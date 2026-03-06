@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -14,878 +15,921 @@
             box-sizing: border-box;
         }
 
-        :root {
-            --primary: #d4468f;
-            --secondary: #8b5cf6;
-            --accent: #ec4899;
-            --dark: #1a1a2e;
-            --light: #f5f1e8;
-            --text-dark: #2d2d3d;
-            --text-light: #6b7280;
-        }
+```
+    :root {
+        --primary: #000000;
+        --secondary: #ffffff;
+        --accent: #333333;
+        --dark: #000000;
+        --light: #ffffff;
+        --text-dark: #000000;
+        --text-light: #555555;
+    }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #000;
-            color: var(--text-dark);
-            line-height: 1.6;
-            overflow: hidden;
-        }
+    body {
+        font-family: 'Inter', sans-serif;
+        background: #000;
+        color: var(--text-dark);
+        line-height: 1.6;
+        overflow: hidden;
+    }
 
-        /* ===== PRESENTATION CONTAINER ===== */
-        .presentation {
-            width: 100vw;
-            height: 100vh;
-            position: relative;
-        }
+    /* ===== PRESENTATION CONTAINER ===== */
+    .presentation {
+        width: 100vw;
+        height: 100vh;
+        position: relative;
+    }
 
-        .slide {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            display: none;
-            opacity: 0;
-            transition: opacity 0.7s ease-in-out;
-            overflow: hidden;
-        }
+    .slide {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: none;
+        opacity: 0;
+        transition: opacity 0.7s ease-in-out;
+        overflow: hidden;
+    }
 
-        .slide.active {
-            display: flex;
+    .slide.active {
+        display: flex;
+        opacity: 1;
+        z-index: 10;
+    }
+
+    .slide.prev {
+        animation: slideOutLeft 0.7s ease-in-out;
+    }
+
+    .slide.next {
+        animation: slideInRight 0.7s ease-in-out;
+    }
+
+    @keyframes slideOutLeft {
+        from {
             opacity: 1;
-            z-index: 10;
+            transform: translateX(0);
         }
-
-        .slide.prev {
-            animation: slideOutLeft 0.7s ease-in-out;
+        to {
+            opacity: 0;
+            transform: translateX(-100%);
         }
+    }
 
-        .slide.next {
-            animation: slideInRight 0.7s ease-in-out;
+    @keyframes slideInRight {
+        from {
+            opacity: 0;
+            transform: translateX(100%);
         }
-
-        @keyframes slideOutLeft {
-            from {
-                opacity: 1;
-                transform: translateX(0);
-            }
-            to {
-                opacity: 0;
-                transform: translateX(-100%);
-            }
+        to {
+            opacity: 1;
+            transform: translateX(0);
         }
+    }
 
-        @keyframes slideInRight {
-            from {
-                opacity: 0;
-                transform: translateX(100%);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
+    /* ===== SLIDE STYLES ===== */
+    .slide-content {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 3rem 4rem 120px 4rem;
+        position: relative;
+        overflow-y: auto;
+        max-height: calc(100vh - 120px);
+    }
+
+    .slide-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+    }
+
+    .slide-inner {
+        position: relative;
+        z-index: 1;
+        max-width: 900px;
+        width: 100%;
+        animation: fadeInUp 0.8s ease-out;
+        overflow-y: auto;
+        max-height: calc(100vh - 180px);
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(40px);
         }
-
-        /* ===== SLIDE STYLES ===== */
-        .slide-content {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 3rem 4rem 120px 4rem;
-            position: relative;
-            overflow-y: auto;
-            max-height: calc(100vh - 120px);
+        to {
+            opacity: 1;
+            transform: translateY(0);
         }
+    }
 
-        .slide-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
+    /* ===== HERO SLIDE ===== */
+    #slide-1 .slide-bg {
+        background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+    }
+
+    #slide-1 .slide-bg::before {
+        content: '';
+        position: absolute;
+        width: 600px;
+        height: 600px;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+        border-radius: 50%;
+        top: -100px;
+        right: -100px;
+        animation: float 6s ease-in-out infinite;
+    }
+
+    #slide-1 .slide-bg::after {
+        content: '';
+        position: absolute;
+        width: 500px;
+        height: 500px;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
+        border-radius: 50%;
+        bottom: -100px;
+        left: -100px;
+        animation: float 8s ease-in-out infinite reverse;
+    }
+
+    #slide-1 .slide-inner {
+        text-align: center;
+    }
+
+    #slide-1 .slide-title {
+        font-size: 4.5rem;
+        margin-bottom: 1.5rem;
+        color: white;
+        -webkit-text-fill-color: unset;
+        background: none;
+        text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        letter-spacing: -2px;
+        line-height: 1;
+    }
+
+    #slide-1 .slide-subtitle {
+        font-size: 1.7rem;
+        color: rgba(255, 255, 255, 0.95);
+        margin-bottom: 1.5rem;
+        font-weight: 400;
+        letter-spacing: 1px;
+    }
+
+    #slide-1 .slide-description {
+        font-size: 1.3rem;
+        color: rgba(255, 255, 255, 0.85);
+        margin-bottom: 2rem;
+        font-weight: 300;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(40px); }
+    }
+
+    .slide-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 3.5rem;
+        font-weight: 900;
+        line-height: 1.1;
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, #000000 0%, #333333 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-align: center;
+        color: #000000;
+    }
+
+    .slide-subtitle {
+        font-size: 1.5rem;
+        color: var(--text-light);
+        text-align: center;
+        font-weight: 300;
+        margin-bottom: 1.2rem;
+    }
+
+    .slide-description {
+        font-size: 1.2rem;
+        color: var(--text-light);
+        text-align: center;
+        line-height: 1.8;
+        margin-bottom: 2rem;
+    }
+
+    /* ===== CONTENT SLIDE STYLES ===== */
+    .slide-white {
+        background: white;
+    }
+
+    .slide-gradient {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        color: white;
+    }
+
+    .slide-dark {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        color: white;
+    }
+
+    .slide-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.2rem;
+        width: 100%;
+        animation: staggerChildren 0.8s ease-out;
+    }
+
+    @keyframes staggerChildren {
+        from {
+            opacity: 0;
         }
-
-        .slide-inner {
-            position: relative;
-            z-index: 1;
-            max-width: 900px;
-            width: 100%;
-            animation: fadeInUp 0.8s ease-out;
-            overflow-y: auto;
-            max-height: calc(100vh - 180px);
+        to {
+            opacity: 1;
         }
+    }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+    .slide-grid-item {
+        animation: fadeInUp 0.6s ease-out;
+        animation-fill-mode: both;
+    }
+
+    .slide-grid-item:nth-child(1) { animation-delay: 0.1s; }
+    .slide-grid-item:nth-child(2) { animation-delay: 0.2s; }
+    .slide-grid-item:nth-child(3) { animation-delay: 0.3s; }
+    .slide-grid-item:nth-child(4) { animation-delay: 0.4s; }
+
+    .grid-card {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 1.5rem 1rem;
+        border-radius: 15px;
+        text-align: center;
+        color: var(--text-dark);
+        border: 3px solid #000000;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .grid-card:hover {
+        transform: translateY(-10px);
+        border-color: #000000;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .grid-icon {
+        font-size: 2.8rem;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .grid-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #000000;
+        margin-bottom: 0.5rem;
+    }
+
+    .grid-text {
+        color: var(--text-light);
+        font-size: 1rem;
+        line-height: 1.5;
+    }
+
+    /* ===== LIST SLIDES ===== */
+    .slide-list {
+        text-align: left;
+        width: 100%;
+        max-width: 800px;
+    }
+
+    .list-item {
+        font-size: 1.35rem;
+        margin: 0.8rem 0;
+        padding: 1rem 1.5rem;
+        border-left: 5px solid #000000;
+        background: rgba(0, 0, 0, 0.05);
+        border-radius: 5px;
+        animation: slideInLeft 0.6s ease-out;
+        animation-fill-mode: both;
+    }
+
+    .list-item:nth-child(1) { animation-delay: 0.1s; }
+    .list-item:nth-child(2) { animation-delay: 0.2s; }
+    .list-item:nth-child(3) { animation-delay: 0.3s; }
+    .list-item:nth-child(4) { animation-delay: 0.4s; }
+    .list-item:nth-child(5) { animation-delay: 0.5s; }
+
+    @keyframes slideInLeft {
+        from {
+            opacity: 0;
+            transform: translateX(-50px);
         }
-
-        /* ===== HERO SLIDE ===== */
-        #slide-1 .slide-bg {
-            background: linear-gradient(135deg, #fef3f8 0%, #f0e9ff 50%, #e8f5ff 100%);
+        to {
+            opacity: 1;
+            transform: translateX(0);
         }
+    }
 
-        #slide-1 .slide-bg::before {
-            content: '';
-            position: absolute;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(212, 70, 143, 0.15) 0%, transparent 70%);
-            border-radius: 50%;
-            top: -100px;
-            right: -100px;
-            animation: float 6s ease-in-out infinite;
-        }
+    .list-item strong {
+        color: #000000;
+        font-weight: 700;
+    }
 
-        #slide-1 .slide-bg::after {
-            content: '';
-            position: absolute;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
-            border-radius: 50%;
-            bottom: -100px;
-            left: -100px;
-            animation: float 8s ease-in-out infinite reverse;
-        }
+    /* ===== COMPARISON SLIDES ===== */
+    .comparison-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.2rem;
+        width: 100%;
+    }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(40px); }
-        }
+    .comparison-box {
+        padding: 1.5rem 1rem;
+        border-radius: 12px;
+        text-align: center;
+        border: 3px solid;
+        animation: fadeInUp 0.8s ease-out;
+    }
 
+    .comparison-box.wrong {
+        background: rgba(0, 0, 0, 0.05);
+        border-color: #000000;
+    }
+
+    .comparison-box.right {
+        background: rgba(0, 0, 0, 0.08);
+        border-color: #000000;
+    }
+
+    .comparison-label {
+        font-weight: 700;
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+    }
+
+    .wrong .comparison-label { color: #000000; }
+    .right .comparison-label { color: #000000; }
+
+    .comparison-text {
+        font-size: 1.3rem;
+        line-height: 1.7;
+        color: var(--text-dark);
+        font-weight: 500;
+    }
+
+    /* ===== TECHNIQUE BOXES ===== */
+    .technique-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.2rem;
+        width: 100%;
+    }
+
+    .technique-box {
+        background: white;
+        padding: 1.5rem 1rem;
+        border-radius: 12px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        border: 2px solid #000000;
+        animation: fadeInUp 0.6s ease-out;
+        animation-fill-mode: both;
+    }
+
+    .technique-box:nth-child(1) { animation-delay: 0.1s; }
+    .technique-box:nth-child(2) { animation-delay: 0.2s; }
+    .technique-box:nth-child(3) { animation-delay: 0.3s; }
+    .technique-box:nth-child(4) { animation-delay: 0.4s; }
+
+    .technique-number {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.5rem;
+        color: #000000;
+        font-weight: 700;
+        margin-bottom: 0.3rem;
+    }
+
+    .technique-box h3 {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.3rem;
+        color: #000000;
+        margin-bottom: 0.7rem;
+    }
+
+    .technique-box p {
+        color: var(--text-light);
+        font-size: 1rem;
+        line-height: 1.5;
+    }
+
+    /* ===== QUOTE SLIDE ===== */
+    .quote-text {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.8rem;
+        font-weight: 700;
+        line-height: 1.4;
+        margin-bottom: 2rem;
+        animation: fadeInUp 0.8s ease-out;
+    }
+
+    .quote-author {
+        font-size: 1.5rem;
+        font-weight: 300;
+        animation: fadeInUp 0.8s ease-out 0.2s both;
+    }
+
+    /* ===== NAVIGATION ===== */
+    .nav-controls {
+        position: fixed;
+        bottom: 40px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 2rem;
+        z-index: 100;
+        align-items: center;
+    }
+
+    .nav-button {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: white;
+        border: 3px solid #000000;
+        cursor: pointer;
+        font-size: 1.8rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+    }
+
+    .nav-button:hover {
+        transform: scale(1.1);
+        background: #000000;
+        color: white;
+    }
+
+    .nav-button:active {
+        transform: scale(0.95);
+    }
+
+    .slide-counter {
+        color: white;
+        font-weight: 700;
+        font-size: 1.3rem;
+        background: rgba(0, 0, 0, 0.4);
+        padding: 0.8rem 1.5rem;
+        border-radius: 25px;
+        backdrop-filter: blur(10px);
+        border: 2px solid white;
+    }
+
+    /* ===== KEYBOARD HINTS ===== */
+    .keyboard-hint {
+        position: fixed;
+        bottom: 20px;
+        right: 30px;
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.6);
+        text-align: right;
+        z-index: 100;
+    }
+
+    /* ===== PROGRESS BAR ===== */
+    .progress-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary), var(--secondary));
+        z-index: 99;
+        transition: width 0.5s ease;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
         .slide-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 3rem;
-            font-weight: 900;
-            line-height: 1.1;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 50%, #ec4899 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-align: center;
+            font-size: 2rem;
         }
 
         .slide-subtitle {
-            font-size: 1.2rem;
-            color: var(--text-light);
-            text-align: center;
-            font-weight: 300;
-            margin-bottom: 1.2rem;
-        }
-
-        .slide-description {
-            font-size: 1.1rem;
-            color: var(--text-light);
-            text-align: center;
-            line-height: 1.8;
-            margin-bottom: 2rem;
-        }
-
-        /* ===== CONTENT SLIDE STYLES ===== */
-        .slide-white {
-            background: white;
-        }
-
-        .slide-gradient {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            color: white;
-        }
-
-        .slide-dark {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: white;
+            font-size: 0.95rem;
         }
 
         .slide-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.2rem;
-            width: 100%;
-            animation: staggerChildren 0.8s ease-out;
+            grid-template-columns: 1fr;
+            gap: 1rem;
         }
 
-        @keyframes staggerChildren {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        .slide-grid-item {
-            animation: fadeInUp 0.6s ease-out;
-            animation-fill-mode: both;
-        }
-
-        .slide-grid-item:nth-child(1) { animation-delay: 0.1s; }
-        .slide-grid-item:nth-child(2) { animation-delay: 0.2s; }
-        .slide-grid-item:nth-child(3) { animation-delay: 0.3s; }
-        .slide-grid-item:nth-child(4) { animation-delay: 0.4s; }
-
-        .grid-card {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 1.5rem 1rem;
-            border-radius: 15px;
-            text-align: center;
-            color: var(--text-dark);
-            border: 2px solid transparent;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .grid-card:hover {
-            transform: translateY(-10px);
-            border-color: var(--primary);
-            box-shadow: 0 20px 40px rgba(212, 70, 143, 0.2);
-        }
-
-        .grid-icon {
-            font-size: 2.2rem;
-            margin-bottom: 0.5rem;
-            display: block;
-        }
-
-        .grid-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .grid-text {
-            color: var(--text-light);
-            font-size: 0.85rem;
-            line-height: 1.5;
-        }
-
-        /* ===== LIST SLIDES ===== */
-        .slide-list {
-            text-align: left;
-            width: 100%;
-            max-width: 800px;
-        }
-
-        .list-item {
-            font-size: 1.1rem;
-            margin: 0.8rem 0;
-            padding: 0.8rem 1.2rem;
-            border-left: 4px solid var(--primary);
-            background: rgba(212, 70, 143, 0.05);
-            border-radius: 5px;
-            animation: slideInLeft 0.6s ease-out;
-            animation-fill-mode: both;
-        }
-
-        .list-item:nth-child(1) { animation-delay: 0.1s; }
-        .list-item:nth-child(2) { animation-delay: 0.2s; }
-        .list-item:nth-child(3) { animation-delay: 0.3s; }
-        .list-item:nth-child(4) { animation-delay: 0.4s; }
-        .list-item:nth-child(5) { animation-delay: 0.5s; }
-
-        @keyframes slideInLeft {
-            from {
-                opacity: 0;
-                transform: translateX(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .list-item strong {
-            color: var(--primary);
-        }
-
-        /* ===== COMPARISON SLIDES ===== */
         .comparison-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.2rem;
-            width: 100%;
+            grid-template-columns: 1fr;
+            gap: 1rem;
         }
 
-        .comparison-box {
-            padding: 1.5rem 1rem;
-            border-radius: 12px;
-            text-align: center;
-            animation: fadeInUp 0.8s ease-out;
-        }
-
-        .comparison-box.wrong {
-            background: rgba(239, 68, 68, 0.1);
-            border: 2px solid #ef4444;
-        }
-
-        .comparison-box.right {
-            background: rgba(34, 197, 94, 0.1);
-            border: 2px solid #22c55e;
-        }
-
-        .comparison-label {
-            font-weight: 700;
-            font-size: 1.1rem;
-            margin-bottom: 1rem;
-        }
-
-        .wrong .comparison-label { color: #ef4444; }
-        .right .comparison-label { color: #22c55e; }
-
-        .comparison-text {
-            font-size: 1.1rem;
-            line-height: 1.7;
-            color: var(--text-dark);
-        }
-
-        /* ===== TECHNIQUE BOXES ===== */
         .technique-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.2rem;
-            width: 100%;
+            grid-template-columns: 1fr;
+            gap: 1rem;
         }
 
-        .technique-box {
-            background: white;
-            padding: 1.5rem 1rem;
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            animation: fadeInUp 0.6s ease-out;
-            animation-fill-mode: both;
+        .slide-content {
+            padding: 2rem 1rem 120px 1rem;
         }
 
-        .technique-box:nth-child(1) { animation-delay: 0.1s; }
-        .technique-box:nth-child(2) { animation-delay: 0.2s; }
-        .technique-box:nth-child(3) { animation-delay: 0.3s; }
-        .technique-box:nth-child(4) { animation-delay: 0.4s; }
-
-        .technique-number {
-            font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            color: var(--primary);
-            font-weight: 700;
-            margin-bottom: 0.3rem;
-        }
-
-        .technique-box h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.1rem;
-            color: var(--text-dark);
-            margin-bottom: 0.7rem;
-        }
-
-        .technique-box p {
-            color: var(--text-light);
-            font-size: 0.85rem;
-            line-height: 1.5;
-        }
-
-        /* ===== QUOTE SLIDE ===== */
-        .quote-text {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            line-height: 1.4;
-            margin-bottom: 2rem;
-            animation: fadeInUp 0.8s ease-out;
-        }
-
-        .quote-author {
-            font-size: 1.3rem;
-            font-weight: 300;
-            animation: fadeInUp 0.8s ease-out 0.2s both;
-        }
-
-        /* ===== NAVIGATION ===== */
-        .nav-controls {
-            position: fixed;
-            bottom: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 2rem;
-            z-index: 100;
-            align-items: center;
-        }
-
-        .nav-button {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: white;
-            border: none;
-            cursor: pointer;
-            font-size: 1.5rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .nav-button:hover {
-            transform: scale(1.1);
-            background: var(--primary);
-            color: white;
-        }
-
-        .nav-button:active {
-            transform: scale(0.95);
-        }
-
-        .slide-counter {
-            color: white;
-            font-weight: 600;
-            font-size: 1.1rem;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 0.8rem 1.5rem;
-            border-radius: 25px;
-            backdrop-filter: blur(10px);
-        }
-
-        /* ===== KEYBOARD HINTS ===== */
         .keyboard-hint {
-            position: fixed;
-            bottom: 20px;
-            right: 30px;
-            font-size: 0.85rem;
-            color: rgba(255, 255, 255, 0.6);
-            text-align: right;
-            z-index: 100;
+            display: none;
         }
+    }
+</style>
+```
 
-        /* ===== PROGRESS BAR ===== */
-        .progress-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            z-index: 99;
-            transition: width 0.5s ease;
-        }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 768px) {
-            .slide-title {
-                font-size: 2rem;
-            }
-
-            .slide-subtitle {
-                font-size: 0.95rem;
-            }
-
-            .slide-grid {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-
-            .comparison-grid {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-
-            .technique-grid {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-
-            .slide-content {
-                padding: 2rem 1rem 120px 1rem;
-            }
-
-            .keyboard-hint {
-                display: none;
-            }
-        }
-    </style>
 </head>
 <body>
     <!-- PROGRESS BAR -->
     <div class="progress-bar" id="progressBar"></div>
 
-    <!-- PRESENTATION SLIDES -->
-    <div class="presentation" id="presentation">
-        <!-- SLIDE 1: TITLE -->
-        <div class="slide active" id="slide-1">
-            <div class="slide-bg"></div>
-            <div class="slide-content">
-                <div class="slide-inner">
-                    <h1 class="slide-title">Emotional Intelligence</h1>
-                    <p class="slide-subtitle">The Invisible Strength That Sustains Institutions</p>
-                    <p class="slide-description">A journey through understanding emotions, managing responses, and building resilience</p>
-                </div>
+```
+<!-- PRESENTATION SLIDES -->
+<div class="presentation" id="presentation">
+    <!-- SLIDE 1: TITLE -->
+    <div class="slide active" id="slide-1">
+        <div class="slide-bg"></div>
+        <div class="slide-content">
+            <div class="slide-inner">
+                <h1 class="slide-title">Emotional Intelligence</h1>
+                <p class="slide-subtitle">The Invisible Strength That Sustains Institutions</p>
+                <p class="slide-description">A journey through understanding emotions, managing responses, and building resilience</p>
             </div>
         </div>
+    </div>
 
-        <!-- SLIDE 2: WHAT IS EI -->
-        <div class="slide slide-white" id="slide-2">
-            <div class="slide-bg"></div>
-            <div class="slide-content">
-                <div class="slide-inner">
-                    <h2 class="slide-title">What is Emotional Intelligence?</h2>
-                    <div class="slide-grid">
-                        <div class="slide-grid-item">
-                            <div class="grid-card">
-                                <span class="grid-icon">🧠</span>
-                                <div class="grid-title">Know Yourself</div>
-                                <div class="grid-text">Understanding what you are feeling and recognizing your emotions</div>
-                            </div>
-                        </div>
-                        <div class="slide-grid-item">
-                            <div class="grid-card">
-                                <span class="grid-icon">⚖️</span>
-                                <div class="grid-title">Control Reactions</div>
-                                <div class="grid-text">Managing how you respond to emotions in any situation</div>
-                            </div>
-                        </div>
-                        <div class="slide-grid-item">
-                            <div class="grid-card">
-                                <span class="grid-icon">🤝</span>
-                                <div class="grid-title">Understand Others</div>
-                                <div class="grid-text">Recognizing emotions in people around you with empathy</div>
-                            </div>
-                        </div>
-                        <div class="slide-grid-item">
-                            <div class="grid-card">
-                                <span class="grid-icon">💡</span>
-                                <div class="grid-title">Respond Wisely</div>
-                                <div class="grid-text">Making balanced decisions even in difficult situations</div>
-                            </div>
+    <!-- SLIDE 2: WHAT IS EI -->
+    <div class="slide slide-white" id="slide-2">
+        <div class="slide-bg"></div>
+        <div class="slide-content">
+            <div class="slide-inner">
+                <h2 class="slide-title">What is Emotional Intelligence?</h2>
+                <div class="slide-grid">
+                    <div class="slide-grid-item">
+                        <div class="grid-card">
+                            <span class="grid-icon">🧠</span>
+                            <div class="grid-title">Know Yourself</div>
+                            <div class="grid-text">Understanding what you are feeling and recognizing your emotions</div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- SLIDE 3: KEY COMPONENTS -->
-        <div class="slide slide-white" id="slide-3">
-            <div class="slide-bg"></div>
-            <div class="slide-content">
-                <div class="slide-inner">
-                    <h2 class="slide-title">The 5 Key Components</h2>
-                    <div class="slide-list">
-                        <div class="list-item"><strong>Self-Awareness:</strong> Recognizing your emotions and understanding your patterns</div>
-                        <div class="list-item"><strong>Self-Regulation:</strong> Managing emotions and maintaining composure under pressure</div>
-                        <div class="list-item"><strong>Internal Motivation:</strong> Working toward goals with passion and resilience</div>
-                        <div class="list-item"><strong>Empathy:</strong> Understanding others' emotions and building trust</div>
-                        <div class="list-item"><strong>Social Skills:</strong> Effective communication, conflict resolution, and teamwork</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- SLIDE 4: WHY IT MATTERS -->
-        <div class="slide slide-white" id="slide-4">
-            <div class="slide-bg"></div>
-            <div class="slide-content">
-                <div class="slide-inner">
-                    <h2 class="slide-title">Why Emotional Intelligence Matters</h2>
-                    <div class="slide-list">
-                        <div class="list-item">EI often matters <strong>MORE than academic intelligence</strong> in professional life</div>
-                        <div class="list-item">Leaders who manage emotions <strong>create stability</strong> and improve performance</div>
-                        <div class="list-item">Emotionally aware individuals make <strong>balanced, thoughtful decisions</strong></div>
-                        <div class="list-item">EI determines how we <strong>handle pressure, people, and problems</strong></div>
-                        <div class="list-item">It is about <strong>balancing emotions</strong>, not suppressing them</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- SLIDE 5: THE PAUSE PRINCIPLE -->
-        <div class="slide slide-gradient" id="slide-5">
-            <div class="slide-content">
-                <div class="slide-inner">
-                    <h2 class="slide-title" style="color: white; -webkit-text-fill-color: unset;">The Pause Principle</h2>
-                    <p class="slide-subtitle" style="color: rgba(255, 255, 255, 0.9);">A pause is not weakness. It is emotional discipline.</p>
-                    <div class="slide-list" style="color: white;">
-                        <div class="list-item" style="background: rgba(255, 255, 255, 0.15); border-left-color: white; color: white;">Emotional intensity <strong>reduces</strong></div>
-                        <div class="list-item" style="background: rgba(255, 255, 255, 0.15); border-left-color: white; color: white;">Perspective <strong>widens</strong></div>
-                        <div class="list-item" style="background: rgba(255, 255, 255, 0.15); border-left-color: white; color: white;">Language becomes <strong>controlled</strong></div>
-                        <div class="list-item" style="background: rgba(255, 255, 255, 0.15); border-left-color: white; color: white;">Judgment <strong>improves</strong></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- SLIDE 6: PAUSE TECHNIQUES -->
-        <div class="slide slide-white" id="slide-6">
-            <div class="slide-bg"></div>
-            <div class="slide-content">
-                <div class="slide-inner">
-                    <h2 class="slide-title">Pause Techniques</h2>
-                    <div class="technique-grid">
-                        <div class="technique-box">
-                            <div class="technique-number">1</div>
-                            <h3>Deep Breathing</h3>
-                            <p>4 seconds in, 4 seconds hold, 6 seconds out. Stabilizes your voice and reduces stress.</p>
-                        </div>
-                        <div class="technique-box">
-                            <div class="technique-number">2</div>
-                            <h3>Mental Count</h3>
-                            <p>Count 1 to 10 before responding. Gives brain time to re-evaluate.</p>
-                        </div>
-                        <div class="technique-box">
-                            <div class="technique-number">3</div>
-                            <h3>Grounding (5-4-3-2-1)</h3>
-                            <p>Name 5 things you see, 4 you feel, 3 you hear, 2 you smell, 1 you taste.</p>
-                        </div>
-                        <div class="technique-box">
-                            <div class="technique-number">4</div>
-                            <h3>Posture Reset</h3>
-                            <p>Straighten posture, relax shoulders, slow speech. Physical adjustment signals calmness.</p>
+                    <div class="slide-grid-item">
+                        <div class="grid-card">
+                            <span class="grid-icon">⚖️</span>
+                            <div class="grid-title">Control Reactions</div>
+                            <div class="grid-text">Managing how you respond to emotions in any situation</div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- SLIDE 7: REFRAMING - PART 1 -->
-        <div class="slide slide-white" id="slide-7">
-            <div class="slide-bg"></div>
-            <div class="slide-content">
-                <div class="slide-inner">
-                    <h2 class="slide-title">Reframe Your Thinking</h2>
-                    <div class="comparison-grid">
-                        <div class="comparison-box wrong">
-                            <div class="comparison-label">❌ Instead of Blame</div>
-                            <div class="comparison-text">"They are disrespecting me"</div>
-                        </div>
-                        <div class="comparison-box right">
-                            <div class="comparison-label">✅ Try This</div>
-                            <div class="comparison-text">"They may be stressed or unaware"</div>
+                    <div class="slide-grid-item">
+                        <div class="grid-card">
+                            <span class="grid-icon">🤝</span>
+                            <div class="grid-title">Understand Others</div>
+                            <div class="grid-text">Recognizing emotions in people around you with empathy</div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- SLIDE 8: REFRAMING - PART 2 -->
-        <div class="slide slide-white" id="slide-8">
-            <div class="slide-bg"></div>
-            <div class="slide-content">
-                <div class="slide-inner">
-                    <h2 class="slide-title">Reframe Your Thinking</h2>
-                    <div class="comparison-grid">
-                        <div class="comparison-box wrong">
-                            <div class="comparison-label">❌ Instead of Defeat</div>
-                            <div class="comparison-text">"I made a mistake. I am incompetent"</div>
-                        </div>
-                        <div class="comparison-box right">
-                            <div class="comparison-label">✅ Try This</div>
-                            <div class="comparison-text">"I made a mistake. I can correct it"</div>
+                    <div class="slide-grid-item">
+                        <div class="grid-card">
+                            <span class="grid-icon">💡</span>
+                            <div class="grid-title">Respond Wisely</div>
+                            <div class="grid-text">Making balanced decisions even in difficult situations</div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- SLIDE 9: REFRAMING - PART 3 -->
-        <div class="slide slide-white" id="slide-9">
-            <div class="slide-bg"></div>
-            <div class="slide-content">
-                <div class="slide-inner">
-                    <h2 class="slide-title">From Victim to Growth</h2>
-                    <div class="comparison-grid">
-                        <div class="comparison-box wrong">
-                            <div class="comparison-label">❌ Victim Thinking</div>
-                            <div class="comparison-text">"Why does this always happen to me?"</div>
-                        </div>
-                        <div class="comparison-box right">
-                            <div class="comparison-label">✅ Growth Thinking</div>
-                            <div class="comparison-text">"What can I learn from this?"</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- SLIDE 10: BRAIN & EMOTIONS -->
-        <div class="slide slide-dark" id="slide-10">
-            <div class="slide-bg"></div>
-            <div class="slide-content">
-                <div class="slide-inner">
-                    <h2 class="slide-title" style="color: white; -webkit-text-fill-color: unset;">The Brain & Emotions</h2>
-                    <div class="slide-list">
-                        <div class="list-item" style="background: rgba(255, 255, 255, 0.1); border-left-color: #ec4899; color: white;">The <strong>amygdala</strong> processes emotions, especially fear and threat</div>
-                        <div class="list-item" style="background: rgba(255, 255, 255, 0.1); border-left-color: #ec4899; color: white;">It triggers emotional reactions <strong>before logic kicks in</strong></div>
-                        <div class="list-item" style="background: rgba(255, 255, 255, 0.1); border-left-color: #ec4899; color: white;">Past experiences create <strong>emotional memories</strong></div>
-                        <div class="list-item" style="background: rgba(255, 255, 255, 0.1); border-left-color: #ec4899; color: white;">With practice, the brain can <strong>reshape emotional reactions</strong></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- SLIDE 11: PHYSICAL WELL-BEING -->
-        <div class="slide slide-white" id="slide-11">
-            <div class="slide-bg"></div>
-            <div class="slide-content">
-                <div class="slide-inner">
-                    <h2 class="slide-title">Emotional Balance Starts With Physical Well-Being</h2>
-                    <div class="slide-list">
-                        <div class="list-item"><strong>Sleep:</strong> Lack of sleep increases irritability and poor judgment. Regular sleep strengthens emotional regulation.</div>
-                        <div class="list-item"><strong>Exercise:</strong> 20-30 minutes daily reduces stress hormones and increases resilience.</div>
-                        <div class="list-item"><strong>Nutrition:</strong> Irregular meals and excessive caffeine increase anxiety and mood swings. Stable energy supports stable emotions.</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- SLIDE 12: INTERNAL DIALOGUE -->
-        <div class="slide slide-white" id="slide-12">
-            <div class="slide-bg"></div>
-            <div class="slide-content">
-                <div class="slide-inner">
-                    <h2 class="slide-title">Shift Your Internal Dialogue</h2>
-                    <div class="comparison-grid" style="gap: 1.5rem;">
-                        <div class="comparison-box wrong">
-                            <div class="comparison-label">❌ Old Dialogue</div>
-                            <div class="comparison-text">"I failed. I cannot handle this."</div>
-                        </div>
-                        <div class="comparison-box right">
-                            <div class="comparison-label">✅ New Dialogue</div>
-                            <div class="comparison-text">"I learned. I will figure this out."</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- SLIDE 13: YOU ARE MANAGING WELL IF -->
-        <div class="slide slide-white" id="slide-13">
-            <div class="slide-bg"></div>
-            <div class="slide-content">
-                <div class="slide-inner">
-                    <h2 class="slide-title">You're Managing Emotions Well If...</h2>
-                    <div class="slide-list">
-                        <div class="list-item">✓ You <strong>pause before reacting</strong></div>
-                        <div class="list-item">✓ Your <strong>tone remains steady</strong> even when challenged</div>
-                        <div class="list-item">✓ You <strong>separate the problem from the person</strong></div>
-                        <div class="list-item">✓ You <strong>delay major decisions</strong> during emotional spikes</div>
-                        <div class="list-item">✓ You <strong>recover quickly</strong> after setbacks</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- SLIDE 14: EI IS LEADERSHIP -->
-        <div class="slide slide-gradient" id="slide-14">
-            <div class="slide-content">
-                <div class="slide-inner">
-                    <h2 class="slide-title" style="color: white; -webkit-text-fill-color: unset;">Emotional Intelligence is Leadership Intelligence</h2>
-                    <p class="slide-subtitle" style="color: rgba(255, 255, 255, 0.9); margin-top: 2rem;">In every office, the emotional temperature is set by the senior-most person</p>
-                    <p class="slide-subtitle" style="color: rgba(255, 255, 255, 0.85); font-size: 1.2rem; margin-top: 3rem;">Your emotional state spreads faster than any circular</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- SLIDE 15: FINAL MESSAGE -->
-        <div class="slide slide-dark" id="slide-15">
-            <div class="slide-bg"></div>
-            <div class="slide-content">
-                <div class="slide-inner" style="text-align: center;">
-                    <div class="quote-text">"A uniform gives you visible power. But emotional intelligence gives you invisible strength."</div>
-                    <p style="margin-top: 3rem; font-size: 1.3rem; color: rgba(255, 255, 255, 0.8);">And invisible strength sustains institutions.</p>
-                    <p style="margin-top: 3rem; font-size: 1.5rem; color: #ec4899; font-weight: 600;">On International Women's Day</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- SLIDE 16: CLOSING -->
-        <div class="slide slide-gradient" id="slide-16">
-            <div class="slide-content">
-                <div class="slide-inner" style="text-align: center;">
-                    <h2 class="slide-title" style="color: white; -webkit-text-fill-color: unset; margin-bottom: 2rem;">Remember</h2>
-                    <p class="slide-subtitle" style="color: rgba(255, 255, 255, 0.9); font-size: 1.3rem; margin-bottom: 2rem;">Obstacles are natural. Emotional growth is deliberate.</p>
-                    <p class="quote-text" style="color: white;">💜 Believe in the power. You can do this. 💜</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- NAVIGATION CONTROLS -->
-    <div class="nav-controls">
-        <button class="nav-button" id="prevBtn" onclick="previousSlide()">❮</button>
-        <div class="slide-counter"><span id="currentSlide">1</span> / <span id="totalSlides">16</span></div>
-        <button class="nav-button" id="nextBtn" onclick="nextSlide()">❯</button>
+    <!-- SLIDE 3: KEY COMPONENTS -->
+    <div class="slide slide-white" id="slide-3">
+        <div class="slide-bg"></div>
+        <div class="slide-content">
+            <div class="slide-inner">
+                <h2 class="slide-title">The 5 Key Components</h2>
+                <div class="slide-list">
+                    <div class="list-item"><strong>Self-Awareness:</strong> Recognizing your emotions and understanding your patterns</div>
+                    <div class="list-item"><strong>Self-Regulation:</strong> Managing emotions and maintaining composure under pressure</div>
+                    <div class="list-item"><strong>Internal Motivation:</strong> Working toward goals with passion and resilience</div>
+                    <div class="list-item"><strong>Empathy:</strong> Understanding others' emotions and building trust</div>
+                    <div class="list-item"><strong>Social Skills:</strong> Effective communication, conflict resolution, and teamwork</div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- KEYBOARD HINTS -->
-    <div class="keyboard-hint">
-        <div>← / → Arrow Keys to Navigate</div>
-        <div>SPACE to Next • Esc to Exit</div>
+    <!-- SLIDE 4: WHY IT MATTERS -->
+    <div class="slide slide-white" id="slide-4">
+        <div class="slide-bg"></div>
+        <div class="slide-content">
+            <div class="slide-inner">
+                <h2 class="slide-title">Why Emotional Intelligence Matters</h2>
+                <div class="slide-list">
+                    <div class="list-item">EI often matters <strong>MORE than academic intelligence</strong> in professional life</div>
+                    <div class="list-item">Leaders who manage emotions <strong>create stability</strong> and improve performance</div>
+                    <div class="list-item">Emotionally aware individuals make <strong>balanced, thoughtful decisions</strong></div>
+                    <div class="list-item">EI determines how we <strong>handle pressure, people, and problems</strong></div>
+                    <div class="list-item">It is about <strong>balancing emotions</strong>, not suppressing them</div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <script>
-        let currentSlide = 1;
-        const totalSlides = document.querySelectorAll('.slide').length;
-        document.getElementById('totalSlides').textContent = totalSlides;
+    <!-- SLIDE 5: THE PAUSE PRINCIPLE -->
+    <div class="slide slide-gradient" id="slide-5">
+        <div class="slide-content">
+            <div class="slide-inner">
+                <h2 class="slide-title" style="color: white; -webkit-text-fill-color: unset;">The Pause Principle</h2>
+                <p class="slide-subtitle" style="color: rgba(255, 255, 255, 0.9);">A pause is not weakness. It is emotional discipline.</p>
+                <div class="slide-list" style="color: white;">
+                    <div class="list-item" style="background: rgba(255, 255, 255, 0.15); border-left-color: white; color: white;">Emotional intensity <strong>reduces</strong></div>
+                    <div class="list-item" style="background: rgba(255, 255, 255, 0.15); border-left-color: white; color: white;">Perspective <strong>widens</strong></div>
+                    <div class="list-item" style="background: rgba(255, 255, 255, 0.15); border-left-color: white; color: white;">Language becomes <strong>controlled</strong></div>
+                    <div class="list-item" style="background: rgba(255, 255, 255, 0.15); border-left-color: white; color: white;">Judgment <strong>improves</strong></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        function showSlide(n) {
-            const slides = document.querySelectorAll('.slide');
-            
-            if (n > totalSlides) {
-                currentSlide = totalSlides;
-                return;
-            }
-            if (n < 1) {
-                currentSlide = 1;
-                return;
-            }
+    <!-- SLIDE 6: PAUSE TECHNIQUES -->
+    <div class="slide slide-white" id="slide-6">
+        <div class="slide-bg"></div>
+        <div class="slide-content">
+            <div class="slide-inner">
+                <h2 class="slide-title">Pause Techniques</h2>
+                <div class="technique-grid">
+                    <div class="technique-box">
+                        <div class="technique-number">1</div>
+                        <h3>Deep Breathing</h3>
+                        <p>4 seconds in, 4 seconds hold, 6 seconds out. Stabilizes your voice and reduces stress.</p>
+                    </div>
+                    <div class="technique-box">
+                        <div class="technique-number">2</div>
+                        <h3>Mental Count</h3>
+                        <p>Count 1 to 10 before responding. Gives brain time to re-evaluate.</p>
+                    </div>
+                    <div class="technique-box">
+                        <div class="technique-number">3</div>
+                        <h3>Grounding (5-4-3-2-1)</h3>
+                        <p>Name 5 things you see, 4 you feel, 3 you hear, 2 you smell, 1 you taste.</p>
+                    </div>
+                    <div class="technique-box">
+                        <div class="technique-number">4</div>
+                        <h3>Posture Reset</h3>
+                        <p>Straighten posture, relax shoulders, slow speech. Physical adjustment signals calmness.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            slides.forEach(slide => {
-                slide.classList.remove('active', 'prev', 'next');
-            });
+    <!-- SLIDE 7: REFRAMING - PART 1 -->
+    <div class="slide slide-white" id="slide-7">
+        <div class="slide-bg"></div>
+        <div class="slide-content">
+            <div class="slide-inner">
+                <h2 class="slide-title">Reframe Your Thinking</h2>
+                <div class="comparison-grid">
+                    <div class="comparison-box wrong">
+                        <div class="comparison-label">❌ Instead of Blame</div>
+                        <div class="comparison-text">"They are disrespecting me"</div>
+                    </div>
+                    <div class="comparison-box right">
+                        <div class="comparison-label">✅ Try This</div>
+                        <div class="comparison-text">"They may be stressed or unaware"</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            slides[currentSlide - 1].classList.add('active');
-            document.getElementById('currentSlide').textContent = currentSlide;
+    <!-- SLIDE 8: REFRAMING - PART 2 -->
+    <div class="slide slide-white" id="slide-8">
+        <div class="slide-bg"></div>
+        <div class="slide-content">
+            <div class="slide-inner">
+                <h2 class="slide-title">Reframe Your Thinking</h2>
+                <div class="comparison-grid">
+                    <div class="comparison-box wrong">
+                        <div class="comparison-label">❌ Instead of Defeat</div>
+                        <div class="comparison-text">"I made a mistake. I am incompetent"</div>
+                    </div>
+                    <div class="comparison-box right">
+                        <div class="comparison-label">✅ Try This</div>
+                        <div class="comparison-text">"I made a mistake. I can correct it"</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            // Update progress bar
-            const progress = (currentSlide / totalSlides) * 100;
-            document.getElementById('progressBar').style.width = progress + '%';
+    <!-- SLIDE 9: REFRAMING - PART 3 -->
+    <div class="slide slide-white" id="slide-9">
+        <div class="slide-bg"></div>
+        <div class="slide-content">
+            <div class="slide-inner">
+                <h2 class="slide-title">From Victim to Growth</h2>
+                <div class="comparison-grid">
+                    <div class="comparison-box wrong">
+                        <div class="comparison-label">❌ Victim Thinking</div>
+                        <div class="comparison-text">"Why does this always happen to me?"</div>
+                    </div>
+                    <div class="comparison-box right">
+                        <div class="comparison-label">✅ Growth Thinking</div>
+                        <div class="comparison-text">"What can I learn from this?"</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 10: BRAIN & EMOTIONS -->
+    <div class="slide slide-dark" id="slide-10">
+        <div class="slide-bg"></div>
+        <div class="slide-content">
+            <div class="slide-inner">
+                <h2 class="slide-title" style="color: white; -webkit-text-fill-color: unset;">The Brain & Emotions</h2>
+                <div class="slide-list">
+                    <div class="list-item" style="background: rgba(255, 255, 255, 0.1); border-left-color: #ec4899; color: white;">The <strong>amygdala</strong> processes emotions, especially fear and threat</div>
+                    <div class="list-item" style="background: rgba(255, 255, 255, 0.1); border-left-color: #ec4899; color: white;">It triggers emotional reactions <strong>before logic kicks in</strong></div>
+                    <div class="list-item" style="background: rgba(255, 255, 255, 0.1); border-left-color: #ec4899; color: white;">Past experiences create <strong>emotional memories</strong></div>
+                    <div class="list-item" style="background: rgba(255, 255, 255, 0.1); border-left-color: #ec4899; color: white;">With practice, the brain can <strong>reshape emotional reactions</strong></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 11: PHYSICAL WELL-BEING -->
+    <div class="slide slide-white" id="slide-11">
+        <div class="slide-bg"></div>
+        <div class="slide-content">
+            <div class="slide-inner">
+                <h2 class="slide-title">Emotional Balance Starts With Physical Well-Being</h2>
+                <div class="slide-list">
+                    <div class="list-item"><strong>Sleep:</strong> Lack of sleep increases irritability and poor judgment. Regular sleep strengthens emotional regulation.</div>
+                    <div class="list-item"><strong>Exercise:</strong> 20-30 minutes daily reduces stress hormones and increases resilience.</div>
+                    <div class="list-item"><strong>Nutrition:</strong> Irregular meals and excessive caffeine increase anxiety and mood swings. Stable energy supports stable emotions.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 12: INTERNAL DIALOGUE -->
+    <div class="slide slide-white" id="slide-12">
+        <div class="slide-bg"></div>
+        <div class="slide-content">
+            <div class="slide-inner">
+                <h2 class="slide-title">Shift Your Internal Dialogue</h2>
+                <div class="comparison-grid" style="gap: 1.5rem;">
+                    <div class="comparison-box wrong">
+                        <div class="comparison-label">❌ Old Dialogue</div>
+                        <div class="comparison-text">"I failed. I cannot handle this."</div>
+                    </div>
+                    <div class="comparison-box right">
+                        <div class="comparison-label">✅ New Dialogue</div>
+                        <div class="comparison-text">"I learned. I will figure this out."</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 13: YOU ARE MANAGING WELL IF -->
+    <div class="slide slide-white" id="slide-13">
+        <div class="slide-bg"></div>
+        <div class="slide-content">
+            <div class="slide-inner">
+                <h2 class="slide-title">You're Managing Emotions Well If...</h2>
+                <div class="slide-list">
+                    <div class="list-item">✓ You <strong>pause before reacting</strong></div>
+                    <div class="list-item">✓ Your <strong>tone remains steady</strong> even when challenged</div>
+                    <div class="list-item">✓ You <strong>separate the problem from the person</strong></div>
+                    <div class="list-item">✓ You <strong>delay major decisions</strong> during emotional spikes</div>
+                    <div class="list-item">✓ You <strong>recover quickly</strong> after setbacks</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 14: EI IS LEADERSHIP -->
+    <div class="slide slide-gradient" id="slide-14">
+        <div class="slide-content">
+            <div class="slide-inner">
+                <h2 class="slide-title" style="color: white; -webkit-text-fill-color: unset;">Emotional Intelligence is Leadership Intelligence</h2>
+                <p class="slide-subtitle" style="color: rgba(255, 255, 255, 0.9); margin-top: 2rem;">In every office, the emotional temperature is set by the senior-most person</p>
+                <p class="slide-subtitle" style="color: rgba(255, 255, 255, 0.85); font-size: 1.2rem; margin-top: 3rem;">Your emotional state spreads faster than any circular</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 15: FINAL MESSAGE -->
+    <div class="slide slide-dark" id="slide-15">
+        <div class="slide-bg"></div>
+        <div class="slide-content">
+            <div class="slide-inner" style="text-align: center;">
+                <div class="quote-text">"A uniform gives you visible power. But emotional intelligence gives you invisible strength."</div>
+                <p style="margin-top: 3rem; font-size: 1.3rem; color: rgba(255, 255, 255, 0.8);">And invisible strength sustains institutions.</p>
+                <p style="margin-top: 3rem; font-size: 1.5rem; color: #ec4899; font-weight: 600;">On International Women's Day</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 16: CLOSING -->
+    <div class="slide slide-gradient" id="slide-16">
+        <div class="slide-content">
+            <div class="slide-inner" style="text-align: center;">
+                <h2 class="slide-title" style="color: white; -webkit-text-fill-color: unset; margin-bottom: 2rem;">Remember</h2>
+                <p class="slide-subtitle" style="color: rgba(255, 255, 255, 0.9); font-size: 1.3rem; margin-bottom: 2rem;">Obstacles are natural. Emotional growth is deliberate.</p>
+                <p class="quote-text" style="color: white;">💜 Believe in the power. You can do this. 💜</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- NAVIGATION CONTROLS -->
+<div class="nav-controls">
+    <button class="nav-button" id="prevBtn" onclick="previousSlide()">❮</button>
+    <div class="slide-counter"><span id="currentSlide">1</span> / <span id="totalSlides">16</span></div>
+    <button class="nav-button" id="nextBtn" onclick="nextSlide()">❯</button>
+</div>
+
+<!-- KEYBOARD HINTS -->
+<div class="keyboard-hint">
+    <div>← / → Arrow Keys to Navigate</div>
+    <div>SPACE to Next • Esc to Exit</div>
+</div>
+
+<script>
+    let currentSlide = 1;
+    const totalSlides = document.querySelectorAll('.slide').length;
+    document.getElementById('totalSlides').textContent = totalSlides;
+
+    function showSlide(n) {
+        const slides = document.querySelectorAll('.slide');
+        
+        if (n > totalSlides) {
+            currentSlide = totalSlides;
+            return;
+        }
+        if (n < 1) {
+            currentSlide = 1;
+            return;
         }
 
-        function nextSlide() {
-            currentSlide++;
-            showSlide(currentSlide);
-        }
-
-        function previousSlide() {
-            currentSlide--;
-            showSlide(currentSlide);
-        }
-
-        // Keyboard controls
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight' || e.key === ' ') {
-                e.preventDefault();
-                nextSlide();
-            } else if (e.key === 'ArrowLeft') {
-                e.preventDefault();
-                previousSlide();
-            } else if (e.key === 'Escape') {
-                // Could add fullscreen exit here
-            }
+        slides.forEach(slide => {
+            slide.classList.remove('active', 'prev', 'next');
         });
 
-        // Initialize
+        slides[currentSlide - 1].classList.add('active');
+        document.getElementById('currentSlide').textContent = currentSlide;
+
+        // Update progress bar
+        const progress = (currentSlide / totalSlides) * 100;
+        document.getElementById('progressBar').style.width = progress + '%';
+    }
+
+    function nextSlide() {
+        currentSlide++;
         showSlide(currentSlide);
-    </script>
+    }
+
+    function previousSlide() {
+        currentSlide--;
+        showSlide(currentSlide);
+    }
+
+    // Keyboard controls
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') {
+            e.preventDefault();
+            nextSlide();
+        } else if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            previousSlide();
+        } else if (e.key === 'Escape') {
+            // Could add fullscreen exit here
+        }
+    });
+
+    // Initialize
+    showSlide(currentSlide);
+</script>
+```
+
 </body>
 </html>
