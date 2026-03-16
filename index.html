@@ -2,637 +2,617 @@
 
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Legal Tech & Automated Pleadings Survey - India</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MSMEs & Employment Generation — Research Presentation</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Fraunces:ital,wght@0,300;0,700;0,900;1,300;1,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; overflow: hidden; font-family: 'Space Grotesk', sans-serif; cursor: none; }
+:root {
+  --bg: #07101f; --surface: #0f1c30; --green: #22c55e;
+  --teal: #14b8a6; --amber: #f59e0b; --blue: #60a5fa;
+  --white: #f0f6ff; --muted: #64748b; --dim: #94a3b8;
+  --border: rgba(255,255,255,0.07);
+}
 
-```
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: linear-gradient(135deg, #b92b27 0%, #1565c0 100%);
-        padding: 20px;
-        min-height: 100vh;
-    }
+/* CURSOR */
+#cur      { position:fixed;width:10px;height:10px;background:var(–green);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s; }
+#cur-ring { position:fixed;width:34px;height:34px;border:1.5px solid rgba(34,197,94,.45);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .3s,height .3s; }
 
-    .container {
-        max-width: 850px;
-        margin: 0 auto;
-        background: white;
-        border-radius: 12px;
-        box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-        overflow: hidden;
-    }
+/* TOP BAR */
+#topbar { position:fixed;top:0;left:0;right:0;height:54px;z-index:300;display:flex;align-items:center;justify-content:space-between;padding:0 22px;background:rgba(7,16,31,.92);backdrop-filter:blur(18px);border-bottom:1px solid var(–border); }
+.tb-logo { font-family:‘Fraunces’,serif;font-size:.92rem;font-weight:700;color:var(–green);white-space:nowrap; }
+.tb-dots { display:flex;gap:5px;align-items:center; }
+.tb-dot { width:7px;height:7px;border-radius:50%;background:var(–muted);border:none;cursor:pointer;padding:0;transition:background .25s,transform .25s; }
+.tb-dot.on { background:var(–green);transform:scale(1.5); }
+.tb-info { font-family:‘JetBrains Mono’,monospace;font-size:.62rem;color:var(–muted);white-space:nowrap; }
 
-    .header {
-        background: linear-gradient(135deg, #b92b27 0%, #1565c0 100%);
-        color: white;
-        padding: 40px;
-        text-align: center;
-    }
+/* PROGRESS BAR */
+#progbar { position:fixed;top:54px;left:0;height:2px;z-index:301;background:linear-gradient(90deg,var(–green),var(–teal));transition:width .4s ease;width:10%; }
 
-    .header h1 {
-        font-size: 26px;
-        margin-bottom: 10px;
-        line-height: 1.3;
-    }
+/* DECK */
+#deck { position:fixed;top:54px;left:0;right:0;bottom:58px;overflow:hidden; }
 
-    .header p {
-        font-size: 15px;
-        opacity: 0.95;
-        margin-top: 10px;
-    }
+/* SLIDES */
+.slide { position:absolute;inset:0;opacity:0;transform:translateX(55px);transition:opacity .5s cubic-bezier(.4,0,.2,1),transform .5s cubic-bezier(.4,0,.2,1);pointer-events:none;overflow:hidden; }
+.slide.active { opacity:1;transform:translateX(0);pointer-events:all; }
+.slide.exit-l { opacity:0;transform:translateX(-55px);pointer-events:none; }
 
-    .content {
-        padding: 40px;
-    }
+/* SLIDE SCROLL AREA */
+.si { position:absolute;inset:0;overflow-y:auto;padding:28px 5vw 28px;scrollbar-width:thin;scrollbar-color:rgba(34,197,94,.25) transparent; }
+.si::-webkit-scrollbar { width:4px; }
+.si::-webkit-scrollbar-thumb { background:rgba(34,197,94,.25);border-radius:2px; }
 
-    .info-box {
-        background: #e8eaf6;
-        border-left: 4px solid #3f51b5;
-        padding: 15px;
-        margin-bottom: 30px;
-        border-radius: 4px;
-        font-size: 14px;
-    }
+/* BACKGROUNDS */
+.bg-dark { background:var(–bg); }
+.bg-mid  { background:var(–surface); }
+.bg-grid { background-color:var(–bg);background-image:linear-gradient(rgba(34,197,94,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(34,197,94,.04) 1px,transparent 1px);background-size:52px 52px; }
 
-    .definition-box {
-        background: #fff3e0;
-        border-left: 4px solid #ff6f00;
-        padding: 15px;
-        margin-bottom: 25px;
-        border-radius: 4px;
-        font-size: 14px;
-    }
+/* BOTTOM NAV */
+#botnav { position:fixed;bottom:0;left:0;right:0;height:58px;z-index:300;display:flex;align-items:center;justify-content:center;gap:12px;background:rgba(7,16,31,.92);backdrop-filter:blur(18px);border-top:1px solid var(–border); }
+.nbtn { display:flex;align-items:center;gap:7px;padding:8px 20px;border:1px solid rgba(34,197,94,.3);border-radius:6px;background:rgba(34,197,94,.06);color:var(–green);font-family:‘JetBrains Mono’,monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:background .22s,border-color .22s,transform .15s; }
+.nbtn:hover { background:rgba(34,197,94,.15);border-color:var(–green);transform:translateY(-1px); }
+.nbtn:disabled { opacity:.28;pointer-events:none; }
+.nbtn svg { width:13px;height:13px;flex-shrink:0; }
+#slide-label { font-family:‘JetBrains Mono’,monospace;font-size:.65rem;color:var(–muted);min-width:56px;text-align:center; }
 
-    .definition-box strong {
-        display: block;
-        margin-bottom: 5px;
-        color: #e65100;
-    }
+/* ANIMATIONS */
+.slide.active .au  { animation:aUp   .55s both; }
+.slide.active .au.d1 { animation-delay:.08s; } .slide.active .au.d2 { animation-delay:.16s; }
+.slide.active .au.d3 { animation-delay:.24s; } .slide.active .au.d4 { animation-delay:.32s; }
+.slide.active .au.d5 { animation-delay:.40s; } .slide.active .au.d6 { animation-delay:.48s; }
+.slide.active .al   { animation:aLeft .55s both; }
+.slide.active .al.d2 { animation-delay:.15s; } .slide.active .al.d3 { animation-delay:.25s; }
+.slide.active .ar   { animation:aRight .55s both; }
+.slide.active .ar.d2 { animation-delay:.15s; }
+@keyframes aUp   { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:none} }
+@keyframes aLeft { from{opacity:0;transform:translateX(-20px)} to{opacity:1;transform:none} }
+@keyframes aRight{ from{opacity:0;transform:translateX(20px)} to{opacity:1;transform:none} }
 
-    .section-title {
-        display: flex;
-        align-items: center;
-        margin-bottom: 25px;
-        font-size: 20px;
-        font-weight: bold;
-        color: #333;
-    }
+/* BAR fills */
+.bf { width:0;transition:width 1.1s cubic-bezier(.16,1,.3,1); }
+.slide.active .bf { width:var(–w); }
+.bfg { background:var(–green); } .bfa { background:var(–amber); }
+.bfb { background:var(–blue); }  .bft { background:var(–teal); }
 
-    .section-number {
-        background: #b92b27;
-        color: white;
-        width: 35px;
-        height: 35px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-right: 15px;
-        font-weight: bold;
-    }
+/* TYPOGRAPHY */
+.eyebrow { font-family:‘JetBrains Mono’,monospace;font-size:.6rem;letter-spacing:.26em;text-transform:uppercase;color:var(–green);display:flex;align-items:center;gap:.65rem;margin-bottom:.9rem; }
+.eyebrow::before { content:’’;display:block;width:20px;height:1px;background:var(–green); }
+.h1 { font-family:‘Fraunces’,serif;font-size:clamp(2rem,4vw,4rem);font-weight:900;line-height:1.06;margin-bottom:1rem; }
+.h2 { font-family:‘Fraunces’,serif;font-size:clamp(1.6rem,3vw,2.8rem);font-weight:900;line-height:1.1;margin-bottom:1rem; }
+.eg { color:var(–green);font-style:italic; } .ea { color:var(–amber); }
+.dim { color:var(–dim); } .mut { color:var(–muted); }
+.mono { font-family:‘JetBrains Mono’,monospace; }
 
-    .form-group {
-        margin-bottom: 25px;
-    }
+/* GRID HELPERS */
+.g2 { display:grid;grid-template-columns:1fr 1fr;gap:2rem; }
+.g3 { display:grid;grid-template-columns:repeat(3,1fr);gap:1rem; }
+.g32 { display:grid;grid-template-columns:repeat(3,1fr);gap:1rem; }
+.g23 { display:grid;grid-template-columns:1fr 1fr;gap:2.5rem; }
+@media(max-width:800px){.g2,.g23,.g32{grid-template-columns:1fr} .g3{grid-template-columns:1fr 1fr}}
+@media(max-width:500px){.g3{grid-template-columns:1fr}}
 
-    .form-group label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: 600;
-        color: #333;
-    }
+/* CARD COMPONENTS */
+.card { background:rgba(255,255,255,.025);border:1px solid var(–border);border-radius:6px;padding:1.3rem; }
+.card-top { border-top:2px solid var(–green); }
+.card-accent::before { content:’’;display:block;position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(–green),transparent); }
 
-    .form-group select {
-        width: 100%;
-        padding: 12px;
-        border: 2px solid #ddd;
-        border-radius: 8px;
-        font-size: 15px;
-        transition: border-color 0.3s;
-    }
+/* BAR TRACK */
+.btrack { height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;margin-top:.5rem; }
+.btrack-sm { height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden; }
 
-    .form-group select:focus {
-        outline: none;
-        border-color: #b92b27;
-    }
+/* ── SLIDE 1 ── */
+.s1-shell { min-height:100%;display:flex;flex-direction:column;justify-content:center;position:relative;gap:1.5rem; }
+.s1-ring  { position:absolute;right:0;top:50%;transform:translateY(-50%);width:min(42vw,400px);height:min(42vw,400px);border:1px solid rgba(34,197,94,.1);border-radius:50%;animation:spin 30s linear infinite;pointer-events:none; }
+.s1-ring2 { position:absolute;right:3%;top:50%;transform:translateY(-50%);width:min(34vw,320px);height:min(34vw,320px);border:1px solid rgba(34,197,94,.07);border-radius:50%;animation:spin 20s linear infinite reverse;pointer-events:none; }
+.s1-glow  { position:absolute;right:-5%;top:30%;width:min(40vw,380px);height:min(40vw,380px);background:radial-gradient(circle,rgba(34,197,94,.07),transparent 65%);border-radius:50%;pointer-events:none; }
+.s1-dot   { position:absolute;right:min(20vw,190px);top:50%;transform:translateY(-50%);width:8px;height:8px;background:var(–green);border-radius:50%;box-shadow:0 0 14px var(–green);animation:dotpulse 3s ease-in-out infinite;pointer-events:none; }
+@keyframes spin    { to{transform:translateY(-50%) rotate(360deg)} }
+@keyframes dotpulse{ 0%,100%{transform:translateY(-50%) scale(1)}50%{transform:translateY(-50%) scale(1.5)} }
+.tag { display:inline-flex;align-items:center;background:rgba(34,197,94,.09);border:1px solid rgba(34,197,94,.22);border-radius:3px;padding:.32rem .85rem;font-family:‘JetBrains Mono’,monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(–green);width:fit-content; }
+.meta-row { display:flex;flex-wrap:wrap;gap:1.5rem; }
+.mc .ml { font-family:‘JetBrains Mono’,monospace;font-size:.55rem;letter-spacing:.13em;text-transform:uppercase;color:var(–green);margin-bottom:.18rem; }
+.mc .mv { font-size:.82rem;color:var(–dim); }
+.stat-row { display:flex;flex-wrap:wrap;gap:2rem; }
+.s1st .sn { font-family:‘Fraunces’,serif;font-size:2.4rem;font-weight:900;color:var(–green);line-height:1; }
+.s1st .sl { font-size:.7rem;color:var(–muted);margin-top:.15rem; }
 
-    .question-box {
-        background: #f8f9fa;
-        padding: 25px;
-        margin-bottom: 25px;
-        border-radius: 8px;
-        border-left: 4px solid #1565c0;
-    }
+/* ── SLIDE 2 — ABSTRACT ── */
+.abs-text { font-size:.95rem;line-height:1.85;color:var(–dim);border-left:2px solid var(–green);padding-left:1.3rem; }
+.kw-row { display:flex;flex-wrap:wrap;gap:.4rem;margin-top:1rem; }
+.kw { font-family:‘JetBrains Mono’,monospace;font-size:.56rem;letter-spacing:.08em;text-transform:uppercase;padding:.26rem .66rem;border:1px solid rgba(34,197,94,.22);border-radius:2px;color:var(–green);background:rgba(34,197,94,.04); }
+.sq-g { display:grid;grid-template-columns:1fr 1fr;gap:.8rem; }
+.sq { background:rgba(255,255,255,.03);border:1px solid var(–border);border-radius:6px;padding:1.2rem 1rem;position:relative;overflow:hidden; }
+.sq::before { content:’’;position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(–green),transparent); }
+.sq-n { font-family:‘Fraunces’,serif;font-size:2.6rem;font-weight:900;color:var(–green);line-height:1; }
+.sq-l { font-size:.74rem;color:var(–muted);margin-top:.3rem;line-height:1.4; }
 
-    .question-text {
-        font-weight: 600;
-        color: #333;
-        margin-bottom: 15px;
-        font-size: 15px;
-        line-height: 1.5;
-    }
+/* ── SLIDES 3 OBJECTIVES ── */
+.obj-list { display:flex;flex-direction:column;gap:.8rem; }
+.obj { display:flex;gap:1.2rem;align-items:flex-start;padding:1rem 1.4rem;border:1px solid var(–border);border-radius:6px;background:rgba(255,255,255,.02); }
+.obj-n { font-family:‘JetBrains Mono’,monospace;font-size:.63rem;color:var(–green);min-width:24px;padding-top:2px;flex-shrink:0; }
+.obj-t { font-size:.92rem;line-height:1.65;color:var(–dim); }
 
-    .radio-group {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
+/* ── SLIDE 4 LITERATURE ── */
+.lit-g { display:grid;grid-template-columns:repeat(3,1fr);gap:.9rem; }
+@media(max-width:900px){.lit-g{grid-template-columns:1fr 1fr}} @media(max-width:560px){.lit-g{grid-template-columns:1fr}}
+.lit { background:rgba(255,255,255,.02);border:1px solid var(–border);border-radius:6px;padding:1.2rem; }
+.lit-a { font-family:‘JetBrains Mono’,monospace;font-size:.57rem;letter-spacing:.1em;text-transform:uppercase;color:var(–green);margin-bottom:.55rem; }
+.lit-t { font-size:.82rem;color:var(–dim);line-height:1.65; }
 
-    .radio-option {
-        display: flex;
-        align-items: center;
-        padding: 12px;
-        background: white;
-        border-radius: 6px;
-        cursor: pointer;
-        transition: background 0.2s;
-    }
+/* ── SLIDE 5 METHODOLOGY ── */
+.steps { display:flex;flex-direction:column;gap:0;position:relative; }
+.steps::before { content:’’;position:absolute;left:18px;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(–green),transparent); }
+.step { display:flex;gap:1.4rem;padding-bottom:1.6rem; }
+.step:last-child { padding-bottom:0; }
+.step-dot { width:38px;height:38px;min-width:38px;border:2px solid var(–green);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:‘Fraunces’,serif;font-weight:700;color:var(–green);font-size:.95rem;background:var(–bg);position:relative;z-index:1; }
+.step-title { font-size:.9rem;font-weight:600;margin-bottom:.3rem; }
+.step-desc  { font-size:.82rem;color:var(–dim);line-height:1.65; }
+.mv-col { display:flex;flex-direction:column;gap:.85rem; }
+.mvc { background:rgba(255,255,255,.03);border:1px solid var(–border);border-radius:6px;padding:1.1rem 1.3rem; }
+.mvc-l { font-family:‘JetBrains Mono’,monospace;font-size:.55rem;letter-spacing:.14em;text-transform:uppercase;color:var(–muted);margin-bottom:.45rem; }
+.mvc-v { font-family:‘Fraunces’,serif;font-size:1.9rem;font-weight:900;color:var(–amber); }
+.mvc-s { font-size:.75rem;color:var(–muted);margin-top:.18rem; }
 
-    .radio-option:hover {
-        background: #e8eaf6;
-    }
+/* ── SLIDE 6 FINDINGS ── */
+.bstat-col { display:flex;flex-direction:column;gap:.85rem; }
+.bstat { display:flex;align-items:center;gap:1.4rem;padding:1rem 1.4rem;background:rgba(34,197,94,.04);border:1px solid rgba(34,197,94,.12);border-radius:6px; }
+.bstat-n { font-family:‘Fraunces’,serif;font-size:2.2rem;font-weight:900;color:var(–green);min-width:84px;text-align:center;flex-shrink:0; }
+.bstat-l { font-size:.88rem;font-weight:600;margin-bottom:.18rem; }
+.bstat-s { font-size:.75rem;color:var(–muted); }
+.brow-list { display:flex;flex-direction:column;gap:.9rem; }
+.brow { display:flex;flex-direction:column;gap:.28rem; }
+.brow-top { display:flex;justify-content:space-between;font-size:.76rem;color:var(–dim); }
 
-    .radio-option input[type="radio"] {
-        width: 18px;
-        height: 18px;
-        margin-right: 12px;
-        cursor: pointer;
-        accent-color: #b92b27;
-    }
+/* ── SLIDE 7 DEMO ── */
+.demo-g { display:grid;grid-template-columns:repeat(3,1fr);gap:1rem; }
+@media(max-width:850px){.demo-g{grid-template-columns:1fr 1fr}} @media(max-width:500px){.demo-g{grid-template-columns:1fr}}
+.dcard { background:rgba(255,255,255,.02);border:1px solid var(–border);border-radius:8px;padding:1.2rem; }
+.dc-icon { font-size:1.5rem;margin-bottom:.55rem; }
+.dc-title { font-size:.72rem;font-weight:600;color:var(–muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.8rem; }
+.dbi { display:flex;flex-direction:column;gap:.26rem;margin-bottom:.6rem; }
+.dbi:last-child { margin-bottom:0; }
+.dbl { display:flex;justify-content:space-between;font-size:.7rem;color:var(–dim); }
 
-    .submit-btn {
-        background: linear-gradient(135deg, #b92b27 0%, #1565c0 100%);
-        color: white;
-        padding: 15px 40px;
-        border: none;
-        border-radius: 8px;
-        font-size: 18px;
-        font-weight: bold;
-        cursor: pointer;
-        display: block;
-        margin: 30px auto 0;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        transition: transform 0.2s;
-    }
+/* ── SLIDE 8 DISCUSSION ── */
+.disc-g { display:grid;grid-template-columns:repeat(3,1fr);gap:1rem; }
+@media(max-width:900px){.disc-g{grid-template-columns:1fr 1fr}} @media(max-width:560px){.disc-g{grid-template-columns:1fr}}
+.disc { padding:1.4rem;border-radius:6px;background:rgba(255,255,255,.025);border-top:2px solid var(–green); }
+.disc-icon { font-size:1.5rem;margin-bottom:.65rem; }
+.disc-t { font-size:.9rem;font-weight:600;margin-bottom:.45rem; }
+.disc-p { font-size:.8rem;color:var(–dim);line-height:1.7; }
 
-    .submit-btn:hover {
-        transform: translateY(-2px);
-    }
+/* ── SLIDE 9 CHALLENGES ── */
+.chall-list,.sug-list { display:flex;flex-direction:column;gap:.7rem; }
+.chall { display:flex;gap:.95rem;align-items:flex-start;padding:.9rem 1.1rem;border:1px solid rgba(245,158,11,.14);border-radius:5px;background:rgba(245,158,11,.03); }
+.chall-i { font-size:1rem;flex-shrink:0;padding-top:1px; }
+.chall-t { font-size:.82rem;color:var(–dim);line-height:1.6; }
+.chall-t strong { color:var(–amber);font-weight:600; }
+.sug { display:flex;gap:.85rem;align-items:flex-start;padding:.82rem 1rem;border-left:2px solid var(–green);background:rgba(34,197,94,.02); }
+.sug-n { font-family:‘JetBrains Mono’,monospace;font-size:.6rem;color:var(–green);min-width:18px;padding-top:2px;flex-shrink:0; }
+.sug-t { font-size:.8rem;color:var(–dim);line-height:1.6; }
+.cs-lbl { font-family:‘JetBrains Mono’,monospace;font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;margin-bottom:.8rem; }
 
-    .thank-you-screen,
-    .results-screen {
-        text-align: center;
-        padding: 60px 40px;
-    }
-
-    .check-icon {
-        width: 80px;
-        height: 80px;
-        margin: 0 auto 20px;
-    }
-
-    .thank-you-screen h2 {
-        font-size: 28px;
-        color: #333;
-        margin-bottom: 15px;
-    }
-
-    .response-count {
-        font-size: 18px;
-        color: #666;
-        margin-top: 20px;
-    }
-
-    .results-header {
-        background: white;
-        padding: 30px;
-        border-radius: 12px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        margin-bottom: 30px;
-        text-align: center;
-    }
-
-    .results-header h2 {
-        font-size: 32px;
-        color: #333;
-        margin-bottom: 10px;
-    }
-
-    .total-responses {
-        font-size: 20px;
-        color: #b92b27;
-        font-weight: bold;
-        margin-top: 10px;
-    }
-
-    .chart-container {
-        background: white;
-        padding: 30px;
-        border-radius: 12px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        margin-bottom: 25px;
-    }
-
-    .chart-title {
-        font-size: 15px;
-        font-weight: 600;
-        color: #333;
-        margin-bottom: 20px;
-        line-height: 1.4;
-    }
-
-    .clear-btn {
-        background: #b92b27;
-        color: white;
-        padding: 12px 30px;
-        border: none;
-        border-radius: 8px;
-        font-size: 16px;
-        font-weight: bold;
-        cursor: pointer;
-        margin-top: 30px;
-    }
-
-    .clear-btn:hover {
-        background: #8e1f1c;
-    }
-
-    .error {
-        border-color: #f44336 !important;
-    }
-
-    .hidden {
-        display: none;
-    }
+/* ── SLIDE 10 CONCLUSION ── */
+.concl-q { font-family:‘Fraunces’,serif;font-size:clamp(1.2rem,2.2vw,1.85rem);font-weight:300;line-height:1.55;color:var(–white); }
+.concl-q em { font-style:italic;color:var(–green); }
+.divline { width:40px;height:2px;background:var(–green);margin:1.3rem 0; }
+.fut-list { display:flex;flex-direction:column;gap:.7rem;margin-top:.8rem; }
+.fut { display:flex;gap:.8rem;align-items:flex-start;padding:.75rem .95rem;border:1px solid var(–border);border-radius:4px; }
+.fut-a { font-family:‘JetBrains Mono’,monospace;font-size:.58rem;color:var(–green);min-width:16px;padding-top:2px;flex-shrink:0; }
+.fut-t { font-size:.8rem;color:var(–dim);line-height:1.6; }
+.au-box { background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.18);border-radius:8px;padding:1.2rem 1.5rem;margin-top:1.4rem; }
+.au-l { font-family:‘JetBrains Mono’,monospace;font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;color:var(–green);margin-bottom:.4rem; }
+.au-n { font-family:‘Fraunces’,serif;font-size:1.1rem;font-weight:700; }
+.au-i { font-size:.75rem;color:var(–muted);margin-top:.22rem;line-height:1.5; }
+.ref-box { margin-top:1.5rem;padding:1rem 1.2rem;background:rgba(34,197,94,.03);border:1px solid rgba(34,197,94,.12);border-radius:6px; }
+.ref-l { font-family:‘JetBrains Mono’,monospace;font-size:.55rem;letter-spacing:.14em;text-transform:uppercase;color:var(–green);margin-bottom:.55rem; }
+.ref-t { font-size:.74rem;color:var(–muted);line-height:1.7; }
 </style>
-```
 
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Legal Tech and Automated Pleadings</h1>
-            <p>Opportunities and Risks for the Indian Justice System</p>
+
+<div id="cur"></div>
+<div id="cur-ring"></div>
+
+<!-- TOP BAR -->
+
+<div id="topbar">
+  <div class="tb-logo">MSMEs &amp; Employment — India</div>
+  <div class="tb-dots" id="tbDots"></div>
+  <div class="tb-info" id="tbInfo">Slide 1 / 10</div>
+</div>
+<div id="progbar"></div>
+
+<!-- DECK -->
+
+<div id="deck">
+
+  <!-- S1 TITLE -->
+
+  <div class="slide bg-grid active" id="s0">
+    <div class="si">
+      <div class="s1-shell">
+        <div class="s1-glow"></div><div class="s1-ring"></div><div class="s1-ring2"></div><div class="s1-dot"></div>
+        <div class="tag au">📊 Empirical Research · Namakkal Conference · Saveetha School of Law</div>
+        <h1 class="h1 au d1">An <span class="eg">Empirical</span> Study on<br>Role of <span class="eg">MSMEs</span> in<br>Employment Generation</h1>
+        <p class="au d2" style="font-size:clamp(.88rem,1.2vw,1.05rem);color:var(--dim);max-width:560px;line-height:1.8">India's socio-legal perspective on how Micro, Small &amp; Medium Enterprises shape employment, livelihood, and inclusive economic growth across urban and rural India.</p>
+        <div class="meta-row au d3">
+          <div class="mc"><div class="ml">Author</div><div class="mv">Lakshmi Yoga Sri S</div></div>
+          <div class="mc"><div class="ml">Reg No</div><div class="mv">132504044 · BBA LLB (Hons)</div></div>
+          <div class="mc"><div class="ml">Institution</div><div class="mv">Saveetha School of Law, SIMATS</div></div>
+          <div class="mc"><div class="ml">Contact</div><div class="mv">yoga.ssri0456@gmail.com</div></div>
         </div>
-
-```
-    <div id="formScreen" class="content">
-        <div class="info-box">
-            <strong>Survey Purpose:</strong> This research examines perspectives on legal technology and automated pleading generation in India's justice system. Your responses will help understand both the opportunities and risks of technology integration in legal practice. All responses are anonymous and confidential.
+        <div class="stat-row au d4">
+          <div class="s1st"><div class="sn" data-cnt="206">0</div><div class="sl">respondents</div></div>
+          <div class="s1st"><div class="sn" data-cnt="16">0</div><div class="sl">literature sources</div></div>
+          <div class="s1st"><div class="sn" data-cnt="26">0</div><div class="sl">analysis figures</div></div>
+          <div class="s1st"><div class="sn" data-cnt="63">0</div><div class="sl">% aged 18–25</div></div>
         </div>
-
-        <div class="definition-box">
-            <strong>Automated Pleadings:</strong>
-            Legal documents (such as complaints, petitions, applications, and written statements) generated or assisted by AI-powered software and legal technology tools. These systems can draft legal arguments, cite relevant case law, and format documents according to court requirements.
-        </div>
-
-        <div class="section-title">
-            <div class="section-number">1</div>
-            <span>Personal Information</span>
-        </div>
-
-        <div class="form-group">
-            <label>Age Group *</label>
-            <select id="age">
-                <option value="">Select age group</option>
-                <option value="18-25">18-25</option>
-                <option value="26-35">26-35</option>
-                <option value="36-45">36-45</option>
-                <option value="46-55">46-55</option>
-                <option value="56-65">56-65</option>
-                <option value="65+">65+</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label>Gender *</label>
-            <select id="gender">
-                <option value="">Select gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Non-binary">Non-binary</option>
-                <option value="Prefer not to say">Prefer not to say</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label>Occupation *</label>
-            <select id="occupation">
-                <option value="">Select occupation</option>
-                <option value="Advocate/Lawyer">Advocate/Lawyer</option>
-                <option value="Judge/Judicial Officer">Judge/Judicial Officer</option>
-                <option value="Law Student">Law Student</option>
-                <option value="Legal Tech Professional">Legal Tech Professional</option>
-                <option value="Legal Researcher/Academic">Legal Researcher/Academic</option>
-                <option value="Corporate Legal Counsel">Corporate Legal Counsel</option>
-                <option value="Government Legal Officer">Government Legal Officer</option>
-                <option value="Other">Other</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label>Education Level *</label>
-            <select id="education">
-                <option value="">Select education level</option>
-                <option value="LLB (3-year)">LLB (3-year)</option>
-                <option value="BA LLB/BBA LLB (5-year)">BA LLB/BBA LLB (5-year)</option>
-                <option value="LLM">LLM (Master of Laws)</option>
-                <option value="Ph.D. in Law">Ph.D. in Law</option>
-                <option value="Non-law Graduate">Non-law Graduate</option>
-                <option value="Other">Other</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label>Years of Legal Experience *</label>
-            <select id="experience">
-                <option value="">Select experience</option>
-                <option value="No experience">No experience (Student/Non-practitioner)</option>
-                <option value="0-2 years">0-2 years</option>
-                <option value="3-5 years">3-5 years</option>
-                <option value="6-10 years">6-10 years</option>
-                <option value="11-20 years">11-20 years</option>
-                <option value="20+ years">20+ years</option>
-            </select>
-        </div>
-
-        <div class="section-title" style="margin-top: 40px;">
-            <div class="section-number" style="background: #1565c0;">2</div>
-            <span>Survey Questions</span>
-        </div>
-
-        <div id="questionsContainer"></div>
-
-        <button class="submit-btn" onclick="submitForm()">Submit Survey</button>
+      </div>
     </div>
+  </div>
 
-    <div id="thankYouScreen" class="thank-you-screen hidden">
-        <svg class="check-icon" fill="none" stroke="#b92b27" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-        <h2>Thank You for Your Response!</h2>
-        <p style="color: #666; font-size: 16px; margin-top: 15px;">
-            Your response has been recorded successfully.
-        </p>
-        <p class="response-count" id="responseStatus"></p>
-    </div>
+  <!-- S2 ABSTRACT -->
 
-    <div id="resultsScreen" class="hidden">
-        <div class="content">
-            <div class="results-header">
-                <h2>Survey Results</h2>
-                <p style="color: #666;">Analysis on Legal Tech and Automated Pleadings in India</p>
-                <div class="total-responses" id="totalResponses"></div>
-            </div>
-            <div id="chartsContainer"></div>
-            <div style="text-align: center;">
-                <button class="clear-btn" onclick="clearAllData()">Clear All Data & Start Over</button>
-            </div>
+  <div class="slide bg-mid" id="s1">
+    <div class="si">
+      <div class="eyebrow au">01 — Abstract</div>
+      <h2 class="h2 au d1">The core <span class="eg">research question</span></h2>
+      <div class="g2" style="margin-top:.8rem">
+        <div class="al">
+          <p class="abs-text">MSMEs are the backbone of India's economy — promoting entrepreneurship, industrial growth, and <strong style="color:var(--white)">large-scale employment generation</strong>. But do existing legal frameworks adequately support their employment potential? This study investigates the socio-legal dimensions of MSME-led job creation across urban and rural India, using structured empirical analysis of 206 respondents combined with review of 16 international peer-reviewed studies.</p>
+          <div class="kw-row">
+            <span class="kw">Employment Generation</span><span class="kw">Economic Development</span>
+            <span class="kw">MSME Act 2006</span><span class="kw">Socio-Legal Perspective</span>
+            <span class="kw">Industrial Growth</span><span class="kw">Government Policies</span>
+          </div>
         </div>
+        <div class="sq-g ar d2">
+          <div class="sq"><div class="sq-n" data-cnt="63">0</div><div class="sq-l">% respondents aged 18–25 — youth-driven sample</div></div>
+          <div class="sq"><div class="sq-n" data-cnt="56">0</div><div class="sq-l">% female respondents in the study</div></div>
+          <div class="sq"><div class="sq-n" data-cnt="60">0</div><div class="sq-l">% urban respondents; 40% from rural areas</div></div>
+          <div class="sq"><div class="sq-n" data-cnt="48">0</div><div class="sq-l">% undergraduates — largest education group</div></div>
+        </div>
+      </div>
     </div>
+  </div>
+
+  <!-- S3 OBJECTIVES -->
+
+  <div class="slide bg-dark" id="s2">
+    <div class="si">
+      <div class="eyebrow au">02 — Research Objectives</div>
+      <h2 class="h2 au d1">What this study sets out to <span class="eg">achieve</span></h2>
+      <div class="obj-list" style="margin-top:.8rem">
+        <div class="obj au d1"><span class="obj-n">01</span><span class="obj-t">Examine the role of Micro, Small and Medium Enterprises (MSMEs) in creating employment opportunities in India</span></div>
+        <div class="obj au d2"><span class="obj-n">02</span><span class="obj-t">Understand the socio-economic impact of MSMEs on job creation, livelihood, and local economic development</span></div>
+        <div class="obj au d3"><span class="obj-n">03</span><span class="obj-t">Analyze the legal and policy framework governing MSMEs and how it supports or affects employment generation</span></div>
+        <div class="obj au d4"><span class="obj-n">04</span><span class="obj-t">Identify the challenges faced by MSMEs in expanding employment opportunities across sectors and regions</span></div>
+        <div class="obj au d5"><span class="obj-n">05</span><span class="obj-t">Suggest measures to strengthen the MSME sector and improve its contribution to employment generation in India</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S4 LITERATURE -->
+
+  <div class="slide bg-mid" id="s3">
+    <div class="si">
+      <div class="eyebrow au">03 — Literature Review</div>
+      <h2 class="h2 au d1">16 scholars on <span class="eg">MSMEs &amp; employment</span></h2>
+      <div class="lit-g" style="margin-top:.9rem">
+        <div class="lit au d1"><div class="lit-a">Beck, Demirgüç-Kunt &amp; Levine (2005)</div><p class="lit-t">SMEs play a critical role in employment in developing economies. Supportive legal and institutional frameworks are necessary to strengthen their sustainable impact.</p></div>
+        <div class="lit au d2"><div class="lit-a">Ayyagari, Beck &amp; Demirgüç-Kunt (2007)</div><p class="lit-t">SMEs account for a large share of total employment. Effective policy reforms and financial access enhance their contribution to labour market expansion.</p></div>
+        <div class="lit au d3"><div class="lit-a">Mead &amp; Liedholm (1998)</div><p class="lit-t">Small enterprises are key job creators in informal sectors. Improving regulatory support and finance access strengthens MSME sustainability.</p></div>
+        <div class="lit au d4"><div class="lit-a">Nichter &amp; Goldmark (2009)</div><p class="lit-t">SMEs show greater potential for sustainable employment than microenterprises. Socio-legal policies and formalization enhance long-term job creation.</p></div>
+        <div class="lit au d5"><div class="lit-a">Tambunan (2019) &amp; Storey (1994)</div><p class="lit-t">MSMEs are vital for labour absorption and regional development, especially in manufacturing, trade, and services across emerging economies.</p></div>
+        <div class="lit au d6"><div class="lit-a">Birch (1987) &amp; Haltiwanger et al. (2013)</div><p class="lit-t">Young and small enterprises contribute disproportionately to net job creation. Start-ups are key drivers of employment growth and economic dynamism.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S5 METHODOLOGY -->
+
+  <div class="slide bg-dark" id="s4">
+    <div class="si">
+      <div class="eyebrow au">04 — Methodology</div>
+      <h2 class="h2 au d1">How data was <span class="eg">collected &amp; analysed</span></h2>
+      <div class="g2" style="margin-top:.9rem;align-items:start">
+        <div class="steps al">
+          <div class="step">
+            <div class="step-dot">1</div>
+            <div style="padding-top:.35rem"><div class="step-title">Empirical Research Design</div><p class="step-desc">Quantitative approach collecting structured data to analyse factors affecting employment among MSME stakeholders and youth across Chennai.</p></div>
+          </div>
+          <div class="step">
+            <div class="step-dot">2</div>
+            <div style="padding-top:.35rem"><div class="step-title">Primary Data — 206 Respondents</div><p class="step-desc">Structured questionnaires via convenience sampling from rural and urban Chennai. Variables: age, gender, education, occupation, area of residence.</p></div>
+          </div>
+          <div class="step">
+            <div class="step-dot">3</div>
+            <div style="padding-top:.35rem"><div class="step-title">Secondary Data Sources</div><p class="step-desc">Government reports, policy documents, and 16 international peer-reviewed studies on MSME development systematically reviewed.</p></div>
+          </div>
+          <div class="step">
+            <div class="step-dot">4</div>
+            <div style="padding-top:.35rem"><div class="step-title">Analysis via SPSS</div><p class="step-desc">Clustered bar charts and SPSS software used to visualise categorical distribution across demographic groups. 26 analysis figures produced.</p></div>
+          </div>
+        </div>
+        <div class="mv-col ar d2">
+          <div class="mvc"><div class="mvc-l">Sample Size</div><div class="mvc-v" data-cnt="206">0</div><div class="mvc-s">Respondents — rural &amp; urban Chennai</div><div class="btrack" style="margin-top:.7rem"><div class="bf bfg" style="--w:82%"></div></div></div>
+          <div class="mvc"><div class="mvc-l">Literature Sources</div><div class="mvc-v" data-cnt="16">0</div><div class="mvc-s">Peer-reviewed international studies</div><div class="btrack" style="margin-top:.7rem"><div class="bf bfa" style="--w:64%"></div></div></div>
+          <div class="mvc"><div class="mvc-l">Analysis Figures</div><div class="mvc-v" data-cnt="26">0</div><div class="mvc-s">Clustered bar charts via SPSS</div><div class="btrack" style="margin-top:.7rem"><div class="bf bft" style="--w:90%"></div></div></div>
+          <div class="mvc"><div class="mvc-l">Urban vs Rural Split</div><div class="mvc-v">60 / 40</div><div class="mvc-s">Urban 60% · Rural 40% of sample</div><div class="btrack" style="margin-top:.7rem"><div class="bf bfb" style="--w:60%"></div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S6 FINDINGS -->
+
+  <div class="slide bg-mid" id="s5">
+    <div class="si">
+      <div class="eyebrow au">05 — Key Findings</div>
+      <h2 class="h2 au d1">The numbers tell the <span class="eg">story</span></h2>
+      <div class="g2" style="margin-top:.9rem;align-items:start">
+        <div class="bstat-col al">
+          <div class="bstat"><div class="bstat-n" data-cnt="46">0%</div><div><div class="bstat-l">Strongly agree MSMEs employ youth</div><div class="bstat-s">Largest single response across all groups</div></div></div>
+          <div class="bstat"><div class="bstat-n" data-cnt="44">0%</div><div><div class="bstat-l">MSMEs reduce rural unemployment</div><div class="bstat-s">Strongly agreed across all demographics</div></div></div>
+          <div class="bstat"><div class="bstat-n" data-cnt="45">0%</div><div><div class="bstat-l">Urban respondents strongly agree on jobs</div><div class="bstat-s">Urban recognition of MSME employment role</div></div></div>
+          <div class="bstat"><div class="bstat-n" data-cnt="58">0%</div><div><div class="bstat-l">Urban respondents aware of MSMEs</div><div class="bstat-s">vs 42% rural — awareness gap identified</div></div></div>
+        </div>
+        <div class="ar d2">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:.8rem">Support by demographic group</div>
+          <div class="brow-list">
+            <div class="brow"><div class="brow-top"><span>Undergraduate — strong agree employment</span><span>47%</span></div><div class="btrack"><div class="bf bfg" style="--w:47%"></div></div></div>
+            <div class="brow"><div class="brow-top"><span>Female — agree MSME employs graduates</span><span>42%</span></div><div class="btrack"><div class="bf bft" style="--w:42%"></div></div></div>
+            <div class="brow"><div class="brow-top"><span>Male — agree MSME employs graduates</span><span>39%</span></div><div class="btrack"><div class="bf bfb" style="--w:39%"></div></div></div>
+            <div class="brow"><div class="brow-top"><span>Rural — strongly agree reduces poverty</span><span>38%</span></div><div class="btrack"><div class="bf bfa" style="--w:38%"></div></div></div>
+            <div class="brow"><div class="brow-top"><span>Urban — agree laws properly implemented</span><span>40%</span></div><div class="btrack"><div class="bf bfg" style="--w:40%"></div></div></div>
+            <div class="brow"><div class="brow-top"><span>Aware of govt MSME schemes (UG)</span><span>38%</span></div><div class="btrack"><div class="bf bft" style="--w:38%"></div></div></div>
+            <div class="brow"><div class="brow-top"><span>Age 18–25 aware of MSME Act</span><span>32%</span></div><div class="btrack"><div class="bf bfa" style="--w:32%"></div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S7 DEMOGRAPHICS -->
+
+  <div class="slide bg-dark" id="s6">
+    <div class="si">
+      <div class="eyebrow au">06 — Survey Demographics</div>
+      <h2 class="h2 au d1">Who <span class="eg">responded</span> to the study</h2>
+      <div class="demo-g" style="margin-top:.9rem">
+        <div class="dcard au d1">
+          <div class="dc-icon">👤</div><div class="dc-title">Age Distribution</div>
+          <div class="dbi"><div class="dbl"><span>18–25 yrs</span><span>63%</span></div><div class="btrack-sm"><div class="bf bfg" style="--w:63%"></div></div></div>
+          <div class="dbi"><div class="dbl"><span>26–35 yrs</span><span>20%</span></div><div class="btrack-sm"><div class="bf bfa" style="--w:20%"></div></div></div>
+          <div class="dbi"><div class="dbl"><span>36–45 yrs</span><span>10%</span></div><div class="btrack-sm"><div class="bf bfb" style="--w:10%"></div></div></div>
+          <div class="dbi"><div class="dbl"><span>Above 45</span><span>7%</span></div><div class="btrack-sm"><div class="bf bft" style="--w:7%"></div></div></div>
+        </div>
+        <div class="dcard au d2">
+          <div class="dc-icon">⚤</div><div class="dc-title">Gender Split</div>
+          <div class="dbi"><div class="dbl"><span>Female</span><span>56%</span></div><div class="btrack-sm"><div class="bf bft" style="--w:56%"></div></div></div>
+          <div class="dbi"><div class="dbl"><span>Male</span><span>44%</span></div><div class="btrack-sm"><div class="bf bfb" style="--w:44%"></div></div></div>
+        </div>
+        <div class="dcard au d3">
+          <div class="dc-icon">🎓</div><div class="dc-title">Education Level</div>
+          <div class="dbi"><div class="dbl"><span>Undergraduate</span><span>48%</span></div><div class="btrack-sm"><div class="bf bfg" style="--w:48%"></div></div></div>
+          <div class="dbi"><div class="dbl"><span>Postgraduate</span><span>28%</span></div><div class="btrack-sm"><div class="bf bfa" style="--w:28%"></div></div></div>
+          <div class="dbi"><div class="dbl"><span>School Level</span><span>14%</span></div><div class="btrack-sm"><div class="bf bfb" style="--w:14%"></div></div></div>
+          <div class="dbi"><div class="dbl"><span>Doctorate</span><span>10%</span></div><div class="btrack-sm"><div class="bf bft" style="--w:10%"></div></div></div>
+        </div>
+        <div class="dcard au d4">
+          <div class="dc-icon">💼</div><div class="dc-title">Occupation</div>
+          <div class="dbi"><div class="dbl"><span>Law Students</span><span>42%</span></div><div class="btrack-sm"><div class="bf bfg" style="--w:42%"></div></div></div>
+          <div class="dbi"><div class="dbl"><span>Research Scholars</span><span>24%</span></div><div class="btrack-sm"><div class="bf bfa" style="--w:24%"></div></div></div>
+          <div class="dbi"><div class="dbl"><span>Legal Practitioners</span><span>18%</span></div><div class="btrack-sm"><div class="bf bfb" style="--w:18%"></div></div></div>
+          <div class="dbi"><div class="dbl"><span>Govt Employees</span><span>16%</span></div><div class="btrack-sm"><div class="bf bft" style="--w:16%"></div></div></div>
+        </div>
+        <div class="dcard au d5">
+          <div class="dc-icon">🏙️</div><div class="dc-title">Area of Residence</div>
+          <div class="dbi"><div class="dbl"><span>Urban</span><span>60%</span></div><div class="btrack-sm"><div class="bf bfg" style="--w:60%"></div></div></div>
+          <div class="dbi"><div class="dbl"><span>Rural</span><span>40%</span></div><div class="btrack-sm"><div class="bf bfa" style="--w:40%"></div></div></div>
+        </div>
+        <div class="dcard au d6">
+          <div class="dc-icon">📡</div><div class="dc-title">How They Learned</div>
+          <div class="dbi"><div class="dbl"><span>Educational institutions</span><span>30%</span></div><div class="btrack-sm"><div class="bf bfg" style="--w:60%"></div></div></div>
+          <div class="dbi"><div class="dbl"><span>Media sources</span><span>25%</span></div><div class="btrack-sm"><div class="bf bfa" style="--w:50%"></div></div></div>
+          <div class="dbi"><div class="dbl"><span>Govt campaigns</span><span>20%</span></div><div class="btrack-sm"><div class="bf bft" style="--w:40%"></div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S8 DISCUSSION -->
+
+  <div class="slide bg-mid" id="s7">
+    <div class="si">
+      <div class="eyebrow au">07 — Discussion</div>
+      <h2 class="h2 au d1">What the findings <span class="eg">really mean</span></h2>
+      <div class="disc-g" style="margin-top:.9rem">
+        <div class="disc au d1"><div class="disc-icon">🌱</div><div class="disc-t">Youth as Agents of Change</div><p class="disc-p">63% of respondents aged 18–25 signals growing entrepreneurial consciousness and the potential for a youth-driven MSME economy across India.</p></div>
+        <div class="disc au d2"><div class="disc-icon">🏘️</div><div class="disc-t">Urban–Rural Awareness Gap</div><p class="disc-p">58% urban vs 42% rural awareness highlights the need for targeted outreach in rural areas where MSMEs are equally critical for employment.</p></div>
+        <div class="disc au d3"><div class="disc-icon">⚖️</div><div class="disc-t">Legal Framework Skepticism</div><p class="disc-p">Only 40% of urban respondents believe MSME laws are properly implemented — significant enforcement and compliance gaps remain.</p></div>
+        <div class="disc au d4"><div class="disc-icon">👩‍🎓</div><div class="disc-t">Education Drives Awareness</div><p class="disc-p">Undergraduate respondents show the highest MSME awareness. Education plays a decisive role in shaping knowledge of MSME laws and schemes.</p></div>
+        <div class="disc au d5"><div class="disc-icon">💰</div><div class="disc-t">Finance as Key Bottleneck</div><p class="disc-p">Consistent with Beck &amp; Demirgüç-Kunt (2006), limited credit access is the primary growth constraint and the most critical lever for expansion.</p></div>
+        <div class="disc au d6"><div class="disc-icon">📊</div><div class="disc-t">MSMEs vs Multinationals</div><p class="disc-p">40% of undergraduates strongly agree MSMEs provide more employment than large international companies — validating India's structural advantage.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S9 CHALLENGES -->
+
+  <div class="slide bg-dark" id="s8">
+    <div class="si">
+      <div class="eyebrow au">08 — Challenges &amp; Suggestions</div>
+      <h2 class="h2 au d1">Problems identified, <span class="eg">solutions proposed</span></h2>
+      <div class="g2" style="margin-top:.9rem;align-items:start">
+        <div class="al">
+          <div class="cs-lbl" style="color:var(--amber)">⚠ Key Challenges</div>
+          <div class="chall-list">
+            <div class="chall"><div class="chall-i">💳</div><div class="chall-t"><strong>Limited Finance Access</strong> — collateral requirements and credit barriers prevent MSMEs from scaling and creating more jobs.</div></div>
+            <div class="chall"><div class="chall-i">📋</div><div class="chall-t"><strong>Regulatory Complexity</strong> — excessive bureaucratic procedures and compliance costs discourage formalization and growth.</div></div>
+            <div class="chall"><div class="chall-i">📣</div><div class="chall-t"><strong>Low Scheme Awareness</strong> — many entrepreneurs are unaware of PMEGP, Mudra Yojana, and credit guarantee schemes.</div></div>
+            <div class="chall"><div class="chall-i">🔌</div><div class="chall-t"><strong>Digital Divide</strong> — rural MSMEs lag in e-commerce adoption, limiting market reach and employment growth.</div></div>
+            <div class="chall"><div class="chall-i">🏗️</div><div class="chall-t"><strong>Informal Employment Data</strong> — the informal nature of many MSMEs makes accurate employment measurement difficult.</div></div>
+          </div>
+        </div>
+        <div class="ar d2">
+          <div class="cs-lbl" style="color:var(--green)">✓ Policy Suggestions</div>
+          <div class="sug-list">
+            <div class="sug"><span class="sug-n">01</span><span class="sug-t">Strengthen MSME Development Act 2006 with simplified registration and reduced bureaucratic delays</span></div>
+            <div class="sug"><span class="sug-n">02</span><span class="sug-t">Improve institutional credit access through collateral-free loans and enhanced credit guarantee schemes</span></div>
+            <div class="sug"><span class="sug-n">03</span><span class="sug-t">Promote skill development programs aligned with industry needs via Ministry of MSMEs</span></div>
+            <div class="sug"><span class="sug-n">04</span><span class="sug-t">Drive digitalization — e-commerce and modern technology to expand market access and create jobs</span></div>
+            <div class="sug"><span class="sug-n">05</span><span class="sug-t">Target women and youth entrepreneurship with infrastructure, industrial clusters, and market linkages</span></div>
+            <div class="sug"><span class="sug-n">06</span><span class="sug-t">Enhance legal awareness on labour laws, taxation, and government schemes for compliance</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S10 CONCLUSION -->
+
+  <div class="slide bg-grid" id="s9">
+    <div class="si">
+      <div class="eyebrow au">09 — Conclusion</div>
+      <div class="g2" style="align-items:start;margin-top:.5rem">
+        <div class="al">
+          <p class="concl-q">"MSMEs remain a <em>cornerstone</em> of employment generation in India — strengthening their socio-legal framework is essential for <em>sustainable growth</em>, reduced unemployment, and balanced regional development."</p>
+          <div class="divline"></div>
+          <p style="font-size:.88rem;color:var(--dim);line-height:1.8;max-width:480px">The study confirms MSMEs significantly contribute to job creation — especially for semi-skilled and unskilled workers in rural and semi-urban areas. Challenges in finance, regulation, and awareness constrain their full potential. A coordinated socio-legal response is essential.</p>
+          <div class="au-box">
+            <div class="au-l">Presented by</div>
+            <div class="au-n">Lakshmi Yoga Sri S</div>
+            <div class="au-i">BBA LLB (Hons) · Reg No: 132504044<br>Saveetha School of Law, SIMATS, Chennai 600077<br>yoga.ssri0456@gmail.com · 9384277769</div>
+          </div>
+        </div>
+        <div class="ar d2">
+          <p style="font-family:'JetBrains Mono',monospace;font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:.8rem">Future Research Scope</p>
+          <div class="fut-list">
+            <div class="fut"><span class="fut-a">→</span><span class="fut-t">Examine impact of digitalization and technology innovation on MSME employment growth</span></div>
+            <div class="fut"><span class="fut-a">→</span><span class="fut-t">Conduct comparative regional studies to understand employment patterns across Indian states</span></div>
+            <div class="fut"><span class="fut-a">→</span><span class="fut-t">Evaluate effectiveness of PMEGP, Mudra Yojana, and Stand-Up India on employment outcomes</span></div>
+            <div class="fut"><span class="fut-a">→</span><span class="fut-t">Study long-term impact of MSME formalization on income stability and social equity</span></div>
+            <div class="fut"><span class="fut-a">→</span><span class="fut-t">Analyze gender-specific employment patterns and barriers to women entrepreneurship in MSMEs</span></div>
+          </div>
+          <div class="ref-box">
+            <div class="ref-l">Key References</div>
+            <div class="ref-t">Beck &amp; Demirgüç-Kunt · Ayyagari et al. · Mead &amp; Liedholm · Nichter &amp; Goldmark · Tambunan · Storey · Birch · Haltiwanger et al. · Audretsch &amp; Thurik · Tybout · Klapper et al. · Rajan &amp; Zingales · La Porta et al. · De Soto · Schumpeter</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /deck -->
+
+<!-- BOTTOM NAV -->
+
+<div id="botnav">
+  <button class="nbtn" id="btnPrev" disabled>
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="10,3 5,8 10,13"/></svg>
+    Previous
+  </button>
+  <div id="slide-label">1 / 10</div>
+  <button class="nbtn" id="btnNext">
+    Next
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="6,3 11,8 6,13"/></svg>
+  </button>
 </div>
 
 <script>
-    const questions = [
-        {
-            id: 'q1',
-            text: 'How familiar are you with legal technology tools currently available in India?',
-            options: ['Very familiar', 'Somewhat familiar', 'Neutral', 'Not very familiar', 'Not familiar at all']
-        },
-        {
-            id: 'q2',
-            text: 'Have you ever used or encountered AI-powered legal drafting tools?',
-            options: ['Yes, regularly', 'Yes, occasionally', 'Yes, once or twice', 'No, but aware of them', 'No, not aware']
-        },
-        {
-            id: 'q3',
-            text: 'Should automated pleading tools be permitted in Indian courts?',
-            options: ['Strongly agree', 'Agree', 'Neutral', 'Disagree', 'Strongly disagree']
-        },
-        {
-            id: 'q4',
-            text: 'How effective would automated pleadings be in improving access to justice for common citizens?',
-            options: ['Extremely effective', 'Very effective', 'Moderately effective', 'Slightly effective', 'Not effective']
-        },
-        {
-            id: 'q5',
-            text: 'Could legal tech reduce the cost of legal services in India?',
-            options: ['Significantly reduce', 'Somewhat reduce', 'No change', 'Somewhat increase', 'Significantly increase']
-        },
-        {
-            id: 'q6',
-            text: 'How concerned are you about the quality and accuracy of AI-generated legal documents?',
-            options: ['Extremely concerned', 'Very concerned', 'Moderately concerned', 'Slightly concerned', 'Not concerned']
-        },
-        {
-            id: 'q7',
-            text: 'Should there be mandatory disclosure when pleadings are AI-generated or AI-assisted?',
-            options: ['Always required', 'Usually required', 'Sometimes required', 'Rarely required', 'Never required']
-        },
-        {
-            id: 'q8',
-            text: 'Would automated pleadings threaten the livelihood of junior lawyers and legal professionals?',
-            options: ['Major threat', 'Moderate threat', 'Minor threat', 'No threat', 'Actually beneficial']
-        },
-        {
-            id: 'q9',
-            text: 'Can AI tools adequately understand the nuances and complexities of Indian law?',
-            options: ['Definitely yes', 'Probably yes', 'Unsure', 'Probably no', 'Definitely no']
-        },
-        {
-            id: 'q10',
-            text: 'Should lawyers remain legally responsible for AI-generated pleadings they file?',
-            options: ['Fully responsible', 'Mostly responsible', 'Shared responsibility', 'Limited responsibility', 'Not responsible']
-        },
-        {
-            id: 'q11',
-            text: 'How important is human oversight and review of automated legal documents?',
-            options: ['Extremely important', 'Very important', 'Moderately important', 'Slightly important', 'Not important']
-        },
-        {
-            id: 'q12',
-            text: 'Would legal tech improve the efficiency of the Indian justice system?',
-            options: ['Strongly agree', 'Agree', 'Neutral', 'Disagree', 'Strongly disagree']
-        },
-        {
-            id: 'q13',
-            text: 'Should the Bar Council of India regulate the use of legal tech tools?',
-            options: ['Strongly agree', 'Agree', 'Neutral', 'Disagree', 'Strongly disagree']
-        },
-        {
-            id: 'q14',
-            text: 'Could automated pleadings help reduce case backlogs in Indian courts?',
-            options: ['Significantly help', 'Somewhat help', 'Minimal impact', 'No impact', 'Actually worsen']
-        },
-        {
-            id: 'q15',
-            text: 'What is your overall stance on integrating legal tech and automated pleadings in India?',
-            options: ['Strongly support', 'Support with regulation', 'Neutral', 'Cautiously oppose', 'Strongly oppose']
-        }
-    ];
+/* CURSOR */
+const cur=document.getElementById('cur'),ring=document.getElementById('cur-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+(function loop(){cur.style.left=mx+'px';cur.style.top=my+'px';rx+=(mx-rx)*.13;ry+=(my-ry)*.13;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop);})();
+document.querySelectorAll('button,.sq,.bstat,.disc,.obj,.lit,.dcard,.chall,.sug,.fut').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.width='15px';cur.style.height='15px';ring.style.width='46px';ring.style.height='46px';});
+  el.addEventListener('mouseleave',()=>{cur.style.width='10px';cur.style.height='10px';ring.style.width='34px';ring.style.height='34px';});
+});
 
-    const colors = ['#b92b27', '#d32f2f', '#1565c0', '#1976d2', '#42a5f5'];
+/* SLIDESHOW */
+const TOTAL=10;
+let current=0;
+const slides=Array.from({length:TOTAL},(_,i)=>document.getElementById('s'+i));
+const btnPrev=document.getElementById('btnPrev');
+const btnNext=document.getElementById('btnNext');
+const slideLabel=document.getElementById('slide-label');
+const progbar=document.getElementById('progbar');
+const tbInfo=document.getElementById('tbInfo');
 
-    function initForm() {
-        const container = document.getElementById('questionsContainer');
-        questions.forEach((q, idx) => {
-            const questionDiv = document.createElement('div');
-            questionDiv.className = 'question-box';
-            questionDiv.innerHTML = `
-                <div class="question-text">Question ${idx + 1}: ${q.text} *</div>
-                <div class="radio-group" id="${q.id}">
-                    ${q.options.map(option => `
-                        <label class="radio-option">
-                            <input type="radio" name="${q.id}" value="${option}">
-                            <span>${option}</span>
-                        </label>
-                    `).join('')}
-                </div>
-            `;
-            container.appendChild(questionDiv);
-        });
-    }
+/* Build dots */
+const tbDots=document.getElementById('tbDots');
+const dotEls=[];
+for(let i=0;i<TOTAL;i++){
+  const d=document.createElement('button');
+  d.className='tb-dot'+(i===0?' on':'');
+  d.setAttribute('aria-label','Go to slide '+(i+1));
+  d.addEventListener('click',()=>goTo(i));
+  tbDots.appendChild(d);
+  dotEls.push(d);
+}
 
-    function validateForm() {
-        let isValid = true;
-        const personalFields = ['age', 'gender', 'occupation', 'education', 'experience'];
-        
-        personalFields.forEach(field => {
-            const el = document.getElementById(field);
-            if (!el.value) {
-                el.classList.add('error');
-                isValid = false;
-            } else {
-                el.classList.remove('error');
-            }
-        });
+function animateCounters(el){
+  el.querySelectorAll('[data-cnt]').forEach(n=>{
+    const target=parseInt(n.dataset.cnt);
+    const hasPct=n.classList.contains('sq-n')||n.classList.contains('bstat-n');
+    let v=0,step=target/50;
+    const t=setInterval(()=>{
+      v=Math.min(v+step,target);
+      n.textContent=Math.floor(v)+(hasPct?'%':'');
+      if(v>=target){n.textContent=target+(hasPct?'%':'');clearInterval(t);}
+    },20);
+  });
+}
 
-        questions.forEach(q => {
-            const selected = document.querySelector(`input[name="${q.id}"]:checked`);
-            const container = document.getElementById(q.id);
-            if (!selected) {
-                container.style.border = '2px solid #f44336';
-                isValid = false;
-            } else {
-                container.style.border = 'none';
-            }
-        });
+function goTo(idx){
+  if(idx===current||idx<0||idx>=TOTAL)return;
+  slides[current].classList.remove('active');
+  if(idx>current)slides[current].classList.add('exit-l');
+  const prev=current;
+  current=idx;
+  setTimeout(()=>{
+    slides[prev].classList.remove('exit-l');
+    slides[current].classList.add('active');
+    const si=slides[current].querySelector('.si');
+    if(si)si.scrollTop=0;
+    setTimeout(()=>animateCounters(slides[current]),280);
+    updateUI();
+  },80);
+}
 
-        return isValid;
-    }
+function updateUI(){
+  dotEls.forEach((d,i)=>d.classList.toggle('on',i===current));
+  btnPrev.disabled=current===0;
+  btnNext.disabled=current===TOTAL-1;
+  slideLabel.textContent=(current+1)+' / '+TOTAL;
+  tbInfo.textContent='Slide '+(current+1)+' / '+TOTAL;
+  progbar.style.width=((current+1)/TOTAL*100)+'%';
+}
 
-    function submitForm() {
-        if (!validateForm()) {
-            alert('Please answer all questions before submitting.');
-            return;
-        }
+btnNext.addEventListener('click',()=>goTo(current+1));
+btnPrev.addEventListener('click',()=>goTo(current-1));
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='ArrowDown')goTo(current+1);
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp')goTo(current-1);
+});
 
-        const formData = {
-            age: document.getElementById('age').value,
-            gender: document.getElementById('gender').value,
-            occupation: document.getElementById('occupation').value,
-            education: document.getElementById('education').value,
-            experience: document.getElementById('experience').value
-        };
+/* Touch swipe */
+let tx=0;
+document.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;},{passive:true});
+document.addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-tx;
+  if(Math.abs(dx)>50){dx<0?goTo(current+1):goTo(current-1);}
+},{passive:true});
 
-        questions.forEach(q => {
-            const selected = document.querySelector(`input[name="${q.id}"]:checked`);
-            formData[q.id] = selected ? selected.value : '';
-        });
-
-        const responses = loadResponses();
-        responses.push(formData);
-        sessionStorage.setItem('legaltech_responses', JSON.stringify(responses));
-
-        document.getElementById('formScreen').classList.add('hidden');
-        
-        if (responses.length >= 3) {
-            showResults();
-        } else {
-            showThankYou(responses.length);
-        }
-    }
-
-    function loadResponses() {
-        const stored = sessionStorage.getItem('legaltech_responses');
-        return stored ? JSON.parse(stored) : [];
-    }
-
-    function showThankYou(count) {
-        document.getElementById('thankYouScreen').classList.remove('hidden');
-        document.getElementById('responseStatus').textContent = 
-            `We need ${3 - count} more response(s) before displaying results. Current: ${count}/3`;
-    }
-
-    function showResults() {
-        const responses = loadResponses();
-        document.getElementById('resultsScreen').classList.remove('hidden');
-        document.getElementById('totalResponses').textContent = `Total Responses: ${responses.length}`;
-        
-        const container = document.getElementById('chartsContainer');
-        container.innerHTML = '';
-
-        questions.forEach((q, idx) => {
-            const chartDiv = document.createElement('div');
-            chartDiv.className = 'chart-container';
-            chartDiv.innerHTML = `
-                <div class="chart-title">Question ${idx + 1}: ${q.text}</div>
-                <canvas id="chart${idx}"></canvas>
-            `;
-            container.appendChild(chartDiv);
-
-            const counts = {};
-            q.options.forEach(opt => counts[opt] = 0);
-            responses.forEach(r => {
-                if (r[q.id]) counts[r[q.id]]++;
-            });
-
-            new Chart(document.getElementById(`chart${idx}`), {
-                type: 'bar',
-                data: {
-                    labels: q.options,
-                    datasets: [{
-                        label: 'Number of Responses',
-                        data: q.options.map(opt => counts[opt]),
-                        backgroundColor: colors,
-                        borderColor: colors.map(c => c),
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                stepSize: 1
-                            }
-                        }
-                    }
-                }
-            });
-        });
-    }
-
-    function clearAllData() {
-        if (confirm('Are you sure you want to clear all survey data and start over?')) {
-            sessionStorage.clear();
-            location.reload();
-        }
-    }
-
-    initForm();
+setTimeout(()=>animateCounters(slides[0]),700);
+updateUI();
 </script>
-```
 
 </body>
 </html>
