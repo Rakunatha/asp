@@ -3,631 +3,1157 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Blockchain-Enabled Land Registries</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI & Judicial Access — Research Presentation</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Mono:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --ink: #0e0e0e;
-    --paper: #f7f5f0;
-    --accent: #1a3a2a;
-    --accent2: #c8a96e;
-    --muted: #888880;
-    --line: rgba(14,14,14,0.12);
-  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+–black: #0a0a0a;
+–white: #f5f4f0;
+–gray-light: #e8e6e0;
+–gray-mid: #888;
+–gray-dark: #333;
+–accent: #1a1a1a;
+}
 
-html, body { width: 100%; height: 100%; overflow: hidden; background: var(–ink); font-family: ‘DM Mono’, monospace; }
+html { scroll-behavior: smooth; }
 
-/* Custom cursor — only on real pointer devices */
-.cursor, .cursor-ring { display: none; pointer-events: none; }
-@media (pointer: fine) {
-body { cursor: none; }
+body {
+font-family: ‘DM Mono’, monospace;
+background: var(–black);
+color: var(–white);
+overflow-x: hidden;
+cursor: none;
+}
+
+/* Custom cursor */
 .cursor {
-display: block; position: fixed;
-width: 8px; height: 8px;
-background: var(–accent2); border-radius: 50%;
-z-index: 9999; mix-blend-mode: difference;
+position: fixed; top: 0; left: 0;
+width: 10px; height: 10px;
+background: var(–white);
+border-radius: 50%;
+pointer-events: none;
+z-index: 9999;
+transition: transform 0.1s ease;
+mix-blend-mode: difference;
 }
 .cursor-ring {
-display: block; position: fixed;
-width: 32px; height: 32px;
-border: 1px solid rgba(200,169,110,0.5); border-radius: 50%;
+position: fixed; top: 0; left: 0;
+width: 36px; height: 36px;
+border: 1px solid rgba(245,244,240,0.5);
+border-radius: 50%;
+pointer-events: none;
 z-index: 9998;
+transition: transform 0.15s ease, width 0.3s, height 0.3s, border-color 0.3s;
+transform: translate(-13px, -13px);
 }
+.cursor-ring.hover { width: 60px; height: 60px; transform: translate(-25px, -25px); border-color: white; }
+
+/* Navigation */
+nav {
+position: fixed; top: 0; left: 0; right: 0;
+z-index: 100;
+display: flex; justify-content: space-between; align-items: center;
+padding: 20px 40px;
+mix-blend-mode: difference;
 }
-
-/* ── Deck ── */
-.deck { position: fixed; inset: 0; }
-
-.slide {
-position: absolute; inset: 0;
-background: var(–paper);
-display: flex; flex-direction: column;
-opacity: 0; pointer-events: none;
-overflow-y: auto; overflow-x: hidden;
--webkit-overflow-scrolling: touch;
-padding: clamp(56px,8vw,88px) clamp(18px,7vw,96px) 100px;
-scrollbar-width: thin; scrollbar-color: rgba(14,14,14,0.15) transparent;
+.nav-logo {
+font-family: ‘DM Mono’, monospace;
+font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+color: var(–white); opacity: 0.6;
 }
-.slide::-webkit-scrollbar { width: 3px; }
-.slide::-webkit-scrollbar-thumb { background: rgba(14,14,14,0.15); border-radius: 2px; }
-
-.slide.active { opacity: 1; pointer-events: all; }
-
-/* Entrance */
-.slide.entering .anim-item { animation: slideUp 0.65s cubic-bezier(0.22,1,0.36,1) forwards; }
-@keyframes slideUp { from { opacity:0; transform:translateY(22px); } to { opacity:1; transform:translateY(0); } }
-@keyframes drawLine { from { transform:scaleX(0); } to { transform:scaleX(1); } }
-@keyframes fadeIn  { from { opacity:0; } to { opacity:1; } }
-
-/* ── UI Chrome ── */
-.progress-bar {
-position: fixed; top:0; left:0; height:2px;
-background: var(–accent2);
-transition: width 0.5s cubic-bezier(0.22,1,0.36,1); z-index:300;
+.nav-progress {
+font-size: 11px; letter-spacing: 2px; color: rgba(245,244,240,0.4);
 }
-.slide-counter {
-position: fixed; top:16px; right: clamp(14px,4vw,34px);
-font-family: ‘DM Mono’, monospace; font-size:10px;
-color: var(–muted); letter-spacing:0.2em; z-index:200;
+.slide-dots {
+display: flex; gap: 6px; align-items: center;
 }
-
-.nav {
-position: fixed; bottom:18px; left:50%; transform:translateX(-50%);
-display: flex; align-items: center; gap:10px;
-z-index:200;
-background: rgba(247,245,240,0.88);
-backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-padding: 8px 14px; border-radius:40px;
-border:1px solid var(–line);
-box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-white-space: nowrap;
-}
-.nav-btn {
-background: none; border: none; cursor: pointer;
-color: var(–ink); font-family: ‘DM Mono’, monospace;
-font-size: 10px; letter-spacing:0.08em;
-padding: 7px 13px; border-radius:20px;
-transition: background 0.2s, color 0.2s;
-text-transform: uppercase; min-height:36px;
-}
-.nav-btn:hover, .nav-btn:focus { background: var(–ink); color: var(–paper); outline:none; }
-
-.nav-dots { display:flex; gap:5px; align-items:center; }
 .dot {
-width:5px; height:5px; border-radius:50%;
-background: var(–muted); border:none; cursor:pointer;
-transition: all 0.3s; flex-shrink:0; padding:0;
+width: 6px; height: 6px; border-radius: 50%;
+background: rgba(245,244,240,0.25);
+cursor: pointer;
+transition: all 0.3s;
 }
-.dot.active { background: var(–accent); width:16px; border-radius:3px; }
+.dot.active { background: var(–white); transform: scale(1.4); }
 
-.key-hint {
-position:fixed; bottom:68px; left:50%; transform:translateX(-50%);
-font-family:‘DM Mono’,monospace; font-size:9px; color:var(–muted);
-letter-spacing:0.2em; text-transform:uppercase; z-index:100;
-opacity:0; animation: fadeIn 1s 2.5s forwards; white-space:nowrap;
-}
-@media (pointer: coarse) { .key-hint { display:none; } }
-
-.transition-overlay {
-position:fixed; inset:0; background:var(–ink);
-z-index:500; pointer-events:none; opacity:0;
+/* Slides container */
+.slides {
+width: 100vw;
 }
 
-/* ── Shared ── */
-.slide-label {
-font-size: clamp(8px,1.4vw,9px); color:var(–muted);
-letter-spacing:0.3em; text-transform:uppercase;
-margin-bottom:8px; opacity:0; animation-delay:0s;
-}
-.slide h2 {
-font-family:‘Cormorant Garamond’,serif; font-weight:300;
-font-size: clamp(1.65rem,4.2vw,3.8rem); color:var(–ink);
-margin-bottom: clamp(24px,4vw,52px);
-letter-spacing:-0.02em; line-height:1.1;
-opacity:0; animation-delay:0.1s;
+/* Individual slide */
+.slide {
+min-height: 100vh;
+width: 100%;
+display: flex;
+align-items: center;
+justify-content: center;
+position: relative;
+padding: 80px 60px;
+overflow: hidden;
 }
 
-/* ════════════════════════════
-S1 — TITLE
-════════════════════════════ */
-#s1 { background:var(–ink); justify-content:center; }
-#s1 .grid-bg {
-position:absolute; inset:0; pointer-events:none;
+/* Slide number */
+.slide-num {
+position: absolute; top: 30px; right: 40px;
+font-size: 11px; letter-spacing: 3px; color: rgba(245,244,240,0.2);
+}
+
+/* Animated background elements */
+.bg-line {
+position: absolute;
+background: rgba(245,244,240,0.04);
+pointer-events: none;
+}
+.bg-line.h { width: 100%; height: 1px; }
+.bg-line.v { height: 100%; width: 1px; }
+
+/* ═══════════ SLIDE 1: COVER ═══════════ */
+#slide-1 {
+background: var(–black);
+flex-direction: column;
+text-align: center;
+justify-content: center;
+}
+#slide-1 .kicker {
+font-size: 10px; letter-spacing: 5px; text-transform: uppercase;
+color: rgba(245,244,240,0.35);
+margin-bottom: 32px;
+animation: fadeUp 1s 0.2s both;
+}
+#slide-1 h1 {
+font-family: ‘Playfair Display’, serif;
+font-size: clamp(36px, 6vw, 88px);
+font-weight: 900;
+line-height: 1.0;
+letter-spacing: -2px;
+max-width: 900px;
+animation: fadeUp 1s 0.4s both;
+}
+#slide-1 h1 em {
+font-style: italic; color: rgba(245,244,240,0.5);
+}
+#slide-1 .subtitle {
+margin-top: 40px;
+font-size: 12px; letter-spacing: 3px; color: rgba(245,244,240,0.4);
+animation: fadeUp 1s 0.6s both;
+}
+#slide-1 .authors {
+margin-top: 16px;
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 16px; font-style: italic;
+color: rgba(245,244,240,0.55);
+animation: fadeUp 1s 0.8s both;
+}
+.cover-grid {
+position: absolute; inset: 0; pointer-events: none; overflow: hidden;
+}
+.cover-grid::before {
+content: ‘’;
+position: absolute; inset: 0;
 background-image:
-linear-gradient(rgba(247,245,240,0.03) 1px,transparent 1px),
-linear-gradient(90deg,rgba(247,245,240,0.03) 1px,transparent 1px);
-background-size:60px 60px;
+linear-gradient(rgba(245,244,240,0.04) 1px, transparent 1px),
+linear-gradient(90deg, rgba(245,244,240,0.04) 1px, transparent 1px);
+background-size: 80px 80px;
+animation: gridFade 3s ease both;
 }
-#s1 .tag {
-font-size:clamp(8px,1.4vw,10px); color:var(–accent2);
-letter-spacing:0.25em; text-transform:uppercase;
-margin-bottom:clamp(22px,3vw,40px);
-opacity:0; animation-delay:0.1s;
+.big-circle {
+position: absolute;
+width: 700px; height: 700px;
+border: 1px solid rgba(245,244,240,0.05);
+border-radius: 50%;
+top: 50%; left: 50%;
+transform: translate(-50%,-50%);
+animation: rotateSlow 40s linear infinite;
 }
-#s1 h1 {
-font-family:‘Cormorant Garamond’,serif; font-weight:300;
-font-size:clamp(2rem,5.5vw,5.5rem); color:var(–paper);
-line-height:1.08; letter-spacing:-0.01em;
-opacity:0; animation-delay:0.25s;
+.big-circle::after {
+content: ‘’;
+position: absolute; inset: 60px;
+border: 1px solid rgba(245,244,240,0.04);
+border-radius: 50%;
 }
-#s1 h1 em { font-style:italic; color:var(–accent2); }
-#s1 .divider {
-width:60px; height:1px; background:var(–accent2);
-margin:clamp(26px,4vw,48px) 0 clamp(14px,2vw,28px);
-transform-origin:left; transform:scaleX(0);
-opacity:1 !important;
-animation: drawLine 0.8s 0.55s cubic-bezier(0.22,1,0.36,1) forwards;
+.scroll-hint {
+position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+font-size: 10px; letter-spacing: 4px; color: rgba(245,244,240,0.25);
+animation: bounce 2s 2s infinite;
+text-transform: uppercase;
 }
-#s1 .subtitle {
-font-size:clamp(9px,1.4vw,11px); color:rgba(247,245,240,0.38);
-letter-spacing:0.1em; line-height:1.8; max-width:480px;
-opacity:0; animation-delay:0.7s;
-}
-#s1 .corner-deco {
-position:absolute; bottom:clamp(56px,8vh,100px); right:clamp(18px,8vw,80px);
-width:clamp(72px,11vw,150px); height:clamp(72px,11vw,150px);
-border:1px solid rgba(200,169,110,0.14); border-radius:50%;
-opacity:0; animation-delay:1s; pointer-events:none;
-}
-#s1 .corner-deco::before {
-content:’’; position:absolute; inset:16px;
-border:1px solid rgba(200,169,110,0.07); border-radius:50%;
+.scroll-hint::after {
+content: ‘↓’;
+display: block; text-align: center; margin-top: 8px;
+font-size: 16px;
 }
 
-/* ════════════════════════════
-S2 — PROBLEM
-════════════════════════════ */
-.problem-grid {
-display:grid;
-grid-template-columns: repeat(2,1fr);
-gap:2px; flex:1;
+/* ═══════════ SLIDE 2: ABSTRACT ═══════════ */
+#slide-2 { background: var(–white); color: var(–black); }
+#slide-2 .slide-num { color: rgba(10,10,10,0.2); }
+.abstract-layout {
+display: grid; grid-template-columns: 1fr 2fr; gap: 80px;
+max-width: 1100px; width: 100%;
+align-items: start;
 }
-@media (min-width:700px) { .problem-grid { grid-template-columns:repeat(4,1fr); } }
+.abstract-label {
+font-size: 10px; letter-spacing: 5px; text-transform: uppercase;
+color: rgba(10,10,10,0.35);
+writing-mode: vertical-rl;
+transform: rotate(180deg);
+height: 100%; display: flex; align-items: center;
+}
+.abstract-content h2 {
+font-family: ‘Playfair Display’, serif;
+font-size: clamp(28px, 4vw, 52px); font-weight: 700;
+line-height: 1.1; margin-bottom: 32px;
+letter-spacing: -1px;
+}
+.abstract-content p {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 18px; line-height: 1.7; color: rgba(10,10,10,0.7);
+}
+.keywords {
+display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px;
+}
+.kw {
+padding: 5px 12px; border: 1px solid rgba(10,10,10,0.2);
+font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+color: rgba(10,10,10,0.5);
+transition: all 0.3s;
+cursor: default;
+}
+.kw:hover { background: var(–black); color: var(–white); border-color: var(–black); }
 
-.prob-card {
-background:var(–ink);
-padding: clamp(18px,2.5vw,30px) clamp(14px,2vw,26px);
-display:flex; flex-direction:column; gap:10px;
-opacity:0;
+/* ═══════════ SLIDE 3: OBJECTIVES ═══════════ */
+#slide-3 { background: var(–black); flex-direction: column; }
+.objectives-header {
+font-family: ‘Playfair Display’, serif;
+font-size: clamp(24px, 4vw, 52px);
+font-weight: 900; margin-bottom: 60px;
+letter-spacing: -1px;
+align-self: flex-start;
 }
-.prob-card:nth-child(1){animation-delay:0.2s}
-.prob-card:nth-child(2){animation-delay:0.33s}
-.prob-card:nth-child(3){animation-delay:0.46s}
-.prob-card:nth-child(4){animation-delay:0.59s}
-.prob-icon { font-size:clamp(16px,2.5vw,22px); line-height:1; }
-.prob-card h3 {
-font-family:‘DM Mono’,monospace; font-size:clamp(8px,1.3vw,10px);
-color:var(–accent2); letter-spacing:0.14em; text-transform:uppercase;
+.objectives-header span { font-style: italic; color: rgba(245,244,240,0.4); }
+.obj-list { width: 100%; max-width: 900px; }
+.obj-item {
+display: grid; grid-template-columns: 60px 1fr;
+gap: 20px; padding: 28px 0;
+border-bottom: 1px solid rgba(245,244,240,0.1);
+opacity: 0; transform: translateX(-30px);
+transition: all 0.6s ease;
+cursor: default;
 }
-.prob-card p {
-font-family:‘Cormorant Garamond’,serif; font-weight:300;
-font-size:clamp(13px,1.7vw,15px); color:rgba(247,245,240,0.55); line-height:1.6;
+.obj-item:hover { border-color: rgba(245,244,240,0.4); }
+.obj-item.visible { opacity: 1; transform: translateX(0); }
+.obj-num {
+font-size: 11px; letter-spacing: 3px; color: rgba(245,244,240,0.3);
+padding-top: 4px;
 }
+.obj-text {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 20px; line-height: 1.5; color: rgba(245,244,240,0.85);
+}
+.obj-item:hover .obj-text { color: var(–white); }
 
-/* ════════════════════════════
-S3 — SOLUTION
-════════════════════════════ */
-.chain-visual {
-display:flex; align-items:stretch; overflow-x:auto;
--webkit-overflow-scrolling:touch;
-margin-bottom:clamp(24px,4vw,48px);
-opacity:0; animation-delay:0.25s;
-scrollbar-width:none;
+/* ═══════════ SLIDE 4: METHODOLOGY ═══════════ */
+#slide-4 { background: #111; }
+.method-grid {
+display: grid; grid-template-columns: 1fr 1fr;
+gap: 2px; max-width: 1100px; width: 100%;
 }
-.chain-visual::-webkit-scrollbar { display:none; }
-
-.chain-block {
-background:var(–accent); color:var(–paper);
-padding:clamp(12px,1.8vw,20px) clamp(8px,1.4vw,20px);
-font-family:‘DM Mono’,monospace;
-font-size:clamp(7px,1vw,9px); letter-spacing:0.1em;
-text-transform:uppercase; text-align:center;
-flex:1; min-width:72px;
-transition: transform 0.2s, background 0.2s;
+.method-card {
+background: rgba(245,244,240,0.03);
+padding: 40px;
+border: 1px solid rgba(245,244,240,0.07);
+transition: all 0.4s;
+cursor: default;
+position: relative; overflow: hidden;
 }
-.chain-block:hover { background:var(–accent2); color:var(–ink); transform:translateY(-4px); }
-.chain-block:hover .block-num { color:var(–ink); }
-.chain-block .block-num {
-font-size:clamp(14px,2.2vw,20px); font-family:‘Cormorant Garamond’,serif;
-display:block; margin-bottom:5px; color:var(–accent2);
+.method-card::before {
+content: ‘’; position: absolute;
+inset: 0; background: rgba(245,244,240,0.05);
+transform: scaleX(0); transform-origin: left;
+transition: transform 0.4s;
 }
-.chain-arrow {
-width:clamp(12px,1.8vw,26px); height:1px;
-background:var(–ink); flex-shrink:0; align-self:center; position:relative;
+.method-card:hover::before { transform: scaleX(1); }
+.method-card:hover { border-color: rgba(245,244,240,0.2); }
+.method-icon {
+font-size: 28px; margin-bottom: 16px; display: block;
+filter: grayscale(1);
 }
-.chain-arrow::after {
-content:’’; position:absolute; right:0; top:-3px;
-width:6px; height:6px;
-border-right:1px solid var(–ink); border-top:1px solid var(–ink);
-transform:rotate(45deg);
+.method-title {
+font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
+color: rgba(245,244,240,0.4); margin-bottom: 12px;
 }
-
-.features-row { display:grid; grid-template-columns:1fr; gap:18px; }
-@media (min-width:580px) { .features-row { grid-template-columns:repeat(3,1fr); } }
-
-.feat { opacity:0; }
-.feat:nth-child(1){animation-delay:0.4s}
-.feat:nth-child(2){animation-delay:0.55s}
-.feat:nth-child(3){animation-delay:0.7s}
-.feat-num {
-font-family:‘Cormorant Garamond’,serif; font-size:clamp(32px,4.5vw,48px);
-font-weight:300; color:rgba(14,14,14,0.06); line-height:1; margin-bottom:5px;
+.method-value {
+font-family: ‘Playfair Display’, serif;
+font-size: clamp(22px, 3vw, 36px); font-weight: 700;
+line-height: 1.1;
 }
-.feat h4 {
-font-family:‘DM Mono’,monospace; font-size:clamp(8px,1.2vw,10px);
-color:var(–accent); letter-spacing:0.14em; text-transform:uppercase;
-margin-bottom:7px; padding-bottom:7px; border-bottom:1px solid var(–line);
-}
-.feat p {
-font-family:‘Cormorant Garamond’,serif; font-size:clamp(13px,1.7vw,15px);
-color:var(–muted); line-height:1.65; font-weight:300;
-}
-
-/* ════════════════════════════
-S4 — LEGAL
-════════════════════════════ */
-#s4 { background:var(–accent); }
-#s4 .slide-label { color:rgba(200,169,110,0.6); }
-#s4 h2 { color:var(–paper); }
-
-.legal-layout { display:grid; grid-template-columns:1fr; gap:28px; }
-@media (min-width:680px) { .legal-layout { grid-template-columns:1fr 1fr; gap:44px; } }
-
-.legal-col { opacity:0; }
-.legal-col:nth-child(1){animation-delay:0.25s}
-.legal-col:nth-child(2){animation-delay:0.4s}
-
-.legal-item {
-padding:14px 0; border-bottom:1px solid rgba(247,245,240,0.1);
-display:flex; gap:14px; align-items:flex-start;
-}
-.legal-item:first-child { border-top:1px solid rgba(247,245,240,0.1); }
-.legal-idx {
-font-family:‘DM Mono’,monospace; font-size:9px; color:var(–accent2);
-letter-spacing:0.2em; padding-top:3px; flex-shrink:0;
-}
-.legal-item h4 {
-font-family:‘DM Mono’,monospace; font-size:clamp(8px,1.2vw,10px);
-color:var(–paper); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:4px;
-}
-.legal-item p {
-font-family:‘Cormorant Garamond’,serif; font-weight:300;
-font-size:clamp(12px,1.5vw,14px); color:rgba(247,245,240,0.48); line-height:1.6;
-}
-.quote-block {
-padding:clamp(14px,2vw,22px); margin-bottom:18px;
-border-left:2px solid var(–accent2); background:rgba(247,245,240,0.04);
-}
-.quote-block p {
-font-family:‘Cormorant Garamond’,serif; font-style:italic; font-weight:300;
-font-size:clamp(12px,1.7vw,15px); color:rgba(247,245,240,0.62); line-height:1.7;
+.method-sub {
+margin-top: 8px;
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 15px; color: rgba(245,244,240,0.5); font-style: italic;
 }
 
-/* ════════════════════════════
-S5 — GOVERNANCE
-════════════════════════════ */
-.gov-grid { display:grid; grid-template-columns:1fr; gap:2px; flex:1; }
-@media (min-width:580px) { .gov-grid { grid-template-columns:repeat(3,1fr); } }
+/* ═══════════ SLIDE 5: KEY FINDINGS STATS ═══════════ */
+#slide-5 { background: var(–white); color: var(–black); flex-direction: column; }
+#slide-5 .slide-num { color: rgba(10,10,10,0.2); }
+.findings-title {
+font-family: ‘Playfair Display’, serif;
+font-size: clamp(24px, 4vw, 52px); font-weight: 900;
+margin-bottom: 60px; align-self: flex-start;
+letter-spacing: -1px;
+}
+.findings-title span { font-style: italic; color: rgba(10,10,10,0.35); }
+.stats-row {
+display: grid; grid-template-columns: repeat(4, 1fr);
+gap: 2px; width: 100%; max-width: 1100px;
+margin-bottom: 40px;
+}
+.stat-box {
+background: var(–black); color: var(–white);
+padding: 40px 28px;
+position: relative; overflow: hidden;
+cursor: default;
+transition: transform 0.3s;
+}
+.stat-box:hover { transform: translateY(-4px); }
+.stat-num {
+font-family: ‘Playfair Display’, serif;
+font-size: clamp(36px, 5vw, 64px); font-weight: 900;
+line-height: 1; display: block;
+color: var(–white);
+}
+.stat-label {
+font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+color: rgba(245,244,240,0.45); margin-top: 8px; display: block;
+line-height: 1.4;
+}
+.stat-bar {
+position: absolute; bottom: 0; left: 0;
+height: 3px; background: rgba(245,244,240,0.3);
+width: 0; transition: width 1.5s ease;
+}
+.stat-box.visible .stat-bar { width: 100%; }
 
-.gov-item {
-padding:clamp(18px,2.5vw,30px) clamp(14px,2vw,26px);
-background:rgba(14,14,14,0.04); position:relative; overflow:hidden;
-opacity:0; transition:background 0.25s;
+/* ═══════════ SLIDE 6: AGE-BASED FINDINGS ═══════════ */
+#slide-6 { background: var(–black); flex-direction: column; }
+.findings-section-title {
+font-family: ‘Playfair Display’, serif;
+font-size: clamp(22px, 3.5vw, 44px); font-weight: 700;
+margin-bottom: 48px; align-self: flex-start;
+border-left: 3px solid rgba(245,244,240,0.6); padding-left: 20px;
 }
-.gov-item::before {
-content:’’; position:absolute; bottom:0; left:0; right:0; height:2px;
-background:var(–accent2); transform:scaleX(0); transform-origin:left;
-transition:transform 0.3s cubic-bezier(0.22,1,0.36,1);
+.finding-rows { width: 100%; max-width: 1000px; }
+.finding-row {
+display: grid; grid-template-columns: 140px 1fr;
+gap: 24px; margin-bottom: 20px; align-items: center;
 }
-.gov-item:hover::before { transform:scaleX(1); }
-.gov-item:hover { background:rgba(14,14,14,0.08); }
-.gov-item:nth-child(1){animation-delay:0.2s}
-.gov-item:nth-child(2){animation-delay:0.35s}
-.gov-item:nth-child(3){animation-delay:0.5s}
+.age-label {
+font-size: 11px; letter-spacing: 3px; color: rgba(245,244,240,0.45);
+text-align: right;
+}
+.bar-wrap {
+background: rgba(245,244,240,0.06);
+height: 42px; position: relative; overflow: hidden;
+cursor: default;
+}
+.bar-fill {
+height: 100%; background: rgba(245,244,240,0.85);
+width: 0; transition: width 1.2s cubic-bezier(0.25,1,0.5,1);
+display: flex; align-items: center; padding-left: 14px;
+}
+.bar-fill span {
+font-size: 11px; letter-spacing: 2px; color: var(–black);
+white-space: nowrap; font-weight: 500;
+}
+.bar-wrap:hover .bar-fill { background: white; }
+.bar-fill.visible { /* triggered by JS */ }
 
-.gov-num {
-font-family:‘Cormorant Garamond’,serif;
-font-size:clamp(34px,4.5vw,52px); font-weight:300;
-color:rgba(14,14,14,0.06); line-height:1;
-position:absolute; top:12px; right:14px;
+/* ═══════════ SLIDE 7: GENDER & EDUCATION ═══════════ */
+#slide-7 { background: #0f0f0f; }
+.two-col {
+display: grid; grid-template-columns: 1fr 1fr;
+gap: 60px; max-width: 1100px; width: 100%;
+align-items: start;
 }
-.gov-item h4 {
-font-family:‘DM Mono’,monospace; font-size:clamp(8px,1.2vw,10px);
-color:var(–accent); letter-spacing:0.14em; text-transform:uppercase; margin-bottom:12px;
+.col-section { }
+.col-label {
+font-size: 10px; letter-spacing: 5px; text-transform: uppercase;
+color: rgba(245,244,240,0.3); margin-bottom: 28px;
+display: flex; align-items: center; gap: 12px;
 }
-.gov-item ul { list-style:none; display:flex; flex-direction:column; gap:8px; }
-.gov-item li {
-font-family:‘Cormorant Garamond’,serif; font-size:clamp(12px,1.5vw,14.5px);
-color:var(–ink); font-weight:300; line-height:1.5; padding-left:14px; position:relative;
+.col-label::after {
+content: ‘’; flex: 1; height: 1px; background: rgba(245,244,240,0.1);
 }
-.gov-item li::before { content:’—’; position:absolute; left:0; color:var(–accent2); font-size:11px; }
+.donut-container {
+display: flex; align-items: center; gap: 32px; margin-bottom: 28px;
+}
+.donut { position: relative; width: 120px; height: 120px; flex-shrink: 0; }
+.donut svg { transform: rotate(-90deg); }
+.donut-label {
+position: absolute; inset: 0;
+display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.donut-label .pct {
+font-family: ‘Playfair Display’, serif;
+font-size: 26px; font-weight: 700;
+}
+.donut-label .sub {
+font-size: 9px; letter-spacing: 2px; color: rgba(245,244,240,0.4);
+text-transform: uppercase;
+}
+.donut-legend { font-family: ‘Cormorant Garamond’, serif; font-size: 16px; line-height: 1.6; color: rgba(245,244,240,0.7); }
+.donut-legend b { color: var(–white); }
 
-/* ════════════════════════════
-S6 — APPROACH
-════════════════════════════ */
-#s6 { background:var(–ink); }
-#s6 .slide-label { color:rgba(200,169,110,0.6); }
-#s6 h2 { color:var(–paper); }
+.edu-bars { display: flex; flex-direction: column; gap: 14px; }
+.edu-row { display: flex; flex-direction: column; gap: 5px; }
+.edu-name { font-size: 10px; letter-spacing: 2px; color: rgba(245,244,240,0.4); text-transform: uppercase; }
+.edu-bar-bg { background: rgba(245,244,240,0.06); height: 28px; position: relative; overflow: hidden; }
+.edu-bar-fill {
+height: 100%; background: rgba(245,244,240,0.7);
+width: 0; transition: width 1.2s cubic-bezier(0.25,1,0.5,1);
+display: flex; align-items: center; justify-content: flex-end; padding-right: 10px;
+}
+.edu-bar-fill.visible { }
+.edu-bar-fill span { font-size: 10px; color: var(–black); font-weight: 500; }
 
-.approach-row {
-display:grid; grid-template-columns:1fr;
-gap:1px; background:rgba(247,245,240,0.08);
-margin-bottom:clamp(24px,4vw,44px);
+/* ═══════════ SLIDE 8: BARRIERS ═══════════ */
+#slide-8 { background: var(–white); color: var(–black); flex-direction: column; }
+#slide-8 .slide-num { color: rgba(10,10,10,0.2); }
+.barriers-title {
+font-family: ‘Playfair Display’, serif;
+font-size: clamp(24px, 4vw, 52px); font-weight: 900;
+margin-bottom: 56px; align-self: flex-start;
+letter-spacing: -1px;
 }
-@media (min-width:580px) { .approach-row { grid-template-columns:repeat(3,1fr); } }
-
-.appr-item {
-background:var(–ink); opacity:0;
-padding:clamp(18px,2.5vw,28px) clamp(14px,2vw,24px); text-align:center;
+.barriers-grid {
+display: grid; grid-template-columns: repeat(3, 1fr);
+gap: 2px; max-width: 1100px; width: 100%;
 }
-.appr-item:nth-child(1){animation-delay:0.25s}
-.appr-item:nth-child(2){animation-delay:0.4s}
-.appr-item:nth-child(3){animation-delay:0.55s}
-.appr-icon { font-size:clamp(20px,3.2vw,28px); margin-bottom:10px; display:block; }
-.appr-item h4 {
-font-family:‘DM Mono’,monospace; font-size:clamp(8px,1.2vw,9px);
-color:var(–accent2); letter-spacing:0.2em; text-transform:uppercase; margin-bottom:9px;
+.barrier-card {
+padding: 36px 28px; background: rgba(10,10,10,0.03);
+border: 1px solid rgba(10,10,10,0.07);
+transition: all 0.4s; cursor: default;
+position: relative;
 }
-.appr-item p {
-font-family:‘Cormorant Garamond’,serif; font-size:clamp(12px,1.5vw,14px);
-color:rgba(247,245,240,0.4); line-height:1.65; font-weight:300;
+.barrier-card:hover {
+background: var(–black); color: var(–white);
+border-color: var(–black);
 }
-
-.interdisciplinary { display:flex; align-items:center; gap:14px; opacity:0; animation-delay:0.7s; }
-.interdisc-label {
-font-family:‘DM Mono’,monospace; font-size:9px; color:var(–muted);
-letter-spacing:0.2em; text-transform:uppercase; white-space:nowrap;
+.barrier-card:hover .b-num { color: rgba(245,244,240,0.3); }
+.barrier-card:hover .b-title { color: var(–white); }
+.barrier-card:hover .b-desc { color: rgba(245,244,240,0.6); }
+.b-num {
+font-size: 42px; font-weight: 900; color: rgba(10,10,10,0.08);
+font-family: ‘Playfair Display’, serif;
+line-height: 1; margin-bottom: 12px;
+transition: color 0.4s;
 }
-.interdisc-line { flex:1; height:1px; background:rgba(247,245,240,0.1); position:relative; }
-.interdisc-line::after {
-content:‘Interdisciplinary Synthesis’;
-position:absolute; top:-9px; left:50%; transform:translateX(-50%);
-font-family:‘Cormorant Garamond’,serif; font-style:italic;
-font-size:clamp(10px,1.4vw,13px); color:var(–accent2); white-space:nowrap;
+.b-title {
+font-size: 12px; letter-spacing: 3px; text-transform: uppercase;
+margin-bottom: 10px; transition: color 0.4s;
 }
-
-/* ════════════════════════════
-S7 — CONCLUSION
-════════════════════════════ */
-#s7 { background:var(–paper); justify-content:center; }
-#s7 .slide-label { color:var(–muted); }
-#s7 h2 { color:var(–ink); }
-#s7 h2 em { font-style:italic; color:var(–accent); }
-
-#s7 .bg-text {
-position:absolute; bottom:-20px; right:-10px;
-font-family:‘Cormorant Garamond’,serif;
-font-size:clamp(100px,22vw,280px); font-weight:300;
-color:rgba(14,14,14,0.03); line-height:1;
-pointer-events:none; user-select:none; letter-spacing:-0.04em;
+.b-desc {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 16px; color: rgba(10,10,10,0.6); line-height: 1.5;
+transition: color 0.4s;
 }
 
+/* ═══════════ SLIDE 9: SPSS ANALYSIS ═══════════ */
+#slide-9 { background: var(–black); flex-direction: column; }
+.analysis-title {
+font-family: ‘Playfair Display’, serif;
+font-size: clamp(22px, 3.5vw, 44px); font-weight: 700;
+margin-bottom: 48px; align-self: flex-start;
+}
+.hypothesis-cards {
+display: grid; grid-template-columns: 1fr 1fr;
+gap: 24px; max-width: 1000px; width: 100%;
+}
+.hyp-card {
+border: 1px solid rgba(245,244,240,0.12);
+padding: 36px; position: relative;
+transition: border-color 0.3s;
+}
+.hyp-card:hover { border-color: rgba(245,244,240,0.35); }
+.hyp-label {
+font-size: 10px; letter-spacing: 4px; text-transform: uppercase;
+color: rgba(245,244,240,0.3); margin-bottom: 20px;
+}
+.hyp-variable {
+font-family: ‘Playfair Display’, serif;
+font-size: 22px; font-weight: 700; margin-bottom: 24px;
+line-height: 1.2;
+}
+.hyp-stats {
+display: grid; grid-template-columns: 1fr 1fr 1fr;
+gap: 12px; margin-bottom: 20px;
+}
+.hyp-stat { }
+.hyp-stat-val {
+font-family: ‘Playfair Display’, serif;
+font-size: 24px; font-weight: 700;
+display: block;
+}
+.hyp-stat-key {
+font-size: 9px; letter-spacing: 2px; color: rgba(245,244,240,0.35);
+text-transform: uppercase;
+}
+.hyp-result {
+background: rgba(245,244,240,0.06);
+padding: 14px 16px;
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 15px; font-style: italic; color: rgba(245,244,240,0.65);
+line-height: 1.4; border-left: 2px solid rgba(245,244,240,0.3);
+}
+
+/* ═══════════ SLIDE 10: RECOMMENDATIONS ═══════════ */
+#slide-10 { background: var(–white); color: var(–black); flex-direction: column; }
+#slide-10 .slide-num { color: rgba(10,10,10,0.2); }
+.reco-title {
+font-family: ‘Playfair Display’, serif;
+font-size: clamp(24px, 4vw, 52px); font-weight: 900;
+margin-bottom: 52px; align-self: flex-start; letter-spacing: -1px;
+}
+.reco-list { max-width: 1000px; width: 100%; }
+.reco-item {
+display: grid; grid-template-columns: 50px 1fr;
+gap: 24px; padding: 24px 0;
+border-bottom: 1px solid rgba(10,10,10,0.08);
+opacity: 0; transform: translateY(20px);
+transition: all 0.5s ease;
+cursor: default;
+}
+.reco-item:hover { border-color: rgba(10,10,10,0.4); }
+.reco-item.visible { opacity: 1; transform: translateY(0); }
+.reco-icon { font-size: 22px; padding-top: 2px; filter: grayscale(1); }
+.reco-content { }
+.reco-head {
+font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+color: rgba(10,10,10,0.4); margin-bottom: 6px;
+}
+.reco-body {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 18px; line-height: 1.5; color: rgba(10,10,10,0.8);
+}
+
+/* ═══════════ SLIDE 11: CONCLUSION ═══════════ */
+#slide-11 { background: var(–black); flex-direction: column; justify-content: center; text-align: center; }
+.conclusion-wrap { max-width: 800px; }
+.conclusion-kicker {
+font-size: 10px; letter-spacing: 5px; text-transform: uppercase;
+color: rgba(245,244,240,0.3); margin-bottom: 32px;
+}
+.conclusion-quote {
+font-family: ‘Playfair Display’, serif;
+font-size: clamp(22px, 3.5vw, 44px); font-weight: 400; font-style: italic;
+line-height: 1.4; color: rgba(245,244,240,0.9);
+margin-bottom: 40px;
+}
+.conclusion-quote strong {
+font-weight: 900; font-style: normal; color: var(–white);
+}
 .conclusion-divider {
-width:40px; height:1px; background:var(–accent2);
-margin:clamp(22px,3.5vw,40px) 0;
-transform-origin:left; transform:scaleX(0);
-opacity:1 !important;
-animation: drawLine 0.8s 0.5s cubic-bezier(0.22,1,0.36,1) forwards;
+width: 60px; height: 1px; background: rgba(245,244,240,0.3); margin: 0 auto 32px;
 }
-.conc-body {
-font-family:‘Cormorant Garamond’,serif;
-font-size:clamp(14px,1.9vw,17px); color:var(–muted);
-max-width:560px; line-height:1.7; font-weight:300;
-margin-bottom:clamp(24px,4vw,44px);
-opacity:0; animation-delay:0.45s;
+.conclusion-sub {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 18px; color: rgba(245,244,240,0.5); line-height: 1.6;
+font-style: italic;
 }
-.pillars { display:flex; gap:clamp(8px,1.5vw,28px); flex-wrap:wrap; opacity:0; animation-delay:0.6s; }
-.pillar-word {
-font-family:‘Cormorant Garamond’,serif; font-weight:600;
-font-size:clamp(10px,1.4vw,13px); letter-spacing:0.14em; text-transform:uppercase;
-color:var(–accent); display:block;
-padding:clamp(9px,1.4vw,12px) clamp(14px,2vw,22px);
-border:1px solid var(–line); transition:border-color 0.2s,background 0.2s;
+.final-credits {
+margin-top: 60px;
+font-size: 10px; letter-spacing: 3px; color: rgba(245,244,240,0.2);
+text-transform: uppercase;
 }
-.pillar-word:hover { border-color:var(–accent2); background:var(–accent2); color:var(–ink); }
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+from { opacity: 0; transform: translateY(30px); }
+to { opacity: 1; transform: translateY(0); }
+}
+@keyframes gridFade {
+from { opacity: 0; }
+to { opacity: 1; }
+}
+@keyframes rotateSlow {
+from { transform: translate(-50%,-50%) rotate(0deg); }
+to { transform: translate(-50%,-50%) rotate(360deg); }
+}
+@keyframes bounce {
+0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.25; }
+50% { transform: translateX(-50%) translateY(6px); opacity: 0.5; }
+}
+
+/* Scroll-reveal base */
+.reveal {
+opacity: 0; transform: translateY(30px);
+transition: all 0.8s cubic-bezier(0.25,1,0.5,1);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* Responsive */
+@media (max-width: 768px) {
+.slide { padding: 80px 24px; }
+.abstract-layout { grid-template-columns: 1fr; }
+.abstract-label { writing-mode: horizontal-tb; transform: none; }
+.stats-row { grid-template-columns: 1fr 1fr; }
+.method-grid { grid-template-columns: 1fr; }
+.barriers-grid { grid-template-columns: 1fr; }
+.hypothesis-cards { grid-template-columns: 1fr; }
+.two-col { grid-template-columns: 1fr; }
+nav { padding: 16px 20px; }
+.slide-dots { display: none; }
+}
 </style>
 
 </head>
 <body>
 
+<!-- Cursor -->
+
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
-<div class="progress-bar" id="progressBar"></div>
-<div class="slide-counter" id="slideCounter">01 / 07</div>
-<div class="transition-overlay" id="overlay"></div>
 
-<div class="deck">
+<!-- Navigation -->
 
-  <!-- S1: TITLE -->
-
-  <div class="slide active entering" id="s1" role="region" aria-label="Title">
-    <div class="grid-bg"></div>
-    <span class="tag anim-item">Research Paper · Legal &amp; Technology Studies</span>
-    <h1 class="anim-item">Blockchain&#8209;Enabled<br><em>Land Registries</em></h1>
-    <div class="divider"></div>
-    <p class="subtitle anim-item">Legal, Technological &amp; Governance Implications of Decentralized Property Rights Administration</p>
-    <div class="corner-deco anim-item"></div>
-  </div>
-
-  <!-- S2: PROBLEM -->
-
-  <div class="slide" id="s2" role="region" aria-label="The Problem">
-    <span class="slide-label anim-item">01 — The Problem</span>
-    <h2 class="anim-item">Traditional systems<br>are <em style="font-style:italic;color:var(--accent2)">failing</em> landowners.</h2>
-    <div class="problem-grid">
-      <div class="prob-card anim-item"><span class="prob-icon">⚙️</span><h3>Inefficiency</h3><p>Bureaucratic delays and paper-based workflows slow down legitimate property transactions significantly.</p></div>
-      <div class="prob-card anim-item"><span class="prob-icon">👁</span><h3>Opacity</h3><p>Lack of transparency in centralized registries enables record manipulation and hidden alterations.</p></div>
-      <div class="prob-card anim-item"><span class="prob-icon">⚖️</span><h3>Corruption</h3><p>Centralized control creates opportunities for unauthorized alterations and systemic fraud in land records.</p></div>
-      <div class="prob-card anim-item"><span class="prob-icon">❓</span><h3>Legal Uncertainty</h3><p>Ownership disputes and public distrust erode confidence in national land administration institutions.</p></div>
-    </div>
-  </div>
-
-  <!-- S3: SOLUTION -->
-
-  <div class="slide" id="s3" role="region" aria-label="Blockchain Solution">
-    <span class="slide-label anim-item">02 — The Solution</span>
-    <h2 class="anim-item">How blockchain<br>transforms the registry.</h2>
-    <div class="chain-visual anim-item">
-      <div class="chain-block"><span class="block-num">01</span>Land Record<br>Created</div>
-      <div class="chain-arrow"></div>
-      <div class="chain-block"><span class="block-num">02</span>Distributed<br>Verification</div>
-      <div class="chain-arrow"></div>
-      <div class="chain-block"><span class="block-num">03</span>Block<br>Confirmed</div>
-      <div class="chain-arrow"></div>
-      <div class="chain-block"><span class="block-num">04</span>Immutable<br>Record Set</div>
-      <div class="chain-arrow"></div>
-      <div class="chain-block"><span class="block-num">05</span>Public<br>Accessible</div>
-    </div>
-    <div class="features-row">
-      <div class="feat anim-item"><div class="feat-num">01</div><h4>Immutability</h4><p>Once recorded, land ownership data cannot be altered or deleted — eliminating retroactive fraud and record tampering.</p></div>
-      <div class="feat anim-item"><div class="feat-num">02</div><h4>Distributed Verification</h4><p>No single point of failure. Consensus-based validation removes the need for centralized institutional authority.</p></div>
-      <div class="feat anim-item"><div class="feat-num">03</div><h4>Enhanced Security</h4><p>Cryptographic data structures make unauthorized access structurally impossible without network-wide detection.</p></div>
-    </div>
-  </div>
-
-  <!-- S4: LEGAL -->
-
-  <div class="slide" id="s4" role="region" aria-label="Legal Implications">
-    <span class="slide-label anim-item">03 — Legal Dimensions</span>
-    <h2 class="anim-item">Navigating the<br>legal landscape.</h2>
-    <div class="legal-layout">
-      <div class="legal-col anim-item">
-        <div class="legal-item"><span class="legal-idx">L.01</span><div><h4>Digital Record Recognition</h4><p>Legal frameworks must evolve to formally recognize blockchain entries as authoritative land title documents.</p></div></div>
-        <div class="legal-item"><span class="legal-idx">L.02</span><div><h4>Evidentiary Validity</h4><p>Courts need clear standards for admissibility of blockchain-derived records in property disputes.</p></div></div>
-        <div class="legal-item"><span class="legal-idx">L.03</span><div><h4>Property Law Compatibility</h4><p>Existing conveyancing statutes may conflict with decentralized transfer mechanics requiring legislative harmonization.</p></div></div>
-      </div>
-      <div class="legal-col anim-item">
-        <div class="quote-block"><p>"The legal recognition of digital land records, evidentiary validity, and compatibility with existing property laws represent the most significant barriers to adoption."</p></div>
-        <div class="legal-item"><span class="legal-idx">L.04</span><div><h4>Cross-Border Jurisdiction</h4><p>International property transactions require multi-jurisdictional legal agreements on blockchain validity.</p></div></div>
-        <div class="legal-item"><span class="legal-idx">L.05</span><div><h4>Dispute Resolution</h4><p>Smart contract-based transfers need arbitration pathways when consensus records are contested.</p></div></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- S5: GOVERNANCE -->
-
-  <div class="slide" id="s5" role="region" aria-label="Governance Challenges">
-    <span class="slide-label anim-item">04 — Governance Challenges</span>
-    <h2 class="anim-item">Institutional &amp;<br>regulatory hurdles.</h2>
-    <div class="gov-grid">
-      <div class="gov-item anim-item"><span class="gov-num">I</span><h4>Regulatory Oversight</h4><ul><li>Defining supervisory bodies for blockchain land systems</li><li>Anti-money laundering compliance in digital transfers</li><li>Cross-agency data sharing protocols</li><li>Audit trail requirements and access control</li></ul></div>
-      <div class="gov-item anim-item"><span class="gov-num">II</span><h4>Data Privacy</h4><ul><li>Balancing transparency with personal data rights</li><li>GDPR &amp; local privacy law compliance challenges</li><li>Right to erasure vs. immutability conflict</li><li>Selective disclosure mechanisms for ownership</li></ul></div>
-      <div class="gov-item anim-item"><span class="gov-num">III</span><h4>Integration</h4><ul><li>Migrating legacy land records to blockchain</li><li>Capacity building within land administration bodies</li><li>Interoperability with national identity systems</li><li>Phased rollout vs. full system replacement</li></ul></div>
-    </div>
-  </div>
-
-  <!-- S6: APPROACH -->
-
-  <div class="slide" id="s6" role="region" aria-label="Research Approach">
-    <span class="slide-label anim-item">05 — Research Approach</span>
-    <h2 class="anim-item">An interdisciplinary<br>framework for analysis.</h2>
-    <div class="approach-row">
-      <div class="appr-item anim-item"><span class="appr-icon">⚖️</span><h4>Legal Analysis</h4><p>Examination of property law frameworks, digital evidence standards, and legislative gaps across jurisdictions.</p></div>
-      <div class="appr-item anim-item"><span class="appr-icon">🔗</span><h4>Technical Evaluation</h4><p>Assessment of distributed ledger architectures, consensus mechanisms, and cryptographic security properties.</p></div>
-      <div class="appr-item anim-item"><span class="appr-icon">🏛️</span><h4>Governance Study</h4><p>Institutional analysis of regulatory frameworks, administrative integration, and public sector readiness.</p></div>
-    </div>
-    <div class="interdisciplinary anim-item">
-      <span class="interdisc-label">Legal</span>
-      <div class="interdisc-line"></div>
-      <span class="interdisc-label">Governance</span>
-    </div>
-  </div>
-
-  <!-- S7: CONCLUSION -->
-
-  <div class="slide" id="s7" role="region" aria-label="Conclusion">
-    <div class="bg-text">B</div>
-    <span class="slide-label anim-item">Conclusion</span>
-    <h2 class="anim-item">Can blockchain build<br><em>trust</em> in land<br>administration?</h2>
-    <div class="conclusion-divider"></div>
-    <p class="conc-body anim-item">This research assesses blockchain as a viable and sustainable mechanism for strengthening the foundational pillars of modern property rights systems.</p>
-    <div class="pillars anim-item">
-      <div><span class="pillar-word">Transparency</span></div>
-      <div><span class="pillar-word">Security</span></div>
-      <div><span class="pillar-word">Trust</span></div>
-    </div>
-  </div>
-
-</div>
-
-<nav class="nav" aria-label="Slide navigation">
-  <button class="nav-btn" id="prevBtn" aria-label="Previous slide">← Prev</button>
-  <div class="nav-dots" id="navDots" role="tablist"></div>
-  <button class="nav-btn" id="nextBtn" aria-label="Next slide">Next →</button>
+<nav>
+  <span class="nav-logo">E-Judiciary & AI · 2025</span>
+  <div class="slide-dots" id="slideDots"></div>
+  <span class="nav-progress" id="navProgress">01 / 11</span>
 </nav>
 
-<div class="key-hint" aria-hidden="true">← → Arrow Keys · Swipe to Navigate</div>
+<!-- ═══════════════════════════════════════════ -->
+
+<!-- SLIDE 1: COVER -->
+
+<!-- ═══════════════════════════════════════════ -->
+
+<section class="slide" id="slide-1">
+  <div class="cover-grid"></div>
+  <div class="big-circle"></div>
+  <div class="slide-num">01</div>
+  <p class="kicker">Empirical Research · Madras High Court · 2025</p>
+  <h1>Public Awareness &<br><em>Judicial Access</em><br>in the Age of AI</h1>
+  <p class="subtitle">An Empirical Study on e-Judiciary Services &<br>Artificial Intelligence Implementation</p>
+  <p class="authors">Rakunatha Khrishanth Manathra &middot; Dr. J. Saravanan<br>Saveetha School of Law, SIMATS</p>
+  <div class="scroll-hint">Scroll</div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+
+<!-- SLIDE 2: ABSTRACT -->
+
+<!-- ═══════════════════════════════════════════ -->
+
+<section class="slide" id="slide-2">
+  <div class="slide-num">02</div>
+  <div class="abstract-layout">
+    <div class="abstract-label">Abstract</div>
+    <div class="abstract-content reveal">
+      <h2>Digital transformation of justice delivery in India</h2>
+      <p>This empirical study examines public awareness and utilization of e-Judiciary services at the Madras High Court — online case tracking, e-filing, virtual hearings — while assessing the growing role of Artificial Intelligence in judicial processes.</p>
+      <p style="margin-top:16px">Data collected from <strong>200 respondents</strong> in the Kilpauk region using structured questionnaires and SPSS analysis revealed uneven awareness, persistent digital barriers, and strong perceived benefits of digital judicial services.</p>
+      <div class="keywords">
+        <span class="kw">Digital Justice</span>
+        <span class="kw">e-Filing</span>
+        <span class="kw">Virtual Hearings</span>
+        <span class="kw">AI in Judiciary</span>
+        <span class="kw">Digital Literacy</span>
+        <span class="kw">Access to Justice</span>
+        <span class="kw">Judicial Transparency</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+
+<!-- SLIDE 3: OBJECTIVES -->
+
+<!-- ═══════════════════════════════════════════ -->
+
+<section class="slide" id="slide-3">
+  <div class="slide-num">03</div>
+  <h2 class="objectives-header">Research <span>Objectives</span></h2>
+  <div class="obj-list">
+    <div class="obj-item">
+      <span class="obj-num">01 —</span>
+      <p class="obj-text">Assess public awareness of e-Judiciary services: online case tracking, e-cause lists, e-filing, virtual hearings, and emerging AI-enabled judicial tools at the Madras High Court.</p>
+    </div>
+    <div class="obj-item">
+      <span class="obj-num">02 —</span>
+      <p class="obj-text">Examine utilization, perception, and acceptance of e-Judiciary and AI-assisted technologies among litigants, advocates, and the general public.</p>
+    </div>
+    <div class="obj-item">
+      <span class="obj-num">03 —</span>
+      <p class="obj-text">Identify major challenges and barriers, and suggest measures to improve digital literacy, ethical AI use, and effective access to technology-driven justice delivery.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+
+<!-- SLIDE 4: METHODOLOGY -->
+
+<!-- ═══════════════════════════════════════════ -->
+
+<section class="slide" id="slide-4">
+  <div class="slide-num">04</div>
+  <div class="method-grid reveal">
+    <div class="method-card">
+      <span class="method-icon">⚗️</span>
+      <p class="method-title">Research Type</p>
+      <p class="method-value">Doctrinal &<br>Empirical</p>
+      <p class="method-sub">Combined approach for comprehensive legal-social analysis</p>
+    </div>
+    <div class="method-card">
+      <span class="method-icon">👥</span>
+      <p class="method-title">Sample Size</p>
+      <p class="method-value">200<br>Respondents</p>
+      <p class="method-sub">Residents in and around Kilpauk, Chennai</p>
+    </div>
+    <div class="method-card">
+      <span class="method-icon">📊</span>
+      <p class="method-title">Data Analysis</p>
+      <p class="method-value">SPSS &<br>Visual Stats</p>
+      <p class="method-sub">Bar graphs, pie charts, ANOVA, comparative charts</p>
+    </div>
+    <div class="method-card">
+      <span class="method-icon">📋</span>
+      <p class="method-title">Sampling</p>
+      <p class="method-value">Convenience<br>Sampling</p>
+      <p class="method-sub">Structured questionnaires as primary data collection tool</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+
+<!-- SLIDE 5: KEY STATS -->
+
+<!-- ═══════════════════════════════════════════ -->
+
+<section class="slide" id="slide-5">
+  <div class="slide-num">05</div>
+  <h2 class="findings-title">Key <span>Findings</span></h2>
+  <div class="stats-row" id="statsRow">
+    <div class="stat-box">
+      <span class="stat-num counter" data-target="200">0</span>
+      <span class="stat-label">Total<br>Respondents</span>
+      <div class="stat-bar" style="--w:100%"></div>
+    </div>
+    <div class="stat-box">
+      <span class="stat-num counter" data-target="72">0</span>
+      <span class="stat-label">% Aware of<br>Case Status Tracking</span>
+      <div class="stat-bar"></div>
+    </div>
+    <div class="stat-box">
+      <span class="stat-num counter" data-target="38">0</span>
+      <span class="stat-label">% Aware of<br>Virtual Hearings</span>
+      <div class="stat-bar"></div>
+    </div>
+    <div class="stat-box">
+      <span class="stat-num counter" data-target="25">0</span>
+      <span class="stat-label">% Familiar with<br>AI Judicial Tools</span>
+      <div class="stat-bar"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+
+<!-- SLIDE 6: AGE-BASED AWARENESS -->
+
+<!-- ═══════════════════════════════════════════ -->
+
+<section class="slide" id="slide-6">
+  <div class="slide-num">06</div>
+  <h3 class="findings-section-title">Awareness by Age Group</h3>
+  <div class="finding-rows" id="ageRows">
+    <div class="finding-row">
+      <span class="age-label">18–20 yrs</span>
+      <div class="bar-wrap"><div class="bar-fill" data-w="82"><span>High — Online Case Status & e-Filing</span></div></div>
+    </div>
+    <div class="finding-row">
+      <span class="age-label">21–30 yrs</span>
+      <div class="bar-wrap"><div class="bar-fill" data-w="75"><span>Moderate-High — Digital Platforms</span></div></div>
+    </div>
+    <div class="finding-row">
+      <span class="age-label">31–40 yrs</span>
+      <div class="bar-wrap"><div class="bar-fill" data-w="60"><span>Moderate — Virtual Hearings peak</span></div></div>
+    </div>
+    <div class="finding-row">
+      <span class="age-label">41–50 yrs</span>
+      <div class="bar-wrap"><div class="bar-fill" data-w="38"><span>Low — Reliance on traditional channels</span></div></div>
+    </div>
+    <div class="finding-row">
+      <span class="age-label">50+ yrs</span>
+      <div class="bar-wrap"><div class="bar-fill" data-w="15"><span>Very Low — Cognitive & access barriers</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+
+<!-- SLIDE 7: GENDER & EDUCATION -->
+
+<!-- ═══════════════════════════════════════════ -->
+
+<section class="slide" id="slide-7">
+  <div class="slide-num">07</div>
+  <div class="two-col reveal">
+    <div class="col-section">
+      <p class="col-label">Gender Disparity</p>
+      <div class="donut-container">
+        <div class="donut">
+          <svg width="120" height="120" viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="48" fill="none" stroke="rgba(245,244,240,0.08)" stroke-width="12"/>
+            <circle cx="60" cy="60" r="48" fill="none" stroke="rgba(245,244,240,0.85)" stroke-width="12"
+              stroke-dasharray="180 122" stroke-dashoffset="0" id="genderCircle"
+              style="transition: stroke-dasharray 1.5s ease"/>
+          </svg>
+          <div class="donut-label">
+            <span class="pct">~60%</span>
+            <span class="sub">Male</span>
+          </div>
+        </div>
+        <div class="donut-legend">
+          <b>Male respondents</b> show higher awareness and significantly greater usage of e-Judiciary services.<br><br>
+          Female respondents exhibit higher <em>neutrality</em> and lower actual utilization — pointing to deeper structural barriers.
+        </div>
+      </div>
+    </div>
+    <div class="col-section">
+      <p class="col-label">Usage by Education Level</p>
+      <div class="edu-bars">
+        <div class="edu-row">
+          <span class="edu-name">Postgraduate</span>
+          <div class="edu-bar-bg"><div class="edu-bar-fill" data-w="88" id="edu1"><span>88%</span></div></div>
+        </div>
+        <div class="edu-row">
+          <span class="edu-name">Graduate</span>
+          <div class="edu-bar-bg"><div class="edu-bar-fill" data-w="72" id="edu2"><span>72%</span></div></div>
+        </div>
+        <div class="edu-row">
+          <span class="edu-name">Higher Secondary</span>
+          <div class="edu-bar-bg"><div class="edu-bar-fill" data-w="40" id="edu3"><span>40%</span></div></div>
+        </div>
+        <div class="edu-row">
+          <span class="edu-name">Secondary</span>
+          <div class="edu-bar-bg"><div class="edu-bar-fill" data-w="18" id="edu4"><span>18%</span></div></div>
+        </div>
+        <div class="edu-row">
+          <span class="edu-name">Primary</span>
+          <div class="edu-bar-bg"><div class="edu-bar-fill" data-w="5" id="edu5"><span>5%</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+
+<!-- SLIDE 8: BARRIERS -->
+
+<!-- ═══════════════════════════════════════════ -->
+
+<section class="slide" id="slide-8">
+  <div class="slide-num">08</div>
+  <h2 class="barriers-title">Key <span style="color:rgba(10,10,10,0.35); font-style:italic">Barriers</span> Identified</h2>
+  <div class="barriers-grid reveal">
+    <div class="barrier-card">
+      <div class="b-num">01</div>
+      <p class="b-title">Digital Illiteracy</p>
+      <p class="b-desc">Many users lack basic skills to navigate online platforms, smartphones, or court portals effectively.</p>
+    </div>
+    <div class="barrier-card">
+      <div class="b-num">02</div>
+      <p class="b-title">Language Barriers</p>
+      <p class="b-desc">Predominantly English interfaces limit accessibility for regional language speakers.</p>
+    </div>
+    <div class="barrier-card">
+      <div class="b-num">03</div>
+      <p class="b-title">Internet Access</p>
+      <p class="b-desc">Uneven connectivity, especially among economically weaker sections and rural populations.</p>
+    </div>
+    <div class="barrier-card">
+      <div class="b-num">04</div>
+      <p class="b-title">Fear of Errors</p>
+      <p class="b-desc">Psychological barriers — particularly among older users — of making irreversible procedural mistakes online.</p>
+    </div>
+    <div class="barrier-card">
+      <div class="b-num">05</div>
+      <p class="b-title">Lack of Guidance</p>
+      <p class="b-desc">Insufficient on-site assistance within court premises, reducing user confidence in independent access.</p>
+    </div>
+    <div class="barrier-card">
+      <div class="b-num">06</div>
+      <p class="b-title">Low AI Awareness</p>
+      <p class="b-desc">Limited public knowledge of AI-enabled tools like legal research assistance, translation, and case analytics.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+
+<!-- SLIDE 9: SPSS / HYPOTHESIS -->
+
+<!-- ═══════════════════════════════════════════ -->
+
+<section class="slide" id="slide-9">
+  <div class="slide-num">09</div>
+  <h3 class="analysis-title">SPSS Statistical Analysis</h3>
+  <div class="hypothesis-cards reveal">
+    <div class="hyp-card">
+      <p class="hyp-label">ANOVA — Variable</p>
+      <p class="hyp-variable">Age vs. e-Judiciary Awareness</p>
+      <div class="hyp-stats">
+        <div class="hyp-stat">
+          <span class="hyp-stat-val">1.752</span>
+          <span class="hyp-stat-key">F-Statistic</span>
+        </div>
+        <div class="hyp-stat">
+          <span class="hyp-stat-val">1, 207</span>
+          <span class="hyp-stat-key">Degrees of Freedom</span>
+        </div>
+        <div class="hyp-stat">
+          <span class="hyp-stat-val">0.187</span>
+          <span class="hyp-stat-key">p-Value</span>
+        </div>
+      </div>
+      <div class="hyp-result">p = .187 &gt; 0.05 → Null hypothesis not rejected. No statistically significant effect of age on e-Judiciary awareness within this sample.</div>
+    </div>
+    <div class="hyp-card">
+      <p class="hyp-label">ANOVA — Variable</p>
+      <p class="hyp-variable">Gender vs. e-Judiciary Awareness</p>
+      <div class="hyp-stats">
+        <div class="hyp-stat">
+          <span class="hyp-stat-val">0.404</span>
+          <span class="hyp-stat-key">F-Statistic</span>
+        </div>
+        <div class="hyp-stat">
+          <span class="hyp-stat-val">1, 207</span>
+          <span class="hyp-stat-key">Degrees of Freedom</span>
+        </div>
+        <div class="hyp-stat">
+          <span class="hyp-stat-val">0.526</span>
+          <span class="hyp-stat-key">p-Value</span>
+        </div>
+      </div>
+      <div class="hyp-result">p = .526 &gt; 0.05 → Null hypothesis not rejected. Gender did not exert a significant statistical influence on the dependent variable in this sample.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+
+<!-- SLIDE 10: RECOMMENDATIONS -->
+
+<!-- ═══════════════════════════════════════════ -->
+
+<section class="slide" id="slide-10">
+  <div class="slide-num">10</div>
+  <h2 class="reco-title">Recommendations</h2>
+  <div class="reco-list">
+    <div class="reco-item">
+      <span class="reco-icon">🏛️</span>
+      <div class="reco-content">
+        <p class="reco-head">Infrastructure</p>
+        <p class="reco-body">Establish permanent help desks within court premises with trained staff to guide users through e-Judiciary services in regional languages.</p>
+      </div>
+    </div>
+    <div class="reco-item">
+      <span class="reco-icon">📱</span>
+      <div class="reco-content">
+        <p class="reco-head">Technology</p>
+        <p class="reco-body">Develop user-friendly mobile applications with multilingual support and simplified navigation to reduce barriers for less digitally literate users.</p>
+      </div>
+    </div>
+    <div class="reco-item">
+      <span class="reco-icon">🎓</span>
+      <div class="reco-content">
+        <p class="reco-head">Digital Literacy</p>
+        <p class="reco-body">Implement targeted training programmes for older citizens, women, and economically weaker groups, leveraging community networks and traditional channels.</p>
+      </div>
+    </div>
+    <div class="reco-item">
+      <span class="reco-icon">🤖</span>
+      <div class="reco-content">
+        <p class="reco-head">Responsible AI Integration</p>
+        <p class="reco-body">Integrate AI tools for case management, legal translation, and decision-support with clear ethical frameworks, transparency, and accountability safeguards.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+
+<!-- SLIDE 11: CONCLUSION -->
+
+<!-- ═══════════════════════════════════════════ -->
+
+<section class="slide" id="slide-11">
+  <div class="slide-num">11</div>
+  <div class="conclusion-wrap reveal">
+    <p class="conclusion-kicker">Conclusion</p>
+    <p class="conclusion-quote">
+      "Digital justice fulfils its potential only when
+      <strong>technological advancement</strong> is matched by
+      <strong>social inclusion</strong> — otherwise, e-Judiciary risks deepening existing inequalities rather than alleviating them."
+    </p>
+    <div class="conclusion-divider"></div>
+    <p class="conclusion-sub">
+      While e-Judiciary services enjoy broad legitimacy and perceived usefulness, awareness and utilization remain uneven across age, gender, education, and occupation. AI integration holds transformative promise — but must be accompanied by human-centric outreach and robust policy support.
+    </p>
+    <div class="final-credits">
+      Saveetha School of Law · SIMATS · Chennai · 2025
+    </div>
+  </div>
+</section>
 
 <script>
-  /* cursor */
-  const cur = document.getElementById('cursor');
-  const rng = document.getElementById('cursorRing');
-  if (cur) {
-    let mx=0,my=0,rx=0,ry=0;
-    document.addEventListener('mousemove',e=>{ mx=e.clientX; my=e.clientY; cur.style.transform=`translate(${mx-4}px,${my-4}px)`; });
-    (function t(){ rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12; rng.style.transform=`translate(${rx-16}px,${ry-16}px)`; requestAnimationFrame(t); })();
-  }
+// ─── CURSOR ────────────────────────────────────────
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
 
-  /* state */
-  const slides = document.querySelectorAll('.slide');
-  const N      = slides.length;
-  let cur_idx  = 0, busy = false;
-  const bar    = document.getElementById('progressBar');
-  const ctr    = document.getElementById('slideCounter');
-  const ov     = document.getElementById('overlay');
-  const dots_w = document.getElementById('navDots');
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.transform = `translate(${mx - 5}px, ${my - 5}px)`;
+});
 
-  /* dots */
-  for(let i=0;i<N;i++){
-    const d=document.createElement('button');
-    d.className='dot'+(i===0?' active':'');
-    d.setAttribute('role','tab');
-    d.setAttribute('aria-label',`Slide ${i+1}`);
-    d.addEventListener('click',()=>go(i));
-    dots_w.appendChild(d);
-  }
+function animRing() {
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  ring.style.transform = `translate(${rx - 18}px, ${ry - 18}px)`;
+  requestAnimationFrame(animRing);
+}
+animRing();
 
-  function ui(){
-    document.querySelectorAll('.dot').forEach((d,i)=>{ d.classList.toggle('active',i===cur_idx); d.setAttribute('aria-selected',i===cur_idx); });
-    bar.style.width=((cur_idx+1)/N*100)+'%';
-    ctr.textContent=`${String(cur_idx+1).padStart(2,'0')} / ${String(N).padStart(2,'0')}`;
-  }
+document.querySelectorAll('a, button, .barrier-card, .method-card, .kw, .stat-box, .dot').forEach(el => {
+  el.addEventListener('mouseenter', () => ring.classList.add('hover'));
+  el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
+});
 
-  function go(idx){
-    if(idx===cur_idx||busy) return;
-    busy=true;
-    ov.style.transition='opacity 0.22s ease'; ov.style.opacity='1';
-    setTimeout(()=>{
-      slides[cur_idx].classList.remove('active','entering');
-      slides[cur_idx].scrollTop=0;
-      cur_idx=idx;
-      slides[cur_idx].classList.add('active');
-      ui();
-      ov.style.transition='opacity 0.28s ease'; ov.style.opacity='0';
-      setTimeout(()=>{
-        slides[cur_idx].classList.add('entering');
-        slides[cur_idx].querySelectorAll('.anim-item').forEach(el=>{ el.style.animation='none'; void el.offsetHeight; el.style.animation=''; });
-        busy=false;
-      },55);
-    },240);
-  }
+// ─── SLIDE DOTS ────────────────────────────────────
+const slides = document.querySelectorAll('.slide');
+const dotsContainer = document.getElementById('slideDots');
+const progress = document.getElementById('navProgress');
 
-  document.getElementById('prevBtn').addEventListener('click',()=>{ if(cur_idx>0) go(cur_idx-1); });
-  document.getElementById('nextBtn').addEventListener('click',()=>{ if(cur_idx<N-1) go(cur_idx+1); });
-  document.addEventListener('keydown',e=>{ if(e.key==='ArrowRight'||e.key==='ArrowDown'){if(cur_idx<N-1)go(cur_idx+1);} if(e.key==='ArrowLeft'||e.key==='ArrowUp'){if(cur_idx>0)go(cur_idx-1);} });
+slides.forEach((_, i) => {
+  const d = document.createElement('div');
+  d.className = 'dot' + (i === 0 ? ' active' : '');
+  d.addEventListener('click', () => slides[i].scrollIntoView({ behavior: 'smooth' }));
+  dotsContainer.appendChild(d);
+});
 
-  /* swipe */
-  let tx=0,ty=0;
-  document.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:true});
-  document.addEventListener('touchend',e=>{
-    const dx=tx-e.changedTouches[0].clientX, dy=ty-e.changedTouches[0].clientY;
-    if(Math.abs(dx)>Math.abs(dy)&&Math.abs(dx)>40){ if(dx>0&&cur_idx<N-1)go(cur_idx+1); if(dx<0&&cur_idx>0)go(cur_idx-1); }
-  },{passive:true});
+// ─── INTERSECTION OBSERVER ─────────────────────────
+const io = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
 
-  ui();
+      // Update nav
+      const idx = [...slides].indexOf(entry.target);
+      if (idx >= 0) {
+        document.querySelectorAll('.dot').forEach((d,i) => d.classList.toggle('active', i === idx));
+        progress.textContent = String(idx + 1).padStart(2,'0') + ' / ' + String(slides.length).padStart(2,'0');
+      }
+    }
+  });
+}, { threshold: 0.35 });
+
+slides.forEach(s => io.observe(s));
+
+// Generic reveal
+const revealIO = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.2 });
+document.querySelectorAll('.reveal, .obj-item, .reco-item').forEach(el => revealIO.observe(el));
+
+// ─── STAGGERED OBJ ITEMS ───────────────────────────
+const objItems = document.querySelectorAll('.obj-item');
+const objIO = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      objItems.forEach((item, i) => {
+        setTimeout(() => item.classList.add('visible'), i * 150);
+      });
+      objIO.disconnect();
+    }
+  });
+}, { threshold: 0.2 });
+if (objItems.length) objIO.observe(objItems[0].closest('.obj-list') || objItems[0]);
+
+// ─── STAGGERED RECO ITEMS ──────────────────────────
+const recoItems = document.querySelectorAll('.reco-item');
+const recoIO = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      recoItems.forEach((item, i) => {
+        setTimeout(() => item.classList.add('visible'), i * 120);
+      });
+      recoIO.disconnect();
+    }
+  });
+}, { threshold: 0.15 });
+if (recoItems.length) recoIO.observe(recoItems[0].closest('.reco-list') || recoItems[0]);
+
+// ─── AGE BARS ──────────────────────────────────────
+const ageBarIO = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      document.querySelectorAll('.bar-fill').forEach((bar, i) => {
+        const w = bar.dataset.w;
+        setTimeout(() => { bar.style.width = w + '%'; }, i * 120);
+      });
+      ageBarIO.disconnect();
+    }
+  });
+}, { threshold: 0.3 });
+const ageSection = document.getElementById('ageRows');
+if (ageSection) ageBarIO.observe(ageSection);
+
+// ─── EDU BARS ──────────────────────────────────────
+const eduBarIO = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      document.querySelectorAll('.edu-bar-fill').forEach((bar, i) => {
+        const w = bar.dataset.w;
+        setTimeout(() => { bar.style.width = w + '%'; }, i * 100);
+      });
+      eduBarIO.disconnect();
+    }
+  });
+}, { threshold: 0.3 });
+const slide7 = document.getElementById('slide-7');
+if (slide7) eduBarIO.observe(slide7);
+
+// ─── COUNTERS ──────────────────────────────────────
+const statIO = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.counter').forEach(el => {
+        const target = +el.dataset.target;
+        let current = 0;
+        const step = Math.ceil(target / 60);
+        const timer = setInterval(() => {
+          current = Math.min(current + step, target);
+          el.textContent = current + (target < 100 ? '%' : '');
+          if (current >= target) clearInterval(timer);
+        }, 25);
+      });
+      e.target.querySelectorAll('.stat-bar').forEach((bar, i) => {
+        setTimeout(() => { bar.style.width = '100%'; }, i * 200);
+      });
+      statIO.disconnect();
+    }
+  });
+}, { threshold: 0.4 });
+const statsRow = document.getElementById('statsRow');
+if (statsRow) statIO.observe(statsRow);
 </script>
 
 </body>
