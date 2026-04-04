@@ -5,494 +5,380 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Judicial Review of IPR Decisions</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-:root {
-–ink: #0d0d0d;
-–paper: #f5f0e8;
-–gold: #c8983a;
-–gold-lt: #e8c97a;
-–crimson: #8b1a2e;
-–slate: #2a3040;
-–muted: #7a7060;
-–rule: #c8983a44;
-–nav-w: 60px;
-}
-
-html, body {
-height: 100%; width: 100%;
-overflow: hidden;
-background: #000;
-font-family: ‘DM Sans’, sans-serif;
+body {
+font-family: Arial, sans-serif;
+background: #1a1a2e;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+min-height: 100vh;
+padding: 20px;
 }
 
-/* LAYOUT */
-#shell { display: flex; width: 100vw; height: 100vh; }
-
-/* SIDE NAV */
-#sidenav {
-width: var(–nav-w); min-width: var(–nav-w);
-background: #0f1217;
-border-right: 1px solid #ffffff10;
-display: flex; flex-direction: column;
-align-items: center; justify-content: space-between;
-padding: 1rem 0; z-index: 100;
-}
-.nav-top, .nav-bottom { display: flex; flex-direction: column; align-items: center; gap: .4rem; }
-.nav-mid { display: flex; flex-direction: column; align-items: center; gap: .5rem; flex: 1; justify-content: center; }
-.nav-btn {
-width: 36px; height: 36px;
-background: #ffffff0c; border: 1px solid #ffffff15;
-border-radius: 8px; color: #ffffff99;
-font-size: .95rem; cursor: pointer;
-display: flex; align-items: center; justify-content: center;
-transition: background .2s, color .2s, border-color .2s;
-}
-.nav-btn:hover:not(:disabled) { background: var(–gold); color: #000; border-color: var(–gold); }
-.nav-btn:disabled { opacity: .2; cursor: default; }
-.dot-btn {
-width: 7px; height: 7px; border-radius: 50%;
-background: #ffffff22; border: none; cursor: pointer; padding: 0;
-transition: all .3s;
-}
-.dot-btn.active { background: var(–gold); transform: scale(1.45); }
-#counter { color: #ffffff35; font-size: .55rem; writing-mode: vertical-rl; letter-spacing: .08em; }
-
-/* DECK */
-#deck { flex: 1; position: relative; overflow: hidden; }
-
-/* PROGRESS */
-#progress {
-position: absolute; top: 0; left: 0; height: 3px;
-background: var(–gold); z-index: 50;
-transition: width .4s ease; pointer-events: none;
-}
-
-/* SLIDES — scrollable */
-.slide {
-position: absolute; inset: 0;
-opacity: 0; pointer-events: none;
-transition: opacity .45s ease, transform .45s ease;
-transform: translateX(36px);
-overflow-y: auto; overflow-x: hidden;
--webkit-overflow-scrolling: touch;
-scroll-behavior: smooth;
-}
-.slide.active  { opacity: 1; pointer-events: auto; transform: translateX(0); }
-.slide.exit    { opacity: 0; transform: translateX(-36px); }
-.slide::-webkit-scrollbar { width: 4px; }
-.slide::-webkit-scrollbar-track { background: transparent; }
-.slide::-webkit-scrollbar-thumb { background: #ffffff20; border-radius: 2px; }
-
-/* slide label badge */
-.slbl {
-position: absolute; top: .8rem; right: 1rem;
-font-size: .58rem; letter-spacing: .16em; text-transform: uppercase;
-color: #ffffff25; pointer-events: none; z-index: 5;
-}
-
-/* ══════════════════════════════
-S1 — TITLE
-══════════════════════════════ */
-#s1 {
-background: var(–slate);
-display: flex; flex-direction: column;
-align-items: center; justify-content: center;
-text-align: center; min-height: 100%;
-padding: 2.5rem 2rem 4rem;
-}
-#s1::before {
-content: ‘’; position: absolute; inset: 0; pointer-events: none;
-background:
-repeating-linear-gradient(0deg, transparent, transparent 59px, var(–rule) 60px),
-repeating-linear-gradient(90deg, transparent, transparent 59px, var(–rule) 60px);
-}
-#s1 > * { position: relative; z-index: 1; }
-.badge {
-font-size: .6rem; letter-spacing: .22em; color: var(–gold);
-text-transform: uppercase; border: 1px solid var(–gold);
-padding: .28em .95em; border-radius: 2px; margin-bottom: 1.1rem; display: inline-block;
-}
-#s1 h1 {
-font-family: ‘Playfair Display’, serif;
-font-size: clamp(1.5rem, 3vw, 2.8rem);
-font-weight: 900; color: var(–paper); line-height: 1.2; max-width: 680px;
-}
-#s1 h1 span { color: var(–gold); font-style: italic; }
-#s1 .sub { margin-top: .9rem; color: #ffffffaa; font-size: .84rem; letter-spacing: .06em; }
-#s1 .authors { margin-top: 2rem; display: flex; gap: 1.8rem; flex-wrap: wrap; justify-content: center; }
-#s1 .acard { border-left: 2px solid var(–gold); padding-left: .8rem; text-align: left; }
-#s1 .acard .name { color: var(–gold-lt); font-size: .8rem; font-weight: 500; }
-#s1 .acard .role { color: #ffffff55; font-size: .68rem; margin-top: .12rem; }
-#s1 .dline {
-position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
-background: linear-gradient(90deg, transparent, var(–gold), transparent);
-}
-
-/* ══════════════════════════════
-S2 — ABSTRACT
-══════════════════════════════ */
-#s2 { background: var(–paper); display: flex; flex-direction: column; min-height: 100%; }
-.s2g { display: flex; min-height: 100%; }
-.s2-left {
-width: 260px; min-width: 260px;
-background: var(–crimson); color: white;
-display: flex; flex-direction: column;
-padding: 2rem 1.5rem; gap: .9rem;
-position: sticky; top: 0; align-self: start; min-height: 100vh;
-}
-.s2-left .ey { font-size: .58rem; letter-spacing: .24em; color: #ffffff60; text-transform: uppercase; }
-.s2-left h2 { font-family: ‘Playfair Display’, serif; font-size: 1.9rem; font-weight: 900; line-height: 1.1; }
-.s2-left .hr { width: 38px; height: 3px; background: var(–gold); }
-.s2-left p { color: #ffffffc0; font-size: .78rem; line-height: 1.7; }
-.kws { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: auto; }
-.kw { background: #ffffff18; border: 1px solid #ffffff28; padding: .24em .7em; border-radius: 2px; font-size: .62rem; }
-.s2-right { flex: 1; padding: 2rem 2.5rem; display: flex; flex-direction: column; gap: .9rem; justify-content: center; }
-.s2-right p { color: #333; font-size: .86rem; line-height: 1.8; }
-.sg { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-top: .4rem; }
-.sb { background: var(–slate); padding: .85rem 1rem; border-radius: 4px; }
-.sb .n { font-family: ‘Playfair Display’, serif; font-size: 1.6rem; color: var(–gold); font-weight: 700; }
-.sb .l { font-size: .65rem; color: #ffffffaa; margin-top: .12rem; line-height: 1.4; }
-
-/* ══════════════════════════════
-S3 — OBJECTIVES
-══════════════════════════════ */
-#s3 { background: var(–ink); display: flex; flex-direction: column; min-height: 100%; padding: 2.2rem 2.8rem 3rem; }
-.s3h { display: flex; align-items: baseline; gap: .9rem; margin-bottom: 1.8rem; }
-.s3h .bg { font-family: ‘Playfair Display’, serif; font-size: 4.5rem; color: var(–gold); opacity: .13; line-height: 1; }
-.s3h h2 { font-family: ‘Playfair Display’, serif; font-size: 1.9rem; color: var(–paper); font-weight: 700; }
-.og { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-.oc {
-border: 1px solid #ffffff16; padding: 1.3rem 1.5rem;
-border-radius: 6px; background: #ffffff05;
-position: relative; overflow: hidden;
-transition: background .25s, border-color .25s;
-}
-.oc:hover { background: #ffffff0e; border-color: var(–gold); }
-.oc .ix { position: absolute; top: .5rem; right: 1rem; font-family: ‘Playfair Display’, serif; font-size: 2.6rem; color: var(–gold); opacity: .1; font-weight: 900; }
-.oc h3 { color: var(–gold-lt); font-size: .62rem; text-transform: uppercase; letter-spacing: .16em; margin-bottom: .5rem; }
-.oc p { color: #ffffffcc; font-size: .8rem; line-height: 1.65; }
-
-/* ══════════════════════════════
-S4 — METHODOLOGY
-══════════════════════════════ */
-#s4 { background: var(–paper); display: flex; flex-direction: column; min-height: 100%; }
-.s4g { display: flex; min-height: 100%; }
-.s4l { flex: 1.1; padding: 2.2rem 2.5rem; display: flex; flex-direction: column; justify-content: center; }
-.s4l .ey { font-size: .58rem; letter-spacing: .22em; text-transform: uppercase; color: var(–muted); margin-bottom: .55rem; }
-.s4l h2 { font-family: ‘Playfair Display’, serif; font-size: 1.9rem; color: var(–ink); font-weight: 900; margin-bottom: 1.4rem; }
-.step { display: flex; gap: .95rem; align-items: flex-start; margin-bottom: 1.2rem; }
-.step .d { width: 30px; height: 30px; min-width: 30px; border-radius: 50%; background: var(–crimson); color: white; display: flex; align-items: center; justify-content: center; font-size: .72rem; font-weight: 500; }
-.step .t h4 { color: var(–ink); font-size: .83rem; font-weight: 500; margin-bottom: .18rem; }
-.step .t p { color: var(–muted); font-size: .76rem; line-height: 1.55; }
-.s4r { flex: 1; background: var(–slate); display: flex; flex-direction: column; justify-content: center; padding: 2.2rem 2rem; gap: 1rem; }
-.slbl2 { color: var(–gold-lt); font-size: .58rem; letter-spacing: .2em; text-transform: uppercase; margin-bottom: .3rem; }
-.mst .bl { display: flex; justify-content: space-between; margin-bottom: .38rem; }
-.mst .bl span { font-size: .76rem; }
-.mst .bl span:first-child { color: #ffffffcc; }
-.mst .bl span:last-child { color: var(–gold); font-weight: 500; }
-.bt { height: 5px; background: #ffffff18; border-radius: 3px; overflow: hidden; }
-.bf { height: 100%; background: linear-gradient(90deg, var(–gold), var(–gold-lt)); border-radius: 3px; width: 0; transition: width 1s ease .2s; }
-.tn { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #ffffff14; color: #ffffff45; font-size: .7rem; line-height: 1.6; }
-.tn b { color: var(–gold); font-weight: 400; }
-
-/* ══════════════════════════════
-S5 — FINDINGS
-══════════════════════════════ */
-#s5 { background: var(–slate); display: flex; flex-direction: column; min-height: 100%; padding: 2.2rem 2.8rem 3rem; }
-.s5top { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1.8rem; flex-wrap: wrap; gap: .6rem; }
-.s5top h2 { font-family: ‘Playfair Display’, serif; font-size: 1.9rem; color: var(–paper); font-weight: 700; }
-.s5top .note { color: #ffffff50; font-size: .7rem; max-width: 220px; text-align: right; line-height: 1.5; }
-.fr { display: grid; grid-template-columns: repeat(4, 1fr); gap: .9rem; }
-.fc { background: #ffffff08; border: 1px solid #ffffff12; padding: 1.3rem 1rem; border-radius: 6px; text-align: center; transition: transform .25s; }
-.fc:hover { transform: translateY(-5px); }
-.ring {
-width: 76px; height: 76px; margin: 0 auto .8rem;
-border-radius: 50%; display: flex; align-items: center; justify-content: center;
-background: conic-gradient(var(–gold) var(–pct, 0deg), #ffffff12 0);
+/* Slide container */
+.slide-container {
+width: 100%;
+max-width: 900px;
+background: #fff;
+border-radius: 8px;
+min-height: 500px;
+padding: 50px 60px;
 position: relative;
+box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+display: none;
 }
-.ring::after { content: ‘’; position: absolute; inset: 8px; background: var(–slate); border-radius: 50%; }
-.ring .v { position: relative; z-index: 1; font-family: ‘Playfair Display’, serif; font-size: 1.15rem; color: var(–gold); font-weight: 700; }
-.fc h4 { color: var(–paper); font-size: .76rem; line-height: 1.5; }
-.cbox { margin-top: 1.5rem; padding: .95rem 1.3rem; background: #ffffff07; border-radius: 6px; border-left: 3px solid var(–gold); }
-.cbox p { color: #ffffffcc; font-size: .8rem; line-height: 1.65; }
+.slide-container.active { display: block; }
 
-/* ══════════════════════════════
-S6 — LITERATURE
-══════════════════════════════ */
-#s6 { background: var(–paper); display: flex; flex-direction: column; min-height: 100%; padding: 2.2rem 2.8rem 3rem; }
-.s6h { margin-bottom: 1.5rem; }
-.s6h .ey { font-size: .58rem; letter-spacing: .22em; text-transform: uppercase; color: var(–muted); }
-.s6h h2 { font-family: ‘Playfair Display’, serif; font-size: 1.9rem; color: var(–ink); font-weight: 900; }
-.lg { display: grid; grid-template-columns: 1fr 1fr; gap: .95rem; }
-.lc { border-left: 3px solid var(–gold); padding: 1rem 1.2rem; background: #0d0d0d07; border-radius: 0 4px 4px 0; }
-.lc .au { color: var(–crimson); font-size: .7rem; font-weight: 500; letter-spacing: .04em; }
-.lc .ti { color: var(–ink); font-size: .82rem; font-weight: 500; margin: .24rem 0; line-height: 1.4; }
-.lc .st { color: var(–muted); font-size: .7rem; }
-.lc .st b { color: var(–slate); }
-.fn { margin-top: 1.1rem; padding: .75rem .95rem; background: #0d0d0d07; border-radius: 4px; font-size: .7rem; color: var(–muted); line-height: 1.6; }
+/* Slide number badge */
+.slide-num {
+position: absolute;
+top: 18px;
+right: 24px;
+font-size: 12px;
+color: #999;
+}
 
-/* ══════════════════════════════
-S7 — CONCLUSION
-══════════════════════════════ */
-#s7 {
-background: var(–ink);
+/* Accent bar at top */
+.accent-bar {
+height: 5px;
+background: #003399;
+border-radius: 8px 8px 0 0;
+position: absolute;
+top: 0; left: 0; right: 0;
+}
+
+/* Typography */
+h1 { font-size: 28px; color: #003399; margin-bottom: 12px; line-height: 1.3; }
+h2 { font-size: 22px; color: #003399; margin-bottom: 16px; border-bottom: 2px solid #003399; padding-bottom: 8px; }
+h3 { font-size: 16px; color: #003399; margin-bottom: 6px; }
+p  { font-size: 14px; color: #333; line-height: 1.7; margin-bottom: 10px; }
+ul { padding-left: 20px; }
+ul li { font-size: 14px; color: #333; line-height: 1.7; margin-bottom: 6px; }
+
+/* Subtitle */
+.subtitle { font-size: 15px; color: #555; margin-bottom: 30px; }
+
+/* Author cards */
+.author-row { display: flex; gap: 30px; flex-wrap: wrap; margin-top: 30px; }
+.author-card { background: #f0f4ff; border-left: 4px solid #003399; padding: 12px 16px; border-radius: 4px; flex: 1; min-width: 200px; }
+.author-card .name { font-weight: bold; font-size: 14px; color: #003399; }
+.author-card .role { font-size: 12px; color: #666; margin-top: 4px; }
+
+/* Keyword pills */
+.keywords { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+.kw { background: #e8eeff; color: #003399; border: 1px solid #aabbff; padding: 4px 12px; border-radius: 20px; font-size: 12px; }
+
+/* Stat grid */
+.stat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 20px; }
+.stat-box { background: #f0f4ff; border: 1px solid #c5d0f0; border-radius: 6px; padding: 14px 16px; text-align: center; }
+.stat-box .num { font-size: 26px; font-weight: bold; color: #003399; }
+.stat-box .lbl { font-size: 12px; color: #555; margin-top: 4px; }
+
+/* Objective cards */
+.obj-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 10px; }
+.obj-card { background: #f7f9ff; border: 1px solid #d0d8f5; border-radius: 6px; padding: 14px 16px; }
+.obj-card .num { font-size: 11px; font-weight: bold; color: #003399; letter-spacing: 1px; margin-bottom: 4px; }
+.obj-card p { margin: 0; font-size: 13px; }
+
+/* Steps */
+.step { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 16px; }
+.step .circle { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; background: #003399; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; margin-top: 2px; }
+.step .txt b { font-size: 14px; color: #222; display: block; margin-bottom: 3px; }
+.step .txt span { font-size: 13px; color: #555; line-height: 1.6; }
+
+/* Findings */
+.find-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 10px; }
+.find-card { background: #f0f4ff; border: 1px solid #c5d0f0; border-radius: 6px; padding: 16px; display: flex; align-items: center; gap: 16px; }
+.find-card .pct { font-size: 32px; font-weight: bold; color: #003399; min-width: 70px; text-align: center; }
+.find-card .desc { font-size: 13px; color: #333; line-height: 1.5; }
+
+/* Lit cards */
+.lit-card { border-left: 4px solid #003399; padding: 12px 16px; background: #f7f9ff; margin-bottom: 12px; border-radius: 0 6px 6px 0; }
+.lit-card .author { font-weight: bold; font-size: 13px; color: #003399; }
+.lit-card .title  { font-size: 13px; color: #333; margin: 4px 0; }
+.lit-card .stats  { font-size: 12px; color: #777; }
+
+/* Tags */
+.tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+.tag { background: #003399; color: #fff; padding: 5px 14px; border-radius: 4px; font-size: 12px; }
+
+/* Conclusion box */
+.info-box { background: #fffbf0; border-left: 4px solid #cc8800; border-radius: 4px; padding: 14px 18px; margin-top: 16px; }
+.info-box p { margin: 0; font-size: 13px; color: #444; }
+
+/* Navigation */
+.nav {
+display: flex;
+align-items: center;
+gap: 16px;
+margin-top: 20px;
+background: #fff;
+padding: 12px 24px;
+border-radius: 40px;
+box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+.nav button {
+background: #003399; color: #fff; border: none;
+width: 36px; height: 36px; border-radius: 50%;
+font-size: 16px; cursor: pointer;
 display: flex; align-items: center; justify-content: center;
-text-align: center; min-height: 100%; padding: 2.5rem 2rem;
+transition: background .2s;
 }
-#s7::before {
-content: ‘’; position: absolute; inset: 0; pointer-events: none;
-background: radial-gradient(ellipse 65% 50% at 50% 55%, #8b1a2e28, transparent);
-}
-#s7 .ct { position: relative; z-index: 1; max-width: 640px; }
-#s7 .ic { font-size: 2rem; margin-bottom: .7rem; }
-#s7 h2 { font-family: ‘Playfair Display’, serif; font-size: clamp(1.7rem, 3vw, 2.6rem); color: var(–paper); font-weight: 900; margin-bottom: 1.1rem; line-height: 1.2; }
-#s7 h2 em { color: var(–gold); font-style: italic; }
-#s7 p { color: #ffffffbb; font-size: .85rem; line-height: 1.85; }
-.tags { display: flex; flex-wrap: wrap; justify-content: center; gap: .45rem; margin-top: 1.8rem; }
-.tag { border: 1px solid var(–gold); color: var(–gold); font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; padding: .32em .85em; border-radius: 2px; }
+.nav button:hover:not(:disabled) { background: #0055cc; }
+.nav button:disabled { background: #ccc; cursor: default; }
+.nav .dot { width: 8px; height: 8px; border-radius: 50%; background: #ccc; cursor: pointer; border: none; padding: 0; transition: background .2s, transform .2s; }
+.nav .dot.active { background: #003399; transform: scale(1.4); }
+.nav .counter { font-size: 13px; color: #666; min-width: 36px; text-align: center; }
 </style>
 
 </head>
 <body>
-<div id="shell">
 
-  <!-- SIDE NAV -->
+<!-- SLIDE 1: TITLE -->
 
-  <div id="sidenav">
-    <div class="nav-top">
-      <button class="nav-btn" id="btn-prev" disabled title="Previous (↑)">↑</button>
-    </div>
-    <div class="nav-mid" id="dots"></div>
-    <div class="nav-bottom">
-      <div id="counter">1/7</div>
-      <button class="nav-btn" id="btn-next" title="Next (↓)">↓</button>
-    </div>
-  </div>
-
-  <!-- DECK -->
-
-  <div id="deck">
-    <div id="progress"></div>
-
-```
-<!-- S1: TITLE -->
-<div class="slide active" id="s1">
-  <span class="slbl">01 · Title</span>
-  <div class="badge">Academic Research Presentation</div>
-  <h1>Judicial Review of <span>IPR Decisions</span>:<br>A Study of Administrative Tribunals in India</h1>
-  <p class="sub">Saveetha School of Law &nbsp;·&nbsp; SIMATS &nbsp;·&nbsp; Chennai</p>
-  <div class="authors">
-    <div class="acard">
+<div class="slide-container active" id="s1">
+  <div class="accent-bar"></div>
+  <div class="slide-num">1 / 7</div>
+  <br>
+  <p class="subtitle" style="color:#003399; font-weight:bold; font-size:13px; letter-spacing:1px; text-transform:uppercase;">Academic Research Presentation</p>
+  <h1>Judicial Review of IPR Decisions:<br>A Study of Administrative Tribunals in India</h1>
+  <p class="subtitle">Saveetha School of Law &nbsp;·&nbsp; SIMATS &nbsp;·&nbsp; Chennai</p>
+  <div class="author-row">
+    <div class="author-card">
       <div class="name">Rakunatha Khrishanth Manathra</div>
       <div class="role">B.A., LLB.(Hons.) — Author</div>
     </div>
-    <div class="acard">
+    <div class="author-card">
       <div class="name">Dr. J. Gayathri MA., ML., PhD</div>
-      <div class="role">Assistant Professor — Co-Author</div>
+      <div class="role">Assistant Professor — Co-Author<br>gayathrij.ssl@saveetha.com</div>
     </div>
   </div>
-  <div class="dline"></div>
-</div>
-
-<!-- S2: ABSTRACT -->
-<div class="slide" id="s2">
-  <span class="slbl">02 · Abstract</span>
-  <div class="s2g">
-    <div class="s2-left">
-      <div class="ey">Slide 02</div>
-      <h2>Abstract &amp; Overview</h2>
-      <div class="hr"></div>
-      <p>Judicial review of IPR decisions is crucial in India's legal system. Constitutional courts under <strong>Articles 32 &amp; 226</strong> ensure administrative tribunals act fairly and within procedural propriety.</p>
-      <p>The <strong>abolition of IPAB in 2021</strong> transferred functions to High Courts, intensifying debates on the scope of judicial review.</p>
-      <div class="kws">
-        <span class="kw">Judicial Review</span><span class="kw">IPR</span>
-        <span class="kw">Admin Tribunals</span><span class="kw">India</span>
-        <span class="kw">IPAB</span><span class="kw">High Courts</span>
-      </div>
-    </div>
-    <div class="s2-right">
-      <p>Intellectual Property Rights have emerged as a critical component of modern economic and technological development. Administrative bodies like the erstwhile IPAB adjudicated IPR disputes — but following the abolition of IPAB in 2021, functions transferred to High Courts.</p>
-      <p>Judicial review acts as a safeguard against arbitrariness, jurisdictional errors, and natural justice violations, maintaining the rule of law in administrative decision-making.</p>
-      <div class="sg">
-        <div class="sb"><div class="n">230</div><div class="l">Survey Respondents</div></div>
-        <div class="sb"><div class="n">60%</div><div class="l">Found JR Essential for Accountability</div></div>
-        <div class="sb"><div class="n">40%</div><div class="l">Said JR Prevents Abuse of Power</div></div>
-        <div class="sb"><div class="n">2021</div><div class="l">IPAB Abolished — Functions to High Courts</div></div>
-      </div>
-    </div>
+  <div class="keywords" style="margin-top:24px;">
+    <span class="kw">Judicial Review</span>
+    <span class="kw">IPR</span>
+    <span class="kw">Administrative Tribunals</span>
+    <span class="kw">India</span>
+    <span class="kw">IPAB</span>
+    <span class="kw">High Courts</span>
   </div>
 </div>
 
-<!-- S3: OBJECTIVES -->
-<div class="slide" id="s3">
-  <span class="slbl">03 · Objectives</span>
-  <div class="s3h">
-    <div class="bg">03</div>
-    <h2>Research Objectives</h2>
-  </div>
-  <div class="og">
-    <div class="oc"><div class="ix">01</div><h3>Examine Current Process</h3><p>Analyse the existing judicial review process of administrative tribunals in India, specifically in the context of intellectual property rights decisions and their constitutional backing.</p></div>
-    <div class="oc"><div class="ix">02</div><h3>Role of Judicial Review</h3><p>Evaluate how judicial review ensures that administrative tribunals make decisions aligned with the law without infringing on individual rights or exceeding jurisdiction.</p></div>
-    <div class="oc"><div class="ix">03</div><h3>Strengths &amp; Weaknesses</h3><p>Identify the gaps and strengths in the current review process and recommend targeted areas for legislative reform and institutional improvement.</p></div>
-    <div class="oc"><div class="ix">04</div><h3>Systemic Impact</h3><p>Investigate the broader impact of judicial review on tribunal functioning and the long-term implications for accountability and fairness in the Indian legal system.</p></div>
+<!-- SLIDE 2: ABSTRACT -->
+
+<div class="slide-container" id="s2">
+  <div class="accent-bar"></div>
+  <div class="slide-num">2 / 7</div>
+  <h2>Abstract</h2>
+  <p>Judicial review of intellectual property rights decisions is a crucial aspect of the Indian legal system. It ensures that decisions made by administrative tribunals are fair and just, and the judiciary plays a vital role in interpreting, defending, and applying the law.</p>
+  <p>The study aims to examine the effectiveness of judicial review of administrative tribunals in India, particularly in the context of IPR decisions. The sample size is <strong>230 respondents</strong> across multiple demographic categories.</p>
+  <div class="stat-grid">
+    <div class="stat-box"><div class="num">230</div><div class="lbl">Survey Respondents</div></div>
+    <div class="stat-box"><div class="num">60%</div><div class="lbl">JR Essential for Accountability</div></div>
+    <div class="stat-box"><div class="num">40%</div><div class="lbl">JR Prevents Abuse of Power</div></div>
+    <div class="stat-box"><div class="num">2021</div><div class="lbl">IPAB Abolished — Functions moved to High Courts</div></div>
   </div>
 </div>
 
-<!-- S4: METHODOLOGY -->
-<div class="slide" id="s4">
-  <span class="slbl">04 · Methodology</span>
-  <div class="s4g">
-    <div class="s4l">
-      <div class="ey">Slide 04 · Research Design</div>
-      <h2>Methodology</h2>
-      <div class="step"><div class="d">1</div><div class="t"><h4>Empirical Research Design</h4><p>Descriptive and empirical methodology for quantitative analysis. 230 samples via convenience sampling across multiple demographic categories.</p></div></div>
-      <div class="step"><div class="d">2</div><div class="t"><h4>Data Collection</h4><p>Structured questionnaires with a five-point Likert scale, administered during field visits. Secondary: peer-reviewed journals and government reports.</p></div></div>
-      <div class="step"><div class="d">3</div><div class="t"><h4>Statistical Analysis</h4><p>SPSS v21 with chi-square, ANOVA, and Pearson correlation tests to evaluate awareness, attitudes, and behavioural patterns.</p></div></div>
-      <div class="step"><div class="d">4</div><div class="t"><h4>Variables</h4><p>Independent: age, gender, education, geography, occupation. Dependent: awareness &amp; attitude towards judicial review of IPR decisions.</p></div></div>
+<!-- SLIDE 3: INTRODUCTION -->
+
+<div class="slide-container" id="s3">
+  <div class="accent-bar"></div>
+  <div class="slide-num">3 / 7</div>
+  <h2>Introduction &amp; Objectives</h2>
+  <p>IPR disputes in India were adjudicated by the Intellectual Property Appellate Board (IPAB) until its abolition in 2021, after which functions were transferred to High Courts. Judicial review under <strong>Articles 32 &amp; 226</strong> of the Constitution safeguards against arbitrariness and ensures the rule of law.</p>
+  <div class="obj-grid">
+    <div class="obj-card">
+      <div class="num">OBJECTIVE 01</div>
+      <p>Examine the current judicial review process of administrative tribunals in India in the context of IPR decisions.</p>
     </div>
-    <div class="s4r">
-      <div class="slbl2">Sample Profile</div>
-      <div class="mst"><div class="bl"><span>Demographic Diversity</span><span>85%</span></div><div class="bt"><div class="bf" data-w="85%"></div></div></div>
-      <div class="mst"><div class="bl"><span>Survey Completion Rate</span><span>91%</span></div><div class="bt"><div class="bf" data-w="91%"></div></div></div>
-      <div class="mst"><div class="bl"><span>Statistical Reliability</span><span>95%</span></div><div class="bt"><div class="bf" data-w="95%"></div></div></div>
-      <div class="mst"><div class="bl"><span>Secondary Source Coverage</span><span>78%</span></div><div class="bt"><div class="bf" data-w="78%"></div></div></div>
-      <div class="tn">Tools: <b>SPSS 21</b> · <b>Chi-Square</b> · <b>ANOVA</b> · <b>Pearson r</b><br>Sample: n = 230 respondents</div>
+    <div class="obj-card">
+      <div class="num">OBJECTIVE 02</div>
+      <p>Analyse how judicial review ensures tribunals make decisions aligned with the law without infringing individual rights.</p>
+    </div>
+    <div class="obj-card">
+      <div class="num">OBJECTIVE 03</div>
+      <p>Identify strengths and weaknesses of the current process and suggest areas for improvement.</p>
+    </div>
+    <div class="obj-card">
+      <div class="num">OBJECTIVE 04</div>
+      <p>Investigate the impact of judicial review on tribunal functioning and its implications for the Indian legal system.</p>
     </div>
   </div>
 </div>
 
-<!-- S5: FINDINGS -->
-<div class="slide" id="s5">
-  <span class="slbl">05 · Findings</span>
-  <div class="s5top">
-    <h2>Key Findings</h2>
-    <div class="note">Based on 230 respondents · SPSS v21</div>
-  </div>
-  <div class="fr">
-    <div class="fc"><div class="ring" style="--pct:216deg"><div class="v">60%</div></div><h4>Believe judicial review is essential for ensuring accountability</h4></div>
-    <div class="fc"><div class="ring" style="--pct:144deg"><div class="v">40%</div></div><h4>Think JR helps prevent abuse of power by tribunals</h4></div>
-    <div class="fc"><div class="ring" style="--pct:72deg"><div class="v">20%</div></div><h4>State it ensures consistency in decision-making</h4></div>
-    <div class="fc"><div class="ring" style="--pct:54deg"><div class="v">15%</div></div><h4>Feel it provides a meaningful opportunity for appeal</h4></div>
-  </div>
-  <div class="cbox"><p><strong style="color:var(--gold-lt)">Key Insight:</strong> The findings highlight the urgent need for a more effective system of judicial review, with significant policy implications for the Indian government — reforms are necessary to strengthen the process and ensure tribunal accountability.</p></div>
-</div>
+<!-- SLIDE 4: METHODOLOGY -->
 
-<!-- S6: LITERATURE -->
-<div class="slide" id="s6">
-  <span class="slbl">06 · Literature</span>
-  <div class="s6h"><div class="ey">Slide 06</div><h2>Review of Literature</h2></div>
-  <div class="lg">
-    <div class="lc"><div class="au">Cane, P. (2010)</div><div class="ti">Judicial Review and Merits Review: Comparing Administrative Adjudication by Courts and Tribunals</div><div class="st">Respondents: <b>252</b> · Awareness: <b>58%</b> · Gap: <b>48%</b></div></div>
-    <div class="lc"><div class="au">Kritika, S. (2023)</div><div class="ti">Review of Administrative Decisions: International Criminal Courts and Tribunals</div><div class="st">Respondents: <b>218</b> · Awareness: <b>61%</b> · Gap: <b>50%</b></div></div>
-    <div class="lc"><div class="au">Michigan Law Review (1931)</div><div class="ti">Administrative Tribunals: Judicial Notice &amp; Judicial Review of Legislative Functions</div><div class="st">Respondents: <b>195–250</b> · Awareness: <b>63%</b> · Gap: <b>49–51%</b></div></div>
-    <div class="lc"><div class="au">Puneeth, P. (2021)</div><div class="ti">Judicial Review of Legislations by Tribunals in India: Law, Problems, and Perspectives</div><div class="st">Respondents: <b>153</b> · Awareness: <b>66%</b> · Gap: <b>35%</b></div></div>
+<div class="slide-container" id="s4">
+  <div class="accent-bar"></div>
+  <div class="slide-num">4 / 7</div>
+  <h2>Methodology</h2>
+  <div class="step">
+    <div class="circle">1</div>
+    <div class="txt">
+      <b>Research Design</b>
+      <span>Descriptive and empirical research methodology. 230 samples collected through convenience sampling across varied demographic profiles.</span>
+    </div>
   </div>
-  <div class="fn">All studies employed structured survey methodology with chi-square &amp; ANOVA. Published in: <em>Comparative Administrative Law</em> · <em>Max Planck Encyclopedia</em> · <em>Michigan Law Review</em> · Cambridge University Press.</div>
-</div>
-
-<!-- S7: CONCLUSION -->
-<div class="slide" id="s7">
-  <span class="slbl">07 · Conclusion</span>
-  <div class="ct">
-    <div class="ic">⚖️</div>
-    <h2>Conclusion &amp; <em>Policy Implications</em></h2>
-    <p>This study critically examines how judicial review of IPR decisions rendered by administrative tribunals in India operates within a constitutional framework. The abolition of IPAB in 2021 has intensified the discourse on the role and scope of judicial review, with High Courts now balancing deference to technical expertise against constitutional principles.</p>
-    <p style="margin-top:.85rem;">Findings suggest that <strong style="color:var(--gold-lt)">legislative reforms are urgently needed</strong> to strengthen the judicial review process, ensure tribunal accountability, and achieve a more just and fair society for IP rights holders and innovators.</p>
-    <div class="tags">
-      <span class="tag">Articles 32 &amp; 226</span>
-      <span class="tag">Natural Justice</span>
-      <span class="tag">Rule of Law</span>
-      <span class="tag">IPAB Abolition 2021</span>
-      <span class="tag">Patent · Trademark · Copyright</span>
-      <span class="tag">Legislative Reform</span>
+  <div class="step">
+    <div class="circle">2</div>
+    <div class="txt">
+      <b>Data Collection</b>
+      <span>Structured questionnaires with a five-point Likert scale, administered during field visits. Secondary sources: peer-reviewed journals, government reports, and statistical databases.</span>
+    </div>
+  </div>
+  <div class="step">
+    <div class="circle">3</div>
+    <div class="txt">
+      <b>Statistical Tools</b>
+      <span>Data analysis performed using <strong>SPSS version 21</strong> with chi-square, ANOVA, and Pearson correlation tests.</span>
+    </div>
+  </div>
+  <div class="step">
+    <div class="circle">4</div>
+    <div class="txt">
+      <b>Variables</b>
+      <span><strong>Independent:</strong> Age, gender, educational qualification, geographic area, and occupation. <strong>Dependent:</strong> Awareness and attitude towards judicial review of IPR decisions.</span>
     </div>
   </div>
 </div>
-```
 
-  </div><!-- /deck -->
-</div><!-- /shell -->
+<!-- SLIDE 5: FINDINGS -->
+
+<div class="slide-container" id="s5">
+  <div class="accent-bar"></div>
+  <div class="slide-num">5 / 7</div>
+  <h2>Key Findings</h2>
+  <div class="find-grid">
+    <div class="find-card">
+      <div class="pct">60%</div>
+      <div class="desc">Respondents believed judicial review is essential for ensuring accountability of administrative tribunals.</div>
+    </div>
+    <div class="find-card">
+      <div class="pct">40%</div>
+      <div class="desc">Respondents felt judicial review helps in preventing abuse of power by administrative bodies.</div>
+    </div>
+    <div class="find-card">
+      <div class="pct">20%</div>
+      <div class="desc">Respondents stated that judicial review ensures consistency in decision-making across tribunals.</div>
+    </div>
+    <div class="find-card">
+      <div class="pct">15%</div>
+      <div class="desc">Respondents felt it provides a meaningful opportunity for appeal of IPR tribunal decisions.</div>
+    </div>
+  </div>
+  <div class="info-box">
+    <p><strong>Note:</strong> The study reveals the need for a more effective and efficient system of judicial review, with significant policy implications for the Indian government.</p>
+  </div>
+</div>
+
+<!-- SLIDE 6: LITERATURE REVIEW -->
+
+<div class="slide-container" id="s6">
+  <div class="accent-bar"></div>
+  <div class="slide-num">6 / 7</div>
+  <h2>Review of Literature</h2>
+  <div class="lit-card">
+    <div class="author">Cane, P. (2010)</div>
+    <div class="title">Judicial Review and Merits Review: Comparing Administrative Adjudication by Courts and Tribunals</div>
+    <div class="stats">252 respondents · Awareness: 58% · Framework gaps identified: 48%</div>
+  </div>
+  <div class="lit-card">
+    <div class="author">Kritika, S. (2023)</div>
+    <div class="title">Review of Administrative Decisions: International Criminal Courts and Tribunals — Max Planck Encyclopedia</div>
+    <div class="stats">218 respondents · Awareness: 61% · Framework gaps identified: 50%</div>
+  </div>
+  <div class="lit-card">
+    <div class="author">Michigan Law Review (1931)</div>
+    <div class="title">Administrative Tribunals: Judicial Notice &amp; Judicial Review of Legislative Functions</div>
+    <div class="stats">195–250 respondents · Awareness: 63% · Framework gaps: 49–51%</div>
+  </div>
+  <div class="lit-card">
+    <div class="author">Puneeth, P. (2021)</div>
+    <div class="title">Judicial Review of Legislations by Tribunals in India: Law, Problems, and Perspectives — Cambridge UP</div>
+    <div class="stats">153 respondents · Awareness: 66% · Framework gaps identified: 35%</div>
+  </div>
+</div>
+
+<!-- SLIDE 7: CONCLUSION -->
+
+<div class="slide-container" id="s7">
+  <div class="accent-bar"></div>
+  <div class="slide-num">7 / 7</div>
+  <h2>Conclusion &amp; Policy Implications</h2>
+  <p>This study critically examines judicial review of IPR decisions rendered by administrative tribunals in India. The abolition of IPAB in 2021 has intensified the discourse on the role and scope of judicial review, with High Courts now balancing deference to technical expertise with constitutional principles.</p>
+  <p>The research seeks to contribute to a nuanced understanding of the relationship between administrative adjudication and constitutional control in the field of intellectual property law.</p>
+  <div class="info-box">
+    <p><strong>Policy Recommendation:</strong> Legislative reforms are necessary to strengthen the judicial review process and ensure that administrative tribunals are held accountable — ultimately leading to a more just and fair society.</p>
+  </div>
+  <div class="tags">
+    <span class="tag">Articles 32 &amp; 226</span>
+    <span class="tag">Natural Justice</span>
+    <span class="tag">Rule of Law</span>
+    <span class="tag">IPAB Abolition 2021</span>
+    <span class="tag">Patents &amp; Trademarks</span>
+    <span class="tag">Legislative Reform</span>
+  </div>
+</div>
+
+<!-- NAVIGATION -->
+
+<div class="nav">
+  <button id="btn-prev" disabled>&#8592;</button>
+  <div id="dot-row"></div>
+  <button id="btn-next">&#8594;</button>
+  <span class="counter" id="ctr">1 / 7</span>
+</div>
 
 <script>
-const slides = document.querySelectorAll('.slide');
-const total = slides.length;
-let cur = 0, busy = false;
+  const slides = document.querySelectorAll('.slide-container');
+  const total = slides.length;
+  let cur = 0;
 
-const btnP = document.getElementById('btn-prev');
-const btnN = document.getElementById('btn-next');
-const ctr  = document.getElementById('counter');
-const prog = document.getElementById('progress');
-const dotsEl = document.getElementById('dots');
+  const btnP = document.getElementById('btn-prev');
+  const btnN = document.getElementById('btn-next');
+  const ctr  = document.getElementById('ctr');
+  const dotRow = document.getElementById('dot-row');
 
-slides.forEach((_, i) => {
-  const d = document.createElement('button');
-  d.className = 'dot-btn' + (i === 0 ? ' active' : '');
-  d.title = `Slide ${i+1}`;
-  d.addEventListener('click', () => go(i));
-  dotsEl.appendChild(d);
-});
-
-function dots() { return dotsEl.querySelectorAll('.dot-btn'); }
-
-function animBars(slide) {
-  slide.querySelectorAll('.bf').forEach(b => {
-    const w = b.dataset.w || '0%';
-    b.style.width = '0';
-    requestAnimationFrame(() => requestAnimationFrame(() => b.style.width = w));
+  // Build dots
+  slides.forEach((_, i) => {
+    const d = document.createElement('button');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.addEventListener('click', () => go(i));
+    dotRow.appendChild(d);
   });
-}
 
-function go(idx) {
-  if (idx === cur || busy || idx < 0 || idx >= total) return;
-  busy = true;
-  const prev = cur; cur = idx;
-
-  slides[prev].classList.add('exit');
-  slides[prev].classList.remove('active');
-  slides[cur].scrollTop = 0;
-
-  setTimeout(() => {
-    slides[prev].classList.remove('exit');
+  function go(idx) {
+    if (idx < 0 || idx >= total || idx === cur) return;
+    slides[cur].classList.remove('active');
+    dotRow.children[cur].classList.remove('active');
+    cur = idx;
     slides[cur].classList.add('active');
-    animBars(slides[cur]);
-    busy = false;
-  }, 55);
+    dotRow.children[cur].classList.add('active');
+    ctr.textContent = `${cur+1} / ${total}`;
+    btnP.disabled = cur === 0;
+    btnN.disabled = cur === total - 1;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 
-  const d = dots();
-  d[prev].classList.remove('active');
-  d[cur].classList.add('active');
-  ctr.textContent = `${cur+1}/${total}`;
-  prog.style.width = `${((cur+1)/total)*100}%`;
-  btnP.disabled = cur === 0;
-  btnN.disabled = cur === total-1;
-}
+  btnN.addEventListener('click', () => go(cur + 1));
+  btnP.addEventListener('click', () => go(cur - 1));
 
-btnN.addEventListener('click', () => go(cur+1));
-btnP.addEventListener('click', () => go(cur-1));
+  document.addEventListener('keydown', e => {
+    if (['ArrowRight','ArrowDown'].includes(e.key)) go(cur + 1);
+    if (['ArrowLeft','ArrowUp'].includes(e.key))  go(cur - 1);
+  });
 
-document.addEventListener('keydown', e => {
-  if (['ArrowRight','ArrowDown','PageDown'].includes(e.key)) go(cur+1);
-  if (['ArrowLeft','ArrowUp','PageUp'].includes(e.key)) go(cur-1);
-});
-
-// Swipe on deck only (won't fight vertical scroll inside slides)
-let tx=0, ty=0;
-const deck = document.getElementById('deck');
-deck.addEventListener('touchstart', e => { tx=e.touches[0].clientX; ty=e.touches[0].clientY; }, {passive:true});
-deck.addEventListener('touchend', e => {
-  const dx = e.changedTouches[0].clientX - tx;
-  const dy = e.changedTouches[0].clientY - ty;
-  if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 48)
-    dx < 0 ? go(cur+1) : go(cur-1);
-}, {passive:true});
-
-// Init
-prog.style.width = `${(1/total)*100}%`;
-animBars(slides[0]);
+  // Swipe
+  let tx = 0;
+  document.addEventListener('touchstart', e => tx = e.touches[0].clientX, {passive:true});
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - tx;
+    if (Math.abs(dx) > 50) dx < 0 ? go(cur+1) : go(cur-1);
+  }, {passive:true});
 </script>
 
 </body>
