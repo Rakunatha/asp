@@ -4,969 +4,577 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI-Enabled ADR in Musical Copyright Disputes</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<title>Judicial Review of IPR Decisions</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-–navy: #0a0f2e;
-–deep: #0d1540;
-–gold: #d4a853;
-–gold-light: #f0c878;
-–teal: #1a9080;
-–teal-light: #24bfaa;
-–cream: #f9f5ee;
-–silver: #8a9bb5;
-–white: #ffffff;
+–ink: #0d0d0d;
+–paper: #f5f0e8;
+–gold: #c8983a;
+–gold-lt: #e8c97a;
+–crimson: #8b1a2e;
+–slate: #2a3040;
+–muted: #7a7060;
+–rule: #c8983a44;
 }
 
-html, body {
-height: 100%;
-font-family: ‘DM Sans’, sans-serif;
-background: var(–navy);
-color: var(–white);
-overflow: hidden;
-}
+html, body { height: 100%; overflow: hidden; background: var(–ink); font-family: ‘DM Sans’, sans-serif; }
 
-/* ── SLIDE WRAPPER ── */
-#slideshow {
-width: 100vw;
-height: 100vh;
-position: relative;
-}
+/* ── DECK ── */
+#deck { position: relative; width: 100vw; height: 100vh; }
 
 .slide {
-position: absolute;
-inset: 0;
-display: flex;
-flex-direction: column;
-padding: 60px 80px 100px;
-opacity: 0;
+position: absolute; inset: 0;
+display: flex; flex-direction: column;
+opacity: 0; pointer-events: none;
+transition: opacity 0.6s cubic-bezier(.4,0,.2,1), transform 0.6s cubic-bezier(.4,0,.2,1);
 transform: translateX(60px);
-pointer-events: none;
-transition: opacity .55s ease, transform .55s ease;
-overflow-y: auto;
-overflow-x: hidden;
 }
+.slide.active  { opacity: 1; pointer-events: auto; transform: translateX(0); }
+.slide.exit    { opacity: 0; transform: translateX(-60px); }
 
-.slide::-webkit-scrollbar { width: 5px; }
-.slide::-webkit-scrollbar-track { background: transparent; }
-.slide::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.18); border-radius: 3px; }
-
-.slide.active {
-opacity: 1;
-transform: translateX(0);
-pointer-events: all;
-}
-
-.slide.exit-left {
-opacity: 0;
-transform: translateX(-60px);
-}
-
-/* ── BACKGROUNDS ── */
-.slide::before {
+/* ── SLIDE 1 — TITLE ── */
+#s1 { background: var(–slate); justify-content: center; align-items: center; text-align: center; overflow: hidden; }
+#s1::before {
 content: ‘’;
-position: absolute;
-inset: 0;
-z-index: 0;
+position: absolute; inset: 0;
+background:
+repeating-linear-gradient(0deg, transparent, transparent 59px, var(–rule) 60px),
+repeating-linear-gradient(90deg, transparent, transparent 59px, var(–rule) 60px);
+}
+#s1 .badge {
+font-size: .68rem; letter-spacing: .22em; color: var(–gold);
+text-transform: uppercase; margin-bottom: 1.2rem;
+border: 1px solid var(–gold); padding: .35em 1.1em; border-radius: 2px;
+position: relative; z-index: 1;
+}
+#s1 h1 {
+font-family: ‘Playfair Display’, serif; font-size: clamp(2rem, 5vw, 3.8rem);
+font-weight: 900; color: var(–paper); line-height: 1.15;
+max-width: 820px; position: relative; z-index: 1;
+text-shadow: 0 4px 40px #0008;
+}
+#s1 h1 span { color: var(–gold); font-style: italic; }
+#s1 .subtitle {
+margin-top: 1.6rem; color: #ffffffaa; font-size: 1rem;
+letter-spacing: .06em; position: relative; z-index: 1;
+}
+#s1 .authors {
+margin-top: 2.4rem; display: flex; gap: 2.4rem; position: relative; z-index: 1;
+}
+#s1 .author-card {
+border-left: 2px solid var(–gold); padding-left: 1rem;
+text-align: left;
+}
+#s1 .author-card .name { color: var(–gold-lt); font-size: .9rem; font-weight: 500; }
+#s1 .author-card .role { color: #ffffff70; font-size: .75rem; margin-top: .2rem; }
+#s1 .deco-line {
+position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
+background: linear-gradient(90deg, transparent, var(–gold), transparent);
 }
 
-/* Title */
-.slide-0::before {
-background: radial-gradient(ellipse 80% 80% at 60% 40%, #1a254a 0%, #0a0f2e 70%);
+/* ── SLIDE 2 — ABSTRACT ── */
+#s2 { background: var(–paper); }
+#s2 .slide-inner { display: grid; grid-template-columns: 1fr 1.6fr; height: 100%; }
+#s2 .left-panel {
+background: var(–crimson); color: white;
+display: flex; flex-direction: column; justify-content: center;
+padding: 3rem 2.5rem;
 }
+#s2 .left-panel .eyebrow { font-size: .65rem; letter-spacing: .25em; color: #ffffff88; text-transform: uppercase; margin-bottom: .8rem; }
+#s2 .left-panel h2 { font-family: ‘Playfair Display’, serif; font-size: 2.6rem; font-weight: 900; line-height: 1.1; }
+#s2 .left-panel .rule { width: 48px; height: 3px; background: var(–gold); margin: 1.4rem 0; }
+#s2 .left-panel .keywords { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: auto; }
+#s2 .keyword { background: #ffffff18; border: 1px solid #ffffff33; padding: .3em .8em; border-radius: 2px; font-size: .7rem; letter-spacing: .06em; }
+#s2 .right-panel { padding: 3rem 3.5rem; overflow-y: auto; display: flex; flex-direction: column; justify-content: center; }
+#s2 .right-panel p { color: var(–ink); font-size: .95rem; line-height: 1.8; color: #333; }
+#s2 .stat-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-top: 2rem; }
+#s2 .stat-box { background: var(–slate); padding: 1rem 1.2rem; border-radius: 4px; }
+#s2 .stat-box .num { font-family: ‘Playfair Display’, serif; font-size: 2rem; color: var(–gold); font-weight: 700; }
+#s2 .stat-box .label { font-size: .72rem; color: #ffffffaa; margin-top: .2rem; }
 
-/* Section slides */
-.slide-intro::before   { background: linear-gradient(135deg, #0d1a45 0%, #0a0f2e 100%); }
-.slide-objectives::before { background: linear-gradient(135deg, #0a1a35 0%, #0f1535 100%); }
-.slide-lit::before     { background: linear-gradient(135deg, #071830 0%, #0d1540 100%); }
-.slide-method::before  { background: linear-gradient(135deg, #071828 0%, #0a1530 100%); }
-.slide-data::before    { background: linear-gradient(135deg, #0a1535 0%, #0d1845 100%); }
-.slide-results::before { background: linear-gradient(135deg, #071830 0%, #0a1540 100%); }
-.slide-discussion::before { background: linear-gradient(135deg, #0a1535 0%, #0d1845 100%); }
-.slide-suggest::before { background: linear-gradient(135deg, #071830 0%, #0a1540 100%); }
-.slide-conclusion::before { background: linear-gradient(135deg, #0d1a45 0%, #0a0f2e 100%); }
-
-/* Decorative orb */
-.orb {
-position: absolute;
-border-radius: 50%;
-filter: blur(80px);
-z-index: 0;
-pointer-events: none;
+/* ── SLIDE 3 — OBJECTIVES ── */
+#s3 { background: var(–ink); }
+#s3 .slide-inner { height: 100%; display: flex; flex-direction: column; padding: 3.5rem 5rem; }
+#s3 .header { display: flex; align-items: baseline; gap: 1.2rem; margin-bottom: 3rem; }
+#s3 .header .num { font-family: ‘Playfair Display’, serif; font-size: 6rem; color: var(–gold); opacity: .18; line-height: 1; }
+#s3 .header h2 { font-family: ‘Playfair Display’, serif; font-size: 2.4rem; color: var(–paper); font-weight: 700; }
+#s3 .obj-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+#s3 .obj-card {
+border: 1px solid #ffffff18; padding: 1.8rem 2rem;
+border-radius: 6px; position: relative; overflow: hidden;
+background: #ffffff06;
+transition: background .3s, border-color .3s;
 }
+#s3 .obj-card:hover { background: #ffffff0f; border-color: var(–gold); }
+#s3 .obj-card .idx { position: absolute; top: 1rem; right: 1.2rem; font-family: ‘Playfair Display’, serif; font-size: 3rem; color: var(–gold); opacity: .12; font-weight: 900; }
+#s3 .obj-card h3 { color: var(–gold-lt); font-size: .72rem; text-transform: uppercase; letter-spacing: .18em; margin-bottom: .7rem; }
+#s3 .obj-card p { color: #ffffffcc; font-size: .88rem; line-height: 1.7; }
 
-/* ── SLIDE CONTENT ── */
-.slide > * { position: relative; z-index: 1; }
+/* ── SLIDE 4 — METHODOLOGY ── */
+#s4 { background: var(–paper); }
+#s4 .slide-inner { height: 100%; display: grid; grid-template-columns: 1.2fr 1fr; }
+#s4 .meth-left { padding: 3.5rem; display: flex; flex-direction: column; justify-content: center; }
+#s4 .meth-left .eyebrow { font-size: .65rem; letter-spacing: .25em; text-transform: uppercase; color: var(–muted); margin-bottom: .8rem; }
+#s4 .meth-left h2 { font-family: ‘Playfair Display’, serif; font-size: 2.6rem; color: var(–ink); font-weight: 900; margin-bottom: 2rem; }
+#s4 .step { display: flex; gap: 1.2rem; align-items: flex-start; margin-bottom: 1.6rem; }
+#s4 .step .dot { width: 36px; height: 36px; min-width: 36px; border-radius: 50%; background: var(–crimson); color: white; display: flex; align-items: center; justify-content: center; font-size: .8rem; font-weight: 500; margin-top: .1rem; }
+#s4 .step .txt h4 { color: var(–ink); font-size: .9rem; font-weight: 500; margin-bottom: .25rem; }
+#s4 .step .txt p { color: var(–muted); font-size: .82rem; line-height: 1.6; }
+#s4 .meth-right { background: var(–slate); display: flex; flex-direction: column; justify-content: center; padding: 3rem; gap: 1.4rem; }
+#s4 .meth-stat { }
+#s4 .meth-stat .bar-label { display: flex; justify-content: space-between; margin-bottom: .45rem; }
+#s4 .meth-stat .bar-label span:first-child { color: #ffffffcc; font-size: .82rem; }
+#s4 .meth-stat .bar-label span:last-child { color: var(–gold); font-size: .82rem; font-weight: 500; }
+#s4 .bar-track { height: 6px; background: #ffffff18; border-radius: 3px; overflow: hidden; }
+#s4 .bar-fill { height: 100%; background: linear-gradient(90deg, var(–gold), var(–gold-lt)); border-radius: 3px; width: 0; transition: width 1s ease .3s; }
 
-/* Slide number / label */
-.slide-label {
-font-size: 11px;
-letter-spacing: 3px;
-text-transform: uppercase;
-color: var(–gold);
-margin-bottom: 16px;
-font-weight: 500;
+/* ── SLIDE 5 — FINDINGS ── */
+#s5 { background: var(–slate); overflow: hidden; }
+#s5 .slide-inner { height: 100%; display: flex; flex-direction: column; padding: 3.5rem 5rem; }
+#s5 .top { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2.8rem; }
+#s5 .top h2 { font-family: ‘Playfair Display’, serif; font-size: 2.4rem; color: var(–paper); font-weight: 700; }
+#s5 .top .note { color: #ffffff60; font-size: .78rem; max-width: 260px; text-align: right; line-height: 1.5; }
+#s5 .findings-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2rem; }
+#s5 .finding-card { background: #ffffff08; border: 1px solid #ffffff14; padding: 1.8rem 1.4rem; border-radius: 6px; text-align: center; transition: transform .3s; }
+#s5 .finding-card:hover { transform: translateY(-6px); }
+#s5 .finding-card .ring {
+width: 90px; height: 90px; margin: 0 auto 1.2rem;
+border-radius: 50%; display: flex; align-items: center; justify-content: center;
+background: conic-gradient(var(–gold) var(–pct), #ffffff14 0);
+position: relative;
 }
-
-/* Headline */
-h1.main-title {
-font-family: ‘Playfair Display’, serif;
-font-size: clamp(28px, 4vw, 52px);
-font-weight: 900;
-line-height: 1.1;
-color: var(–white);
-margin-bottom: 20px;
+#s5 .finding-card .ring::after {
+content: ‘’; position: absolute; inset: 10px;
+background: var(–slate); border-radius: 50%;
 }
+#s5 .finding-card .ring .val { position: relative; z-index: 1; font-family: ‘Playfair Display’, serif; font-size: 1.4rem; color: var(–gold); font-weight: 700; }
+#s5 .finding-card h4 { color: var(–paper); font-size: .82rem; line-height: 1.5; }
 
-h2.section-title {
-font-family: ‘Playfair Display’, serif;
-font-size: clamp(22px, 3vw, 38px);
-font-weight: 700;
-color: var(–white);
-margin-bottom: 28px;
-border-left: 4px solid var(–gold);
-padding-left: 20px;
+/* ── SLIDE 6 — LITERATURE ── */
+#s6 { background: var(–paper); }
+#s6 .slide-inner { height: 100%; display: flex; flex-direction: column; padding: 3rem 4.5rem; }
+#s6 .header { margin-bottom: 2rem; }
+#s6 .header .eyebrow { font-size: .65rem; letter-spacing: .25em; text-transform: uppercase; color: var(–muted); }
+#s6 .header h2 { font-family: ‘Playfair Display’, serif; font-size: 2.2rem; color: var(–ink); font-weight: 900; }
+#s6 .lit-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.2rem; }
+#s6 .lit-card { border-left: 3px solid var(–gold); padding: 1.2rem 1.4rem; background: #0d0d0d06; }
+#s6 .lit-card .author { color: var(–crimson); font-size: .78rem; font-weight: 500; letter-spacing: .04em; }
+#s6 .lit-card .title { color: var(–ink); font-size: .88rem; font-weight: 500; margin: .3rem 0; }
+#s6 .lit-card .stat { color: var(–muted); font-size: .78rem; }
+#s6 .lit-card .stat b { color: var(–slate); }
+
+/* ── SLIDE 7 — CONCLUSION ── */
+#s7 { background: var(–ink); justify-content: center; align-items: center; text-align: center; overflow: hidden; }
+#s7::before {
+content: ‘’; position: absolute; inset: 0;
+background: radial-gradient(ellipse 70% 50% at 50% 60%, #8b1a2e33, transparent);
 }
+#s7 .content { position: relative; z-index: 1; max-width: 760px; padding: 2rem; }
+#s7 .icon { font-size: 2.5rem; margin-bottom: 1rem; }
+#s7 h2 { font-family: ‘Playfair Display’, serif; font-size: 3rem; color: var(–paper); font-weight: 900; margin-bottom: 1.4rem; }
+#s7 h2 em { color: var(–gold); font-style: italic; }
+#s7 p { color: #ffffffbb; font-size: .98rem; line-height: 1.85; }
+#s7 .tags { display: flex; flex-wrap: wrap; justify-content: center; gap: .6rem; margin-top: 2.2rem; }
+#s7 .tag { border: 1px solid var(–gold); color: var(–gold); font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; padding: .4em 1em; border-radius: 2px; }
 
-h3.sub-title {
-font-size: 13px;
-letter-spacing: 4px;
-text-transform: uppercase;
-color: var(–teal-light);
-margin-bottom: 8px;
-font-weight: 500;
-}
-
-/* Body text */
-.body-text {
-font-size: clamp(13px, 1.4vw, 16px);
-line-height: 1.75;
-color: #c5d0e8;
-max-width: 820px;
-}
-
-.body-text p + p { margin-top: 14px; }
-
-/* ── TITLE SLIDE specific ── */
-.title-slide {
-justify-content: center;
-align-items: flex-start;
-gap: 0;
-}
-
-.title-slide .subtitle {
-font-size: clamp(13px, 1.5vw, 17px);
-color: var(–silver);
-max-width: 700px;
-line-height: 1.6;
-margin-bottom: 40px;
-}
-
-.authors-block {
-display: flex;
-gap: 40px;
-flex-wrap: wrap;
-}
-
-.author-card {
-background: rgba(212,168,83,0.08);
-border: 1px solid rgba(212,168,83,0.25);
-border-radius: 12px;
-padding: 18px 24px;
-min-width: 220px;
-}
-
-.author-card .name {
-font-family: ‘Playfair Display’, serif;
-font-weight: 700;
-font-size: 15px;
-color: var(–gold-light);
-margin-bottom: 4px;
-}
-
-.author-card .role {
-font-size: 12px;
-color: var(–silver);
-line-height: 1.5;
-}
-
-.gold-line {
-width: 80px;
-height: 3px;
-background: linear-gradient(90deg, var(–gold), transparent);
-margin: 24px 0;
-}
-
-/* ── CARDS / GRID ── */
-.card-grid {
-display: grid;
-gap: 18px;
-margin-top: 8px;
-}
-
-.card-grid-2 { grid-template-columns: 1fr 1fr; }
-.card-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
-
-.card {
-background: rgba(255,255,255,0.04);
-border: 1px solid rgba(255,255,255,0.09);
-border-radius: 14px;
-padding: 22px 24px;
-transition: background .2s;
-}
-
-.card:hover { background: rgba(255,255,255,0.07); }
-
-.card .card-icon {
-font-size: 24px;
-margin-bottom: 10px;
-}
-
-.card .card-title {
-font-size: 13px;
-font-weight: 600;
-color: var(–gold-light);
-text-transform: uppercase;
-letter-spacing: 1.5px;
-margin-bottom: 8px;
-}
-
-.card p {
-font-size: 13px;
-color: #b0bed8;
-line-height: 1.6;
-}
-
-/* ── STAT BOXES ── */
-.stat-row {
-display: flex;
-gap: 20px;
-flex-wrap: wrap;
-margin-top: 16px;
-}
-
-.stat-box {
-background: linear-gradient(135deg, rgba(212,168,83,0.12), rgba(212,168,83,0.04));
-border: 1px solid rgba(212,168,83,0.3);
-border-radius: 14px;
-padding: 22px 28px;
-flex: 1;
-min-width: 150px;
-text-align: center;
-}
-
-.stat-box .stat-num {
-font-family: ‘Playfair Display’, serif;
-font-size: clamp(30px, 3.5vw, 46px);
-font-weight: 900;
-color: var(–gold);
-line-height: 1;
-margin-bottom: 6px;
-}
-
-.stat-box .stat-label {
-font-size: 12px;
-color: var(–silver);
-text-transform: uppercase;
-letter-spacing: 1.5px;
-}
-
-/* Teal stat variant */
-.stat-box.teal {
-background: linear-gradient(135deg, rgba(26,144,128,0.15), rgba(26,144,128,0.04));
-border-color: rgba(36,191,170,0.3);
-}
-
-.stat-box.teal .stat-num { color: var(–teal-light); }
-
-/* ── LIST ── */
-.styled-list {
-list-style: none;
-display: flex;
-flex-direction: column;
-gap: 12px;
-margin-top: 8px;
-}
-
-.styled-list li {
-display: flex;
-align-items: flex-start;
-gap: 14px;
-font-size: clamp(13px, 1.3vw, 15px);
-color: #c5d0e8;
-line-height: 1.6;
-}
-
-.styled-list li::before {
-content: ‘◆’;
-color: var(–gold);
-font-size: 8px;
-margin-top: 6px;
-flex-shrink: 0;
-}
-
-/* Numbered */
-.num-list { counter-reset: item; list-style: none; display: flex; flex-direction: column; gap: 10px; }
-.num-list li { display: flex; align-items: flex-start; gap: 14px; font-size: 13px; color: #c5d0e8; line-height: 1.6; }
-.num-list li::before {
-counter-increment: item;
-content: counter(item);
-background: var(–teal);
-color: #fff;
-font-size: 10px;
-font-weight: 700;
-min-width: 22px;
-height: 22px;
-border-radius: 50%;
-display: flex;
-align-items: center;
-justify-content: center;
-flex-shrink: 0;
-margin-top: 1px;
-}
-
-/* ── PROGRESS BAR ── */
-.progress-bar-row {
-display: flex;
-flex-direction: column;
-gap: 12px;
-margin-top: 8px;
-}
-
-.progress-item { display: flex; align-items: center; gap: 14px; }
-.progress-label { font-size: 13px; color: #b0bed8; width: 130px; flex-shrink: 0; }
-.progress-track { flex: 1; height: 8px; background: rgba(255,255,255,0.08); border-radius: 99px; overflow: hidden; }
-.progress-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(–teal), var(–gold)); }
-.progress-pct { font-size: 13px; font-weight: 600; color: var(–gold-light); width: 40px; text-align: right; }
-
-/* ── QUOTE BLOCK ── */
-.quote-block {
-border-left: 3px solid var(–gold);
-padding: 16px 24px;
-background: rgba(212,168,83,0.06);
-border-radius: 0 12px 12px 0;
-margin-top: 16px;
-}
-
-.quote-block p {
-font-family: ‘Playfair Display’, serif;
-font-style: italic;
-font-size: clamp(14px, 1.5vw, 17px);
-color: var(–cream);
-line-height: 1.7;
-}
-
-/* ── TWO COLUMN ── */
-.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; margin-top: 12px; }
-.left-col {}
-.right-col {}
-
-/* ── TAG CLOUD ── */
-.tag-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
-.tag {
-background: rgba(26,144,128,0.15);
-border: 1px solid rgba(36,191,170,0.25);
-color: var(–teal-light);
-font-size: 12px;
-padding: 6px 14px;
-border-radius: 99px;
-font-weight: 500;
-}
-
-/* ── NAV CONTROLS ── */
+/* ── CHROME ── */
 #nav {
-position: fixed;
-bottom: 32px;
-left: 50%;
-transform: translateX(-50%);
-display: flex;
-align-items: center;
-gap: 16px;
-z-index: 100;
-background: rgba(10,15,46,0.85);
-border: 1px solid rgba(255,255,255,0.1);
-backdrop-filter: blur(20px);
-border-radius: 99px;
-padding: 10px 20px;
+position: fixed; bottom: 2.2rem; left: 50%; transform: translateX(-50%);
+display: flex; align-items: center; gap: .8rem; z-index: 100;
+background: #0d0d0dcc; backdrop-filter: blur(12px);
+padding: .7rem 1.4rem; border-radius: 50px;
+border: 1px solid #ffffff18;
+}
+#nav button {
+background: none; border: none; cursor: pointer; color: #ffffffaa;
+font-size: 1.1rem; padding: .3rem .5rem; border-radius: 6px;
+transition: color .2s, background .2s;
+}
+#nav button:hover:not(:disabled) { color: var(–gold); background: #ffffff0f; }
+#nav button:disabled { opacity: .25; cursor: default; }
+#dots { display: flex; gap: .5rem; align-items: center; }
+.dot-btn { width: 7px; height: 7px; border-radius: 50%; background: #ffffff33; border: none; cursor: pointer; padding: 0; transition: all .3s; }
+.dot-btn.active { background: var(–gold); transform: scale(1.3); }
+#counter { color: #ffffff60; font-size: .75rem; min-width: 40px; text-align: center; }
+
+/* slide-number badge */
+#slide-num {
+position: fixed; top: 1.6rem; right: 2rem; z-index: 100;
+font-size: .68rem; letter-spacing: .15em; color: #ffffff50; text-transform: uppercase;
 }
 
-.nav-btn {
-background: none;
-border: none;
-color: var(–silver);
-font-size: 18px;
-cursor: pointer;
-width: 36px;
-height: 36px;
-border-radius: 50%;
-display: flex;
-align-items: center;
-justify-content: center;
-transition: all .2s;
+/* keyboard hint */
+#hint {
+position: fixed; top: 1.6rem; left: 2rem; z-index: 100;
+font-size: .68rem; letter-spacing: .1em; color: #ffffff30;
 }
 
-.nav-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
-.nav-btn:disabled { opacity: 0.3; cursor: default; }
-.nav-btn:disabled:hover { background: none; color: var(–silver); }
+/* progress bar */
+#progress { position: fixed; top: 0; left: 0; height: 3px; background: var(–gold); z-index: 200; transition: width .4s ease; }
 
-#slide-counter {
-font-size: 13px;
-color: var(–silver);
-min-width: 70px;
-text-align: center;
-font-weight: 500;
-}
-
-/* dot nav */
-#dot-nav { display: flex; gap: 6px; }
-.dot {
-width: 6px;
-height: 6px;
-border-radius: 50%;
-background: rgba(255,255,255,0.25);
-cursor: pointer;
-transition: all .2s;
-}
-
-.dot.active { background: var(–gold); width: 18px; border-radius: 3px; }
-
-/* ── SLIDE SPECIFIC DECORATIONS ── */
-
-/* Musical notes scattered */
-.note {
-position: absolute;
-font-size: 40px;
-opacity: 0.04;
-pointer-events: none;
-z-index: 0;
-user-select: none;
-}
-
-/* Conclusion gradient text */
-.gradient-text {
-background: linear-gradient(90deg, var(–gold), var(–teal-light));
--webkit-background-clip: text;
--webkit-text-fill-color: transparent;
-background-clip: text;
-}
-
-/* Two-tone label */
-.highlight { color: var(–gold-light); font-weight: 600; }
-.highlight-teal { color: var(–teal-light); font-weight: 600; }
-
-/* responsive clamp on padding */
-@media(max-width:800px){
-.slide { padding: 40px 36px; }
-.card-grid-2 { grid-template-columns: 1fr; }
-.card-grid-3 { grid-template-columns: 1fr 1fr; }
-.two-col { grid-template-columns: 1fr; gap: 24px; }
-.authors-block { flex-direction: column; }
-}
-
-/* scrollable content — now the whole slide scrolls, this is just a passthrough */
-.slide-scroll { flex: 1; }
-
-/* ── SECTION DIVIDER ── */
-.divider { width: 100%; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent); margin: 20px 0; }
-
-/* vertical accent line on data slides */
-.accent-bar {
-position: absolute;
-right: 80px;
-top: 60px;
-bottom: 60px;
-width: 2px;
-background: linear-gradient(180deg, transparent, rgba(212,168,83,0.4), transparent);
-z-index: 0;
+@media (max-width: 768px) {
+#s2 .slide-inner, #s4 .slide-inner { grid-template-columns: 1fr; }
+#s2 .left-panel { padding: 2rem; }
+#s3 .slide-inner, #s5 .slide-inner { padding: 2rem; }
+#s3 .obj-grid, #s5 .findings-row, #s6 .lit-grid { grid-template-columns: 1fr; }
+#s5 .findings-row { grid-template-columns: 1fr 1fr; }
+#s1 h1 { font-size: 1.8rem; }
+#s1 .authors { flex-direction: column; gap: 1rem; }
+#s4 .meth-right { display: none; }
 }
 </style>
 
 </head>
 <body>
 
-<div id="slideshow">
+<div id="progress"></div>
+<div id="slide-num">Slide <span id="sn">1</span> / 7</div>
+<div id="hint">← → Arrow keys or click</div>
 
-  <!-- ══════════════ SLIDE 0 · TITLE ══════════════ -->
+<div id="deck">
 
-  <div class="slide slide-0 title-slide active">
-    <div class="orb" style="width:600px;height:600px;top:-200px;right:-200px;background:rgba(26,144,128,0.12);"></div>
-    <div class="orb" style="width:400px;height:400px;bottom:-150px;left:-100px;background:rgba(212,168,83,0.08);"></div>
-    <span class="note" style="top:15%;right:12%;">♪</span>
-    <span class="note" style="bottom:20%;right:25%;font-size:60px;">♫</span>
-    <span class="note" style="top:60%;right:8%;font-size:28px;">♬</span>
+  <!-- SLIDE 1: TITLE -->
 
-```
-<h3 class="sub-title">Research Paper Presentation</h3>
-<h1 class="main-title">AI-Enabled Alternative<br>Dispute Resolution in<br><span class="gradient-text">Musical Copyright Disputes</span></h1>
-<p class="subtitle">Enhancing Efficiency and Fairness in Rights Conflict Resolution</p>
-<div class="gold-line"></div>
-<div class="authors-block">
-  <div class="author-card">
-    <div class="name">Rakunatha Khrishanth Manathra</div>
-    <div class="role">B.A., LLB.(Hons.) · Saveetha School of Law, SIMATS<br>rkhrishanthm@gmail.com</div>
-  </div>
-  <div class="author-card">
-    <div class="name">Mr. Jaikanth Manivel M</div>
-    <div class="role">Assistant Professor · Saveetha School of Law<br>SIMATS, Chennai – 600 077</div>
-  </div>
-</div>
-<div class="tag-row" style="margin-top:28px;">
-  <span class="tag">AI-enabled ADR</span>
-  <span class="tag">Copyright Infringement</span>
-  <span class="tag">Music Industry</span>
-  <span class="tag">India</span>
-  <span class="tag">Digital Rights</span>
-</div>
-```
-
-  </div>
-
-  <!-- ══════════════ SLIDE 1 · ABSTRACT ══════════════ -->
-
-  <div class="slide slide-intro">
-    <div class="orb" style="width:500px;height:500px;top:-100px;right:-150px;background:rgba(26,144,128,0.1);"></div>
-    <div class="slide-label">01 · Abstract</div>
-    <h2 class="section-title">Research Overview</h2>
-    <div class="stat-row">
-      <div class="stat-box"><div class="stat-num">300</div><div class="stat-label">Survey Respondents</div></div>
-      <div class="stat-box teal"><div class="stat-num">30</div><div class="stat-label">Literature Sources</div></div>
-      <div class="stat-box"><div class="stat-num">3</div><div class="stat-label">Jurisdictions Compared</div></div>
-      <div class="stat-box teal"><div class="stat-num">SPSS</div><div class="stat-label">Analysis Tool</div></div>
-    </div>
-    <div class="divider"></div>
-    <div class="body-text">
-      <p>This study investigates the integration of <span class="highlight">Artificial Intelligence (AI)</span> with <span class="highlight">Alternative Dispute Resolution (ADR)</span> mechanisms as a novel approach to resolving copyright disputes in the music industry, particularly in India's rapidly evolving digital landscape.</p>
-      <p>Using <span class="highlight-teal">doctrinal and comparative methodology</span> supported by empirical analysis, the research collects 300 structured responses from artists, legal professionals, and technology experts. Statistical analysis employs descriptive statistics, cross-tabulations, and chi-square tests.</p>
-      <p>The findings conclude that AI-enabled ADR can <span class="highlight">reduce time and costs</span> associated with traditional dispute resolution—but platforms must be user-friendly, transparent, and ethically governed.</p>
-    </div>
-  </div>
-
-  <!-- ══════════════ SLIDE 2 · INTRODUCTION ══════════════ -->
-
-  <div class="slide slide-intro">
-    <div class="orb" style="width:450px;height:450px;bottom:-100px;left:-100px;background:rgba(212,168,83,0.07);"></div>
-    <div class="slide-label">02 · Introduction</div>
-    <h2 class="section-title">The Problem Landscape</h2>
-    <div class="two-col">
-      <div class="left-col">
-        <div class="body-text">
-          <p>The transition from physical media to platforms like <span class="highlight">YouTube, Spotify, and SoundCloud</span> has fundamentally transformed music creation—while simultaneously increasing the volume and complexity of copyright disputes.</p>
-          <p>Traditional copyright enforcement has struggled to keep pace. Lengthy, costly judicial processes are ill-equipped to handle the scale and technical nature of online infringement.</p>
-        </div>
-        <div style="margin-top:20px;">
-          <h3 class="sub-title" style="margin-bottom:12px;">Key Drivers</h3>
-          <ul class="styled-list">
-            <li>Digital piracy at unprecedented scale</li>
-            <li>Slow royalty collection systems</li>
-            <li>Limited rights awareness among independent artists</li>
-            <li>Overburdened courts with long delays</li>
-            <li>Rise of AI-generated music complicating ownership</li>
-          </ul>
-        </div>
+  <div class="slide active" id="s1">
+    <div class="badge">Academic Research Presentation</div>
+    <h1>Judicial Review of <span>IPR Decisions</span>: A Study of Administrative Tribunals in India</h1>
+    <p class="subtitle">Saveetha School of Law · SIMATS · Chennai</p>
+    <div class="authors">
+      <div class="author-card">
+        <div class="name">Rakunatha Khrishanth Manathra</div>
+        <div class="role">B.A., LLB.(Hons.) — Author</div>
       </div>
-      <div class="right-col">
-        <div class="card" style="margin-bottom:16px;">
-          <div class="card-title">🇮🇳 Government Response</div>
-          <p>India's Copyright (Amendment) Act, 2012 laid the groundwork for digital rights management. Recent policy discussions emphasize AI-powered systems for copyright monitoring and dispute resolution.</p>
-        </div>
-        <div class="card" style="margin-bottom:16px;">
-          <div class="card-title">🌍 Global Comparisons</div>
-          <p>The U.S. (DMCA, ASCAP, BMI) and EU (Digital Single Market Directive, GEMA, SACEM) combine strong legal frameworks with technological innovation—offering models for India.</p>
-        </div>
-        <div class="card">
-          <div class="card-title">🤖 AI-ADR Promise</div>
-          <p>AI-enabled ADR tools promise reduced resolution times, lower costs, and high-volume case management through automated evidence analysis and pattern recognition.</p>
-        </div>
+      <div class="author-card">
+        <div class="name">Dr. J. Gayathri MA., ML., PhD</div>
+        <div class="role">Assistant Professor — Co-Author</div>
       </div>
     </div>
+    <div class="deco-line"></div>
   </div>
 
-  <!-- ══════════════ SLIDE 3 · OBJECTIVES ══════════════ -->
+  <!-- SLIDE 2: ABSTRACT -->
 
-  <div class="slide slide-objectives">
-    <div class="orb" style="width:500px;height:500px;top:-150px;right:-200px;background:rgba(212,168,83,0.08);"></div>
-    <div class="slide-label">03 · Research Objectives</div>
-    <h2 class="section-title">What This Study Aims To Do</h2>
-    <div class="card-grid card-grid-3" style="margin-top:16px;">
-      <div class="card">
-        <div class="card-icon">⚖️</div>
-        <div class="card-title">Objective 1</div>
-        <p>Study how AI-powered ADR can help solve copyright conflicts in the music industry efficiently and fairly.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon">📜</div>
-        <div class="card-title">Objective 2</div>
-        <p>Review India's copyright laws (especially 2012 amendments) and compare with US and EU to find strengths and weaknesses.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon">🛡️</div>
-        <div class="card-title">Objective 3</div>
-        <p>Suggest ways to responsibly use AI in ADR systems, ensuring fairness, ethics, and respect for musical creativity.</p>
-      </div>
-    </div>
-    <div class="divider"></div>
-    <div class="two-col">
-      <div>
-        <h3 class="sub-title">Independent Variables</h3>
-        <div class="tag-row">
-          <span class="tag">Age</span>
-          <span class="tag">Profession</span>
-          <span class="tag">Digital Literacy</span>
-          <span class="tag">Access to Legal Resources</span>
+  <div class="slide" id="s2">
+    <div class="slide-inner">
+      <div class="left-panel">
+        <div class="eyebrow">Slide 02</div>
+        <h2>Abstract &amp; Overview</h2>
+        <div class="rule"></div>
+        <p style="color:#ffffffcc;font-size:.85rem;line-height:1.7;">Judicial review of IPR decisions is crucial in India's legal system. Constitutional courts under Articles 32 &amp; 226 ensure administrative tribunals act fairly, lawfully, and within procedural propriety.</p>
+        <div class="keywords" style="margin-top:1.6rem;">
+          <span class="keyword">Judicial Review</span>
+          <span class="keyword">IPR</span>
+          <span class="keyword">Admin Tribunals</span>
+          <span class="keyword">India</span>
+          <span class="keyword">IPAB</span>
+          <span class="keyword">High Courts</span>
         </div>
       </div>
-      <div>
-        <h3 class="sub-title">Dependent Variables</h3>
-        <div class="tag-row">
-          <span class="tag">ADR Efficiency Perceptions</span>
-          <span class="tag">Trust in AI Systems</span>
-          <span class="tag">Copyright Awareness</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══════════════ SLIDE 4 · LITERATURE REVIEW ══════════════ -->
-
-  <div class="slide slide-lit">
-    <div class="orb" style="width:400px;height:400px;bottom:-100px;right:-100px;background:rgba(26,144,128,0.09);"></div>
-    <div class="slide-label">04 · Literature Review</div>
-    <h2 class="section-title">Key Scholarly Works (30 Studies)</h2>
-    <div class="slide-scroll">
-      <div class="card-grid card-grid-2">
-        <div class="card">
-          <div class="card-title">Copyright Law Reform (India)</div>
-          <p><span class="highlight">Manveen Singh (2013)</span> — 2012 Amendment transferred default copyright ownership from producers to creators, granting non-assignable royalty rights.</p>
-        </div>
-        <div class="card">
-          <div class="card-title">Digital Challenges</div>
-          <p><span class="highlight">Riya Yadav (2021)</span> — Rampant piracy, ambiguous fair use, and inefficient royalty distribution persist without tech upgrades and institutional reform.</p>
-        </div>
-        <div class="card">
-          <div class="card-title">Remix Culture</div>
-          <p><span class="highlight">Yamuna V.J. (2021)</span> — Current legal framework ill-equipped to differentiate permissible inspiration from actionable infringement. Judiciary needs musicology training.</p>
-        </div>
-        <div class="card">
-          <div class="card-title">AI in IP Disputes</div>
-          <p><span class="highlight">Sourav Mandal (2022)</span> — AI streamlines dispute resolution via automated rights detection and predictive outcomes; must be transparent with human oversight.</p>
-        </div>
-        <div class="card">
-          <div class="card-title">Ethics of AI in Law</div>
-          <p><span class="highlight">Mireille Hildebrandt (2020)</span> — Qualitative assessments like musical inspiration are ill-suited for algorithmic analysis; AI should play only an assistive role.</p>
-        </div>
-        <div class="card">
-          <div class="card-title">WIPO AI & IP (2021)</div>
-          <p>AI can assist in evidence generation and settlement prediction. If scaled and ethically regulated, it could significantly improve speed and consistency of ADR worldwide.</p>
-        </div>
-        <div class="card">
-          <div class="card-title">India's ADR Digitization</div>
-          <p><span class="highlight">Jayanth K. Krishnan (2022)</span> — AI-assisted mediation platforms efficiently handle data-driven cases like streaming violations and licensing conflicts.</p>
-        </div>
-        <div class="card">
-          <div class="card-title">UNESCO AI Ethics (2021)</div>
-          <p>Automated systems may fail to capture cultural nuances. Human oversight, ethical safeguards, and culturally inclusive design are essential for music-related disputes.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══════════════ SLIDE 5 · METHODOLOGY ══════════════ -->
-
-  <div class="slide slide-method">
-    <div class="orb" style="width:450px;height:450px;top:-100px;right:-100px;background:rgba(212,168,83,0.08);"></div>
-    <div class="slide-label">05 · Methodology</div>
-    <h2 class="section-title">Research Design & Methods</h2>
-    <div class="two-col">
-      <div class="left-col">
-        <h3 class="sub-title">Approach</h3>
-        <ul class="styled-list" style="margin-bottom:20px;">
-          <li><span class="highlight">Doctrinal</span> — theoretical review of existing literature</li>
-          <li><span class="highlight">Non-Doctrinal</span> — empirical, descriptive quantitative survey</li>
-          <li>Structured questionnaire with closed-ended & Likert-scale questions</li>
-          <li>Online administration across urban and semi-urban schools and colleges</li>
-        </ul>
-        <h3 class="sub-title">Target Population</h3>
-        <div class="body-text">
-          <p>Teenagers aged 13–19 who are active consumers and creators of digital music content — the key demographic impacted by copyright issues and digital technologies.</p>
-        </div>
-      </div>
-      <div class="right-col">
-        <div class="stat-box" style="margin-bottom:16px;text-align:left;padding:20px 24px;">
-          <div style="font-size:12px;color:var(--silver);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px;">Sample Size</div>
-          <div class="stat-num">300</div>
-          <div class="stat-label">Respondents via purposive sampling</div>
-        </div>
-        <div class="card" style="margin-bottom:12px;">
-          <div class="card-title">📊 Statistical Tools</div>
-          <p>SPSS software — descriptive statistics, cross-tabulations, chi-square tests, ANOVA</p>
-        </div>
-        <div class="card">
-          <div class="card-title">🎵 Sampling Rationale</div>
-          <p>Platforms of focus: YouTube, Spotify, SoundCloud — digital-native music environments where copyright issues are most prevalent</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══════════════ SLIDE 6 · DATA ANALYSIS ══════════════ -->
-
-  <div class="slide slide-data">
-    <div class="orb" style="width:500px;height:500px;bottom:-150px;right:-100px;background:rgba(26,144,128,0.1);"></div>
-    <div class="slide-label">06 · Data Analysis</div>
-    <h2 class="section-title">Survey Findings at a Glance</h2>
-    <div class="two-col">
-      <div class="left-col">
-        <h3 class="sub-title" style="margin-bottom:14px;">Gender Distribution (Table 1)</h3>
-        <div class="progress-bar-row" style="margin-bottom:24px;">
-          <div class="progress-item"><span class="progress-label">Female</span><div class="progress-track"><div class="progress-fill" style="width:50%;"></div></div><span class="progress-pct">50%</span></div>
-          <div class="progress-item"><span class="progress-label">Male</span><div class="progress-track"><div class="progress-fill" style="width:45%;"></div></div><span class="progress-pct">45%</span></div>
-          <div class="progress-item"><span class="progress-label">Prefer not to say</span><div class="progress-track"><div class="progress-fill" style="width:5%;"></div></div><span class="progress-pct">5%</span></div>
-        </div>
-        <h3 class="sub-title" style="margin-bottom:14px;">Legal Rights Awareness (Table 2)</h3>
-        <div class="progress-bar-row" style="margin-bottom:24px;">
-          <div class="progress-item"><span class="progress-label">Yes — Aware</span><div class="progress-track"><div class="progress-fill" style="width:70%;background:linear-gradient(90deg,#d4a853,#f0c878);"></div></div><span class="progress-pct">70%</span></div>
-          <div class="progress-item"><span class="progress-label">No</span><div class="progress-track"><div class="progress-fill" style="width:15%;background:linear-gradient(90deg,#e05555,#ff7777);"></div></div><span class="progress-pct">15%</span></div>
-          <div class="progress-item"><span class="progress-label">Not sure</span><div class="progress-track"><div class="progress-fill" style="width:15%;background:linear-gradient(90deg,#666,#888);"></div></div><span class="progress-pct">15%</span></div>
-        </div>
-      </div>
-      <div class="right-col">
-        <h3 class="sub-title" style="margin-bottom:14px;">AI Familiarity (Table 3)</h3>
-        <div class="progress-bar-row" style="margin-bottom:24px;">
-          <div class="progress-item"><span class="progress-label">Familiar with AI</span><div class="progress-track"><div class="progress-fill" style="width:80%;background:linear-gradient(90deg,#6b5fcf,#a07cff);"></div></div><span class="progress-pct">80%</span></div>
-          <div class="progress-item"><span class="progress-label">Not familiar</span><div class="progress-track"><div class="progress-fill" style="width:20%;background:linear-gradient(90deg,#666,#888);"></div></div><span class="progress-pct">20%</span></div>
-        </div>
-        <h3 class="sub-title" style="margin-bottom:14px;">Trust in AI Decision-Making (Table 4)</h3>
-        <div class="progress-bar-row" style="margin-bottom:24px;">
-          <div class="progress-item"><span class="progress-label">Trust AI</span><div class="progress-track"><div class="progress-fill" style="width:35%;background:linear-gradient(90deg,#1a9080,#24bfaa);"></div></div><span class="progress-pct">35%</span></div>
-          <div class="progress-item"><span class="progress-label">Do not trust</span><div class="progress-track"><div class="progress-fill" style="width:40%;background:linear-gradient(90deg,#e05555,#ff7777);"></div></div><span class="progress-pct">40%</span></div>
-          <div class="progress-item"><span class="progress-label">Unsure</span><div class="progress-track"><div class="progress-fill" style="width:25%;background:linear-gradient(90deg,#666,#888);"></div></div><span class="progress-pct">25%</span></div>
-        </div>
-        <h3 class="sub-title" style="margin-bottom:14px;">Support for AI in Copyright Disputes (Table 5)</h3>
-        <div class="progress-bar-row">
-          <div class="progress-item"><span class="progress-label">Strongly Support</span><div class="progress-track"><div class="progress-fill" style="width:25%;background:linear-gradient(90deg,#1a9080,#24bfaa);"></div></div><span class="progress-pct">25%</span></div>
-          <div class="progress-item"><span class="progress-label">Support</span><div class="progress-track"><div class="progress-fill" style="width:40%;background:linear-gradient(90deg,#2aaa95,#35d4bc);"></div></div><span class="progress-pct">40%</span></div>
-          <div class="progress-item"><span class="progress-label">Neutral</span><div class="progress-track"><div class="progress-fill" style="width:20%;background:linear-gradient(90deg,#666,#888);"></div></div><span class="progress-pct">20%</span></div>
-          <div class="progress-item"><span class="progress-label">Oppose</span><div class="progress-track"><div class="progress-fill" style="width:10%;background:linear-gradient(90deg,#e05555,#ff7777);"></div></div><span class="progress-pct">10%</span></div>
-          <div class="progress-item"><span class="progress-label">Strongly Oppose</span><div class="progress-track"><div class="progress-fill" style="width:5%;background:linear-gradient(90deg,#c03333,#e05555);"></div></div><span class="progress-pct">5%</span></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══════════════ SLIDE 7 · RESULTS ══════════════ -->
-
-  <div class="slide slide-results">
-    <div class="orb" style="width:500px;height:500px;top:-100px;left:-100px;background:rgba(212,168,83,0.07);"></div>
-    <div class="slide-label">07 · Results & Statistical Analysis</div>
-    <h2 class="section-title">Key Findings</h2>
-    <div class="card-grid card-grid-2">
-      <div class="card">
-        <div class="card-title">📊 Chi-Square Test 1 (Age & Legal Guidelines)</div>
-        <p>Only 20% of respondents provided valid answers. The 36–55 age group showed the highest disagreement (114/200). However, <span class="highlight">p = 0.518</span> — no statistically significant relationship between age and opinion.</p>
-      </div>
-      <div class="card">
-        <div class="card-title">📊 Chi-Square Test 2 (Age & AI Training Infringement)</div>
-        <p>36–55 group exhibited strongest agreement (53 at score 9, 31 at score 10). <span class="highlight">Pearson Chi-Square = 4.327, p = 0.364</span> — no statistically significant association, though older respondents lean toward viewing unauthorized AI training as infringement.</p>
-      </div>
-      <div class="card">
-        <div class="card-title">📐 ANOVA Test (Age predicting Legal Guidelines need)</div>
-        <p><span class="highlight">F-value = 0.250, p = 0.618</span> — age does not significantly predict views on need for legal clarity. Variation appears due to random chance rather than age-related trends.</p>
-      </div>
-      <div class="card">
-        <div class="card-title">👤 Age Group Breakdown</div>
-        <p>16–18: <span class="highlight">23%</span> believe unauthorized AI training = infringement<br>19–35: <span class="highlight">20%</span><br>36–55: <span class="highlight">57%</span> — highest concern across all metrics</p>
-      </div>
-    </div>
-    <div class="quote-block">
-      <p>"While young respondents are generally aware and supportive of AI's role in resolving music copyright disputes, issues of trust, fairness, and respect for creative works need to be addressed to ensure wider acceptance."</p>
-    </div>
-  </div>
-
-  <!-- ══════════════ SLIDE 8 · DISCUSSION ══════════════ -->
-
-  <div class="slide slide-discussion">
-    <div class="orb" style="width:450px;height:450px;bottom:-100px;right:-100px;background:rgba(26,144,128,0.09);"></div>
-    <div class="slide-label">08 · Discussion</div>
-    <h2 class="section-title">Interpreting the Evidence</h2>
-    <div class="slide-scroll">
-      <div class="two-col">
-        <div class="left-col">
-          <ul class="styled-list">
-            <li><span class="highlight">High AI Familiarity (80%)</span> lays a critical foundation for integrating AI solutions in legal and creative industries.</li>
-            <li><span class="highlight">Skepticism on Trust (40% distrust)</span> suggests transparency, accountability, and human oversight must be prioritized in AI dispute systems.</li>
-            <li><span class="highlight">Cautious Optimism (65% support)</span> indicates the majority see potential in AI-ADR to enhance efficiency and access to justice.</li>
-            <li><span class="highlight">Gender Divide</span> — Female respondents (64.68%) show significantly greater concern over legal inadequacies vs. males (35.32%).</li>
-            <li><span class="highlight">Generational Divide</span> — Older respondents (36–55) are more likely to view AI training practices as legally problematic, while younger groups show more nuanced positions.</li>
-          </ul>
-        </div>
-        <div class="right-col">
-          <div class="card" style="margin-bottom:14px;">
-            <div class="card-title">🎓 Knowledge Gap</div>
-            <p>30% of respondents were unaware or uncertain about creators' legal rights — indicating a critical need for targeted educational initiatives.</p>
+      <div class="right-panel">
+        <p>Intellectual Property Rights have emerged as a critical component of modern economic and technological development. Administrative bodies like the erstwhile IPAB adjudicated IPR disputes — but following the <strong>abolition of IPAB in 2021</strong>, functions transferred to High Courts.</p>
+        <p style="margin-top:1rem;">Judicial review acts as a safeguard against arbitrariness, jurisdictional errors, and natural justice violations, maintaining the rule of law in administrative decision-making.</p>
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="num">230</div>
+            <div class="label">Survey Respondents</div>
           </div>
-          <div class="card" style="margin-bottom:14px;">
-            <div class="card-title">⚖️ Primary Responsibility</div>
-            <p>39.5% of 36–55 group believe AI developers should be primarily responsible. A widespread consensus that tool creators should bear main legal and ethical responsibility.</p>
+          <div class="stat-box">
+            <div class="num">60%</div>
+            <div class="label">Found JR Essential for Accountability</div>
           </div>
-          <div class="card">
-            <div class="card-title">🌐 Occupational Views</div>
-            <p>Students lean toward AI freedom (26.87%), while business and unemployed respondents favor universal global copyright law (24.38% each).</p>
+          <div class="stat-box">
+            <div class="num">40%</div>
+            <div class="label">Said JR Prevents Abuse of Power</div>
+          </div>
+          <div class="stat-box">
+            <div class="num">2021</div>
+            <div class="label">IPAB Abolished — Functions to High Courts</div>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ══════════════ SLIDE 9 · SUGGESTIONS ══════════════ -->
+  <!-- SLIDE 3: OBJECTIVES -->
 
-  <div class="slide slide-suggest">
-    <div class="orb" style="width:450px;height:450px;top:-100px;right:-100px;background:rgba(212,168,83,0.08);"></div>
-    <div class="slide-label">09 · Suggestions & Limitations</div>
-    <h2 class="section-title">Recommendations & Study Boundaries</h2>
-    <div class="two-col">
-      <div>
-        <h3 class="sub-title" style="margin-bottom:14px;">Policy Recommendations</h3>
-        <ol class="num-list">
-          <li>Intensify educational efforts on music copyright for young digital users</li>
-          <li>Design AI-ADR platforms with transparency, explainability, and ethical safeguards to mitigate bias</li>
-          <li>Incorporate human oversight at all stages of dispute resolution</li>
-          <li>Actively involve youth in development to align AI tools with their perspectives</li>
-          <li>Ensure platforms are user-friendly and widely accessible</li>
-          <li>Pursue multi-stakeholder research involving creators, legal professionals, and technologists</li>
-        </ol>
+  <div class="slide" id="s3">
+    <div class="slide-inner">
+      <div class="header">
+        <div class="num">03</div>
+        <h2>Research Objectives</h2>
       </div>
-      <div>
-        <h3 class="sub-title" style="margin-bottom:14px;">Study Limitations</h3>
-        <ul class="styled-list">
-          <li>Sample limited to specific age group and educational levels — not fully representative</li>
-          <li>Self-reported data may introduce bias in understanding of AI and copyright</li>
-          <li>Focused on awareness and perceptions, not actual ADR system experiences</li>
-          <li>Cultural and regional factors not extensively explored</li>
-        </ul>
-        <div class="card" style="margin-top:16px;">
-          <div class="card-title">🔬 Future Research Directions</div>
-          <p>Larger diverse samples, qualitative methods, real-world AI dispute resolution case studies, comparative studies with UK and Canada, blockchain integration for rights verification.</p>
+      <div class="obj-grid">
+        <div class="obj-card">
+          <div class="idx">01</div>
+          <h3>Examine Current Process</h3>
+          <p>Analyse the existing judicial review process of administrative tribunals in India, specifically in the context of intellectual property rights decisions.</p>
+        </div>
+        <div class="obj-card">
+          <div class="idx">02</div>
+          <h3>Role of Judicial Review</h3>
+          <p>Evaluate how judicial review ensures that administrative tribunals make decisions aligned with the law without infringing on individual rights.</p>
+        </div>
+        <div class="obj-card">
+          <div class="idx">03</div>
+          <h3>Strengths &amp; Weaknesses</h3>
+          <p>Identify gaps and strengths in the current process, and recommend targeted areas for reform and legislative improvement.</p>
+        </div>
+        <div class="obj-card">
+          <div class="idx">04</div>
+          <h3>Systemic Impact</h3>
+          <p>Investigate the broader impact of judicial review on tribunal functioning and the long-term implications for the Indian legal system.</p>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ══════════════ SLIDE 10 · CONCLUSION ══════════════ -->
+  <!-- SLIDE 4: METHODOLOGY -->
 
-  <div class="slide slide-conclusion">
-    <div class="orb" style="width:600px;height:600px;top:-200px;right:-200px;background:rgba(26,144,128,0.11);"></div>
-    <div class="orb" style="width:400px;height:400px;bottom:-150px;left:-100px;background:rgba(212,168,83,0.07);"></div>
-    <span class="note" style="top:20%;right:10%;font-size:50px;">♪</span>
-    <span class="note" style="bottom:15%;right:20%;font-size:35px;">♫</span>
+  <div class="slide" id="s4">
+    <div class="slide-inner">
+      <div class="meth-left">
+        <div class="eyebrow">Slide 04</div>
+        <h2>Methodology</h2>
+        <div class="step">
+          <div class="dot">1</div>
+          <div class="txt">
+            <h4>Empirical Research Design</h4>
+            <p>Descriptive and empirical methodology suited for quantitative analysis of real-world attitudes. 230 samples via convenience sampling.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="dot">2</div>
+          <div class="txt">
+            <h4>Data Collection</h4>
+            <p>Structured questionnaires using a five-point Likert scale, administered during field visits across multiple demographic categories.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="dot">3</div>
+          <div class="txt">
+            <h4>Statistical Analysis</h4>
+            <p>SPSS v21 with chi-square, ANOVA, and Pearson correlation tests. Secondary sources: peer-reviewed journals, government reports.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="dot">4</div>
+          <div class="txt">
+            <h4>Variables</h4>
+            <p>Independent: age, gender, education, geography, occupation. Dependent: awareness &amp; attitude towards judicial review of IPR decisions.</p>
+          </div>
+        </div>
+      </div>
+      <div class="meth-right">
+        <div style="color:var(--gold-lt);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;margin-bottom:1.6rem;">Sample Profile</div>
+        <div class="meth-stat">
+          <div class="bar-label"><span>Demographic Diversity</span><span>85%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="--w:85%"></div></div>
+        </div>
+        <div class="meth-stat" style="margin-top:1.2rem;">
+          <div class="bar-label"><span>Survey Completion Rate</span><span>91%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="--w:91%"></div></div>
+        </div>
+        <div class="meth-stat" style="margin-top:1.2rem;">
+          <div class="bar-label"><span>Statistical Reliability</span><span>95%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="--w:95%"></div></div>
+        </div>
+        <div class="meth-stat" style="margin-top:1.2rem;">
+          <div class="bar-label"><span>Secondary Source Coverage</span><span>78%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="--w:78%"></div></div>
+        </div>
+        <div style="margin-top:2rem;padding-top:1.4rem;border-top:1px solid #ffffff18;">
+          <div style="color:#ffffff60;font-size:.75rem;line-height:1.7;">Tools: <span style="color:var(--gold)">SPSS 21</span> · Chi-Square · ANOVA · Pearson r</div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-```
-<div class="slide-label">10 · Conclusion</div>
-<h2 class="section-title">The Path Forward</h2>
-<div class="quote-block" style="margin-bottom:24px;">
-  <p>"AI-enabled ADR presents a promising solution to the growing challenges of copyright violations in the music industry. By leveraging AI's capabilities for efficient data processing and pattern recognition, these systems can potentially reduce the time and costs associated with traditional dispute resolution methods."</p>
+  <!-- SLIDE 5: FINDINGS -->
+
+  <div class="slide" id="s5">
+    <div class="slide-inner">
+      <div class="top">
+        <h2>Key Findings</h2>
+        <div class="note">Based on 230 respondents across diverse demographics. Data analysis via SPSS v21.</div>
+      </div>
+      <div class="findings-row">
+        <div class="finding-card">
+          <div class="ring" style="--pct:216deg">
+            <div class="val">60%</div>
+          </div>
+          <h4>Believe judicial review is essential for ensuring accountability</h4>
+        </div>
+        <div class="finding-card">
+          <div class="ring" style="--pct:144deg">
+            <div class="val">40%</div>
+          </div>
+          <h4>Think JR helps prevent abuse of power by tribunals</h4>
+        </div>
+        <div class="finding-card">
+          <div class="ring" style="--pct:72deg">
+            <div class="val">20%</div>
+          </div>
+          <h4>State it ensures consistency in decision-making</h4>
+        </div>
+        <div class="finding-card">
+          <div class="ring" style="--pct:54deg">
+            <div class="val">15%</div>
+          </div>
+          <h4>Feel it provides meaningful opportunity for appeal</h4>
+        </div>
+      </div>
+      <div style="margin-top:2rem;padding:1.2rem 1.6rem;background:#ffffff08;border-radius:6px;border-left:3px solid var(--gold);">
+        <p style="color:#ffffffcc;font-size:.85rem;line-height:1.6;"><strong style="color:var(--gold-lt);">Conclusion:</strong> The findings highlight the need for a more effective and efficient system of judicial review, with significant policy implications for the Indian government — suggesting that reforms are necessary to strengthen the process and ensure tribunal accountability.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6: LITERATURE REVIEW -->
+
+  <div class="slide" id="s6">
+    <div class="slide-inner">
+      <div class="header">
+        <div class="eyebrow">Slide 06</div>
+        <h2>Review of Literature</h2>
+      </div>
+      <div class="lit-grid">
+        <div class="lit-card">
+          <div class="author">Cane, P. (2010)</div>
+          <div class="title">Judicial Review and Merits Review: Comparing Administrative Adjudication</div>
+          <div class="stat">Respondents: <b>252</b> · Awareness: <b>58%</b> · Gap identified: <b>48%</b></div>
+        </div>
+        <div class="lit-card">
+          <div class="author">Kritika, S. (2023)</div>
+          <div class="title">Review of Administrative Decisions: International Criminal Courts and Tribunals</div>
+          <div class="stat">Respondents: <b>218</b> · Awareness: <b>61%</b> · Gap identified: <b>50%</b></div>
+        </div>
+        <div class="lit-card">
+          <div class="author">Michigan Law Review (1931)</div>
+          <div class="title">Administrative Tribunals: Judicial Notice</div>
+          <div class="stat">Respondents: <b>195</b> · Awareness: <b>63%</b> · Gap identified: <b>49%</b></div>
+        </div>
+        <div class="lit-card">
+          <div class="author">Puneeth, P. (2021)</div>
+          <div class="title">Judicial Review of Legislations by Tribunals in India: Law, Problems, and Perspectives</div>
+          <div class="stat">Respondents: <b>153</b> · Awareness: <b>66%</b> · Gap identified: <b>35%</b></div>
+        </div>
+      </div>
+      <div style="margin-top:1.4rem;padding:.9rem 1.2rem;background:#0d0d0d0a;border-radius:4px;font-size:.78rem;color:var(--muted);">
+        All studies employed structured survey methodology with chi-square &amp; ANOVA. Published in: Comparative Administrative Law · Max Planck Encyclopedia · Michigan Law Review · Cambridge University Press.
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 7: CONCLUSION -->
+
+  <div class="slide" id="s7">
+    <div class="content">
+      <div class="icon">⚖️</div>
+      <h2>Conclusion &amp; <em>Policy Implications</em></h2>
+      <p>This study critically examines how judicial review of IPR decisions rendered by administrative tribunals in India operates within a constitutional framework. The abolition of IPAB in 2021 has intensified the discourse on the role and scope of judicial review, with High Courts now balancing deference to technical expertise against constitutional principles.</p>
+      <p style="margin-top:1.1rem;">Findings suggest that <strong style="color:var(--gold-lt);">legislative reforms are urgently needed</strong> to strengthen the judicial review process, ensure tribunal accountability, and ultimately achieve a more just and fair society for IP rights holders and innovators.</p>
+      <div class="tags">
+        <span class="tag">Articles 32 &amp; 226</span>
+        <span class="tag">Natural Justice</span>
+        <span class="tag">Rule of Law</span>
+        <span class="tag">IPAB Abolition 2021</span>
+        <span class="tag">Patent · Trademark · Copyright</span>
+        <span class="tag">Legislative Reform</span>
+      </div>
+    </div>
+  </div>
+
 </div>
-<div class="card-grid card-grid-3">
-  <div class="card">
-    <div class="card-icon">🔍</div>
-    <div class="card-title">Detect Efficiently</div>
-    <p>Pattern recognition and content-matching algorithms offer considerable potential to detect copyright infringements and support early dispute intervention.</p>
-  </div>
-  <div class="card">
-    <div class="card-icon">🤝</div>
-    <div class="card-title">Govern Responsibly</div>
-    <p>Transparency, fairness, human oversight, and stakeholder involvement are non-negotiable for gaining trust across all parties.</p>
-  </div>
-  <div class="card">
-    <div class="card-icon">🚀</div>
-    <div class="card-title">Innovate Inclusively</div>
-    <p>Blockchain for rights verification, cross-jurisdictional learning from UK and Canada, and youth-inclusive policymaking can shape the next generation of AI-ADR.</p>
-  </div>
-</div>
-<div class="tag-row" style="margin-top:24px;">
-  <span class="tag">AI-Enabled ADR</span>
-  <span class="tag">Copyright Protection</span>
-  <span class="tag">Transparency</span>
-  <span class="tag">Human Oversight</span>
-  <span class="tag">Stakeholder Inclusion</span>
-  <span class="tag">Access to Justice</span>
-</div>
-```
 
-  </div>
-
-</div><!-- /slideshow -->
-
-<!-- ── NAVIGATION ── -->
+<!-- NAVIGATION -->
 
 <div id="nav">
-  <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)" disabled>&#8592;</button>
-  <div id="dot-nav"></div>
-  <span id="slide-counter">1 / 11</span>
-  <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">&#8594;</button>
+  <button id="btn-prev" disabled>&#8592;</button>
+  <div id="dots"></div>
+  <button id="btn-next">&#8594;</button>
+  <div id="counter">1 / 7</div>
 </div>
 
 <script>
   const slides = document.querySelectorAll('.slide');
   const total = slides.length;
   let current = 0;
+  let animating = false;
 
-  const dotNav = document.getElementById('dot-nav');
-  const counter = document.getElementById('slide-counter');
-  const prevBtn = document.getElementById('prevBtn');
-  const nextBtn = document.getElementById('nextBtn');
+  const btnPrev = document.getElementById('btn-prev');
+  const btnNext = document.getElementById('btn-next');
+  const counter = document.getElementById('counter');
+  const sn = document.getElementById('sn');
+  const progress = document.getElementById('progress');
+  const dotsEl = document.getElementById('dots');
 
   // Build dots
   slides.forEach((_, i) => {
-    const d = document.createElement('div');
-    d.className = 'dot' + (i === 0 ? ' active' : '');
-    d.onclick = () => goTo(i);
-    dotNav.appendChild(d);
+    const d = document.createElement('button');
+    d.className = 'dot-btn' + (i === 0 ? ' active' : '');
+    d.addEventListener('click', () => goTo(i));
+    dotsEl.appendChild(d);
   });
 
-  function goTo(n) {
-    if (n === current) return;
-    slides[current].classList.add('exit-left');
-    slides[current].classList.remove('active');
-    setTimeout(() => slides[n < current ? n+1 : current].classList.remove('exit-left'), 600);
-    current = n;
-    slides[current].classList.add('active');
-    slides[current].scrollTop = 0;
-    updateUI();
-  }
+  function getDots() { return dotsEl.querySelectorAll('.dot-btn'); }
 
-  function changeSlide(dir) {
-    const next = current + dir;
-    if (next < 0 || next >= total) return;
-    slides[current].classList.remove('active');
-    if (dir > 0) slides[current].style.transform = 'translateX(-60px)';
-    else slides[current].style.transform = 'translateX(60px)';
-    slides[current].style.opacity = '0';
-    setTimeout(() => { slides[current].style.transform = ''; slides[current].style.opacity = ''; }, 600);
-    current = next;
-    slides[current].classList.add('active');
-    slides[current].scrollTop = 0;
-    updateUI();
-  }
-
-  function updateUI() {
-    counter.textContent = `${current + 1} / ${total}`;
-    prevBtn.disabled = current === 0;
-    nextBtn.disabled = current === total - 1;
-    document.querySelectorAll('.dot').forEach((d, i) => {
-      d.classList.toggle('active', i === current);
+  function animateBars(slide) {
+    slide.querySelectorAll('.bar-fill').forEach(bar => {
+      const w = getComputedStyle(bar).getPropertyValue('--w') || bar.style.getPropertyValue('--w');
+      bar.style.width = '0';
+      requestAnimationFrame(() => requestAnimationFrame(() => { bar.style.width = w; }));
     });
   }
 
-  // Keyboard navigation
+  function goTo(idx, dir) {
+    if (idx === current || animating) return;
+    animating = true;
+    const prev = current;
+    current = idx;
+
+    slides[prev].classList.add('exit');
+    slides[prev].classList.remove('active');
+
+    setTimeout(() => {
+      slides[prev].classList.remove('exit');
+      slides[current].classList.add('active');
+      animateBars(slides[current]);
+      animating = false;
+    }, 50);
+
+    // Update chrome
+    const dots = getDots();
+    dots[prev].classList.remove('active');
+    dots[current].classList.add('active');
+    counter.textContent = `${current + 1} / ${total}`;
+    sn.textContent = current + 1;
+    progress.style.width = `${((current + 1) / total) * 100}%`;
+    btnPrev.disabled = current === 0;
+    btnNext.disabled = current === total - 1;
+  }
+
+  btnNext.addEventListener('click', () => goTo(Math.min(current + 1, total - 1)));
+  btnPrev.addEventListener('click', () => goTo(Math.max(current - 1, 0)));
+
   document.addEventListener('keydown', e => {
-    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') changeSlide(1);
-    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') changeSlide(-1);
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goTo(Math.min(current + 1, total - 1));
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   goTo(Math.max(current - 1, 0));
   });
 
-  updateUI();
+  // Touch swipe
+  let tx = 0;
+  document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; });
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - tx;
+    if (Math.abs(dx) > 50) dx < 0 ? goTo(Math.min(current + 1, total - 1)) : goTo(Math.max(current - 1, 0));
+  });
+
+  // Init
+  progress.style.width = `${(1 / total) * 100}%`;
+  animateBars(slides[0]);
 </script>
 
 </body>
