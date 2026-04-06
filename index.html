@@ -1,385 +1,517 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Judicial Review of IPR Decisions</title>
+<title>Revolutionizing IPR Contract Drafting Through AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Source+Sans+3:wght@300;400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy: #060d1f;
+    --accent: #2a7fff;
+    --gold: #c9a84c;
+    --gold2: #e8c96d;
+    --white: #f0f4ff;
+    --muted: #8a9bbf;
+    --glass: rgba(255,255,255,0.04);
+    --glass-border: rgba(255,255,255,0.08);
+  }
 
-body {
-font-family: Arial, sans-serif;
-background: #1a1a2e;
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-min-height: 100vh;
-padding: 20px;
-}
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
-/* Slide container */
-.slide-container {
-width: 100%;
-max-width: 900px;
-background: #fff;
-border-radius: 8px;
-min-height: 500px;
-padding: 50px 60px;
-position: relative;
-box-shadow: 0 8px 40px rgba(0,0,0,0.4);
-display: none;
-}
-.slide-container.active { display: block; }
+  body {
+    background: var(--navy);
+    color: var(--white);
+    font-family: 'Source Sans 3', sans-serif;
+    height: 100vh;
+    overflow: hidden;
+    user-select: none;
+  }
 
-/* Slide number badge */
-.slide-num {
-position: absolute;
-top: 18px;
-right: 24px;
-font-size: 12px;
-color: #999;
-}
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(42,127,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(42,127,255,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
 
-/* Accent bar at top */
-.accent-bar {
-height: 5px;
-background: #003399;
-border-radius: 8px 8px 0 0;
-position: absolute;
-top: 0; left: 0; right: 0;
-}
+  #topbar {
+    position: fixed; top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--gold));
+    z-index: 100;
+  }
 
-/* Typography */
-h1 { font-size: 28px; color: #003399; margin-bottom: 12px; line-height: 1.3; }
-h2 { font-size: 22px; color: #003399; margin-bottom: 16px; border-bottom: 2px solid #003399; padding-bottom: 8px; }
-h3 { font-size: 16px; color: #003399; margin-bottom: 6px; }
-p  { font-size: 14px; color: #333; line-height: 1.7; margin-bottom: 10px; }
-ul { padding-left: 20px; }
-ul li { font-size: 14px; color: #333; line-height: 1.7; margin-bottom: 6px; }
+  #deck { position: relative; width: 100vw; height: 100vh; z-index: 1; }
 
-/* Subtitle */
-.subtitle { font-size: 15px; color: #555; margin-bottom: 30px; }
+  .slide {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.5s cubic-bezier(.4,0,.2,1), transform 0.5s cubic-bezier(.4,0,.2,1);
+    transform: translateX(60px);
+    padding: 48px 7vw 100px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  .slide::-webkit-scrollbar { width: 4px; }
+  .slide::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 2px; }
+  .slide.active { opacity: 1; pointer-events: all; transform: translateX(0); }
+  .slide.exit   { opacity: 0; transform: translateX(-60px); }
 
-/* Author cards */
-.author-row { display: flex; gap: 30px; flex-wrap: wrap; margin-top: 30px; }
-.author-card { background: #f0f4ff; border-left: 4px solid #003399; padding: 12px 16px; border-radius: 4px; flex: 1; min-width: 200px; }
-.author-card .name { font-weight: bold; font-size: 14px; color: #003399; }
-.author-card .role { font-size: 12px; color: #666; margin-top: 4px; }
+  /* NAV */
+  #nav-fade {
+    position: fixed; bottom: 0; left: 0; right: 0; height: 90px;
+    background: linear-gradient(to bottom, transparent, rgba(6,13,31,0.96));
+    pointer-events: none; z-index: 99;
+  }
+  #nav {
+    position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%);
+    display: flex; align-items: center; gap: 16px;
+    background: rgba(6,13,31,0.92);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 40px; padding: 10px 22px;
+    z-index: 100;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.6), 0 0 0 1px rgba(42,127,255,0.08);
+  }
+  #nav button {
+    background: none; border: none; color: var(--muted);
+    cursor: pointer; font-size: 18px; padding: 4px 10px;
+    border-radius: 6px; transition: color .2s, background .2s;
+    font-family: 'Space Mono', monospace;
+  }
+  #nav button:hover { color: var(--white); background: var(--glass); }
+  .dots { display: flex; gap: 8px; align-items: center; }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--muted); cursor: pointer; transition: all .3s; }
+  .dot.on { background: var(--accent); width: 22px; border-radius: 3px; }
+  #slide-counter { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--muted); min-width: 36px; text-align: center; }
 
-/* Keyword pills */
-.keywords { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
-.kw { background: #e8eeff; color: #003399; border: 1px solid #aabbff; padding: 4px 12px; border-radius: 20px; font-size: 12px; }
+  /* COMMON */
+  .slide-label {
+    font-family: 'Space Mono', monospace; font-size: 11px;
+    letter-spacing: .18em; color: var(--accent); text-transform: uppercase;
+    margin-bottom: 12px; display: flex; align-items: center; gap: 10px;
+  }
+  .slide-label::before { content:''; display:inline-block; width:28px; height:2px; background:var(--accent); }
 
-/* Stat grid */
-.stat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 20px; }
-.stat-box { background: #f0f4ff; border: 1px solid #c5d0f0; border-radius: 6px; padding: 14px 16px; text-align: center; }
-.stat-box .num { font-size: 26px; font-weight: bold; color: #003399; }
-.stat-box .lbl { font-size: 12px; color: #555; margin-top: 4px; }
+  h2.slide-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(22px, 3vw, 38px); font-weight: 700;
+    color: var(--white); margin-bottom: 20px;
+  }
+  h2.slide-title span { color: var(--gold); }
 
-/* Objective cards */
-.obj-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 10px; }
-.obj-card { background: #f7f9ff; border: 1px solid #d0d8f5; border-radius: 6px; padding: 14px 16px; }
-.obj-card .num { font-size: 11px; font-weight: bold; color: #003399; letter-spacing: 1px; margin-bottom: 4px; }
-.obj-card p { margin: 0; font-size: 13px; }
+  .two-col   { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
 
-/* Steps */
-.step { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 16px; }
-.step .circle { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; background: #003399; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; margin-top: 2px; }
-.step .txt b { font-size: 14px; color: #222; display: block; margin-bottom: 3px; }
-.step .txt span { font-size: 13px; color: #555; line-height: 1.6; }
+  .card {
+    background: var(--glass); border: 1px solid var(--glass-border);
+    border-radius: 12px; padding: 16px; position: relative; overflow: hidden;
+    transition: border-color .3s, background .3s;
+  }
+  .card:hover { border-color: rgba(42,127,255,0.3); background: rgba(42,127,255,0.06); }
+  .card::before { content:''; position:absolute; top:0; left:0; height:3px; width:100%; background:linear-gradient(90deg,var(--accent),var(--gold)); opacity:0; transition:opacity .3s; }
+  .card:hover::before { opacity:1; }
+  .card-icon { font-size:24px; margin-bottom:7px; }
+  .card h3 { font-family:'Playfair Display',serif; font-size:14px; font-weight:700; color:var(--white); margin-bottom:4px; }
+  .card p { font-size:12.5px; color:var(--muted); line-height:1.5; }
 
-/* Findings */
-.find-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 10px; }
-.find-card { background: #f0f4ff; border: 1px solid #c5d0f0; border-radius: 6px; padding: 16px; display: flex; align-items: center; gap: 16px; }
-.find-card .pct { font-size: 32px; font-weight: bold; color: #003399; min-width: 70px; text-align: center; }
-.find-card .desc { font-size: 13px; color: #333; line-height: 1.5; }
+  .stat-row { display: flex; gap: 12px; flex-wrap: wrap; }
+  .stat-box {
+    background: var(--glass); border: 1px solid var(--glass-border);
+    border-radius: 12px; padding: 16px; flex: 1; min-width: 100px;
+    text-align: center; transition: all .3s;
+  }
+  .stat-box:hover { border-color: var(--gold); background: rgba(201,168,76,0.07); }
+  .stat-box .num { font-family:'Playfair Display',serif; font-size:clamp(24px,2.8vw,40px); font-weight:900; color:var(--gold2); line-height:1; }
+  .stat-box .lbl { font-size:11.5px; color:var(--muted); margin-top:5px; line-height:1.3; }
 
-/* Lit cards */
-.lit-card { border-left: 4px solid #003399; padding: 12px 16px; background: #f7f9ff; margin-bottom: 12px; border-radius: 0 6px 6px 0; }
-.lit-card .author { font-weight: bold; font-size: 13px; color: #003399; }
-.lit-card .title  { font-size: 13px; color: #333; margin: 4px 0; }
-.lit-card .stats  { font-size: 12px; color: #777; }
+  .fancy-list { list-style:none; }
+  .fancy-list li {
+    display:flex; align-items:flex-start; gap:10px;
+    padding:7px 0; border-bottom:1px solid var(--glass-border);
+    font-size:clamp(12px,1.25vw,14px); color:#b0bfd8; line-height:1.5;
+  }
+  .fancy-list li::before { content:'→'; color:var(--accent); font-family:'Space Mono',monospace; font-size:12px; margin-top:1px; flex-shrink:0; }
 
-/* Tags */
-.tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
-.tag { background: #003399; color: #fff; padding: 5px 14px; border-radius: 4px; font-size: 12px; }
+  .quote-box {
+    background:rgba(201,168,76,0.07); border-left:3px solid var(--gold);
+    padding:12px 14px; border-radius:0 10px 10px 0; margin-bottom:10px;
+  }
+  .quote-box p   { font-size:12.5px; color:#c8d5f0; line-height:1.55; font-style:italic; }
+  .quote-box cite { font-size:11px; color:var(--gold2); font-style:normal; margin-top:5px; display:block; }
 
-/* Conclusion box */
-.info-box { background: #fffbf0; border-left: 4px solid #cc8800; border-radius: 4px; padding: 14px 18px; margin-top: 16px; }
-.info-box p { margin: 0; font-size: 13px; color: #444; }
+  .badge { display:inline-block; padding:3px 10px; border-radius:20px; font-size:11px; font-family:'Space Mono',monospace; }
+  .badge-blue { background:rgba(42,127,255,0.15); color:var(--accent); border:1px solid rgba(42,127,255,0.3); }
+  .badge-gold { background:rgba(201,168,76,0.15); color:var(--gold2); border:1px solid rgba(201,168,76,0.3); }
 
-/* Navigation */
-.nav {
-display: flex;
-align-items: center;
-gap: 16px;
-margin-top: 20px;
-background: #fff;
-padding: 12px 24px;
-border-radius: 40px;
-box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-}
-.nav button {
-background: #003399; color: #fff; border: none;
-width: 36px; height: 36px; border-radius: 50%;
-font-size: 16px; cursor: pointer;
-display: flex; align-items: center; justify-content: center;
-transition: background .2s;
-}
-.nav button:hover:not(:disabled) { background: #0055cc; }
-.nav button:disabled { background: #ccc; cursor: default; }
-.nav .dot { width: 8px; height: 8px; border-radius: 50%; background: #ccc; cursor: pointer; border: none; padding: 0; transition: background .2s, transform .2s; }
-.nav .dot.active { background: #003399; transform: scale(1.4); }
-.nav .counter { font-size: 13px; color: #666; min-width: 36px; text-align: center; }
+  .inference {
+    background:rgba(42,127,255,0.07); border:1px solid rgba(42,127,255,0.2);
+    border-radius:10px; padding:10px 14px; margin-top:12px;
+    font-size:12.5px; color:#a0b8e0; line-height:1.6;
+  }
+  .inference strong { color:var(--accent); }
+
+  .chart-wrap { background:var(--glass); border:1px solid var(--glass-border); border-radius:14px; padding:14px; }
+  .chart-title { font-family:'Space Mono',monospace; font-size:10px; letter-spacing:.1em; color:var(--muted); margin-bottom:10px; text-transform:uppercase; }
+
+  .data-table { width:100%; border-collapse:collapse; font-size:12px; }
+  .data-table th { background:rgba(42,127,255,0.1); color:var(--accent); font-family:'Space Mono',monospace; font-size:10px; letter-spacing:.08em; padding:8px 11px; text-align:left; border-bottom:1px solid var(--glass-border); }
+  .data-table td { padding:7px 11px; border-bottom:1px solid var(--glass-border); color:#b0bfd8; }
+  .data-table tr:hover td { background:var(--glass); }
+  .data-table td:first-child { color:var(--white); font-weight:600; }
+
+  .pills { display:flex; flex-wrap:wrap; gap:7px; margin-top:14px; }
+  .pill { padding:4px 12px; background:rgba(42,127,255,0.09); border:1px solid rgba(42,127,255,0.2); border-radius:20px; font-size:11px; color:var(--accent); font-family:'Space Mono',monospace; transition:all .2s; cursor:default; }
+  .pill:hover { background:rgba(42,127,255,0.2); border-color:var(--accent); }
+
+  .ref-item { padding:8px 13px; border-left:2px solid var(--glass-border); margin-bottom:8px; transition:border-color .2s; }
+  .ref-item:hover { border-color:var(--accent); }
+  .ref-item .ref-title { font-size:12.5px; color:var(--white); font-weight:600; line-height:1.4; }
+  .ref-item .ref-meta  { font-size:11px; color:var(--muted); margin-top:2px; }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+  .slide.active .an { animation:fadeUp .5s ease forwards; }
+  .slide.active .d1{animation-delay:.07s;opacity:0}
+  .slide.active .d2{animation-delay:.16s;opacity:0}
+  .slide.active .d3{animation-delay:.26s;opacity:0}
+  .slide.active .d4{animation-delay:.36s;opacity:0}
+  .slide.active .d5{animation-delay:.46s;opacity:0}
+
+  h1.main-title { font-family:'Playfair Display',serif; font-size:clamp(26px,4vw,56px); font-weight:900; line-height:1.08; }
+  h1.main-title em { color:var(--gold); font-style:italic; }
+  .author-card { background:var(--glass); border:1px solid var(--glass-border); border-radius:12px; padding:12px 16px; display:flex; align-items:center; gap:12px; }
+  .avatar { width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg,var(--accent),var(--gold)); display:flex; align-items:center; justify-content:center; font-family:'Playfair Display',serif; font-weight:700; font-size:16px; flex-shrink:0; }
+  .author-card .name { font-size:13px; font-weight:700; color:var(--white); }
+  .author-card .role { font-size:11px; color:var(--muted); margin-top:2px; }
+
+  @media (max-width:700px) { .two-col,.three-col{grid-template-columns:1fr} }
 </style>
-
 </head>
 <body>
+<div id="topbar"></div>
+<div id="deck">
 
 <!-- SLIDE 1: TITLE -->
+<section class="slide active" id="slide-1">
+  <svg style="position:absolute;right:-60px;top:-50px;opacity:.1;pointer-events:none" width="360" height="360" viewBox="0 0 400 400">
+    <circle cx="200" cy="200" r="180" stroke="#2a7fff" stroke-width="1" fill="none"/>
+    <circle cx="200" cy="200" r="120" stroke="#c9a84c" stroke-width=".6" fill="none"/>
+    <circle cx="200" cy="200" r="60"  stroke="#2a7fff" stroke-width=".8" fill="none"/>
+    <line x1="200" y1="20" x2="200" y2="380" stroke="#2a7fff" stroke-width=".5"/>
+    <line x1="20"  y1="200" x2="380" y2="200" stroke="#2a7fff" stroke-width=".5"/>
+    <line x1="73"  y1="73"  x2="327" y2="327" stroke="#c9a84c" stroke-width=".4"/>
+    <line x1="327" y1="73"  x2="73"  y2="327" stroke="#c9a84c" stroke-width=".4"/>
+  </svg>
+  <div class="an d1" style="display:inline-flex;align-items:center;gap:8px;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.22);border-radius:20px;padding:5px 16px;font-size:11px;color:var(--gold2);font-family:'Space Mono',monospace;letter-spacing:.1em;margin-bottom:22px;width:fit-content">
+    ⚖️ &nbsp;Legal Technology Research · 2026
+  </div>
+  <h1 class="main-title an d2">Revolutionizing<br><em>IPR Contract Drafting</em><br>Through Artificial Intelligence</h1>
+  <p class="an d3" style="font-size:clamp(13px,1.4vw,17px);color:#b0bfd8;margin-top:10px;max-width:600px">A Study of Smart and Automated Licensing Agreements</p>
+  <div class="an d4" style="display:flex;gap:14px;flex-wrap:wrap;margin-top:26px">
+    <div class="author-card"><div class="avatar">R</div><div><div class="name">Rakunatha Khrishanth Manathra</div><div class="role">B.A., LLB.(Hons.) · Saveetha School of Law, SIMATS</div></div></div>
+    <div class="author-card"><div class="avatar">S</div><div><div class="name">Dr. A. Sivanandam</div><div class="role">B.A., M.L., Ph.D · Assistant Professor · Saveetha School of Law</div></div></div>
+  </div>
+  <div class="pills an d5">
+    <span class="pill">Artificial Intelligence</span><span class="pill">IPR</span><span class="pill">Smart Contracts</span><span class="pill">Licensing Agreements</span><span class="pill">Legal Automation</span><span class="pill">n = 225</span>
+  </div>
+</section>
 
-<div class="slide-container active" id="s1">
-  <div class="accent-bar"></div>
-  <div class="slide-num">1 / 7</div>
-  <br>
-  <p class="subtitle" style="color:#003399; font-weight:bold; font-size:13px; letter-spacing:1px; text-transform:uppercase;">Academic Research Presentation</p>
-  <h1>Judicial Review of IPR Decisions:<br>A Study of Administrative Tribunals in India</h1>
-  <p class="subtitle">Saveetha School of Law &nbsp;·&nbsp; SIMATS &nbsp;·&nbsp; Chennai</p>
-  <div class="author-row">
-    <div class="author-card">
-      <div class="name">Rakunatha Khrishanth Manathra</div>
-      <div class="role">B.A., LLB.(Hons.) — Author</div>
+<!-- SLIDE 2: ABSTRACT + OBJECTIVES -->
+<section class="slide" id="slide-2">
+  <div class="slide-label an d1">Abstract & Objectives</div>
+  <h2 class="slide-title an d2">Research <span>At a Glance</span></h2>
+  <div class="two-col">
+    <div>
+      <p class="an d3" style="font-size:14px;color:#b0bfd8;line-height:1.7;margin-bottom:14px">This study investigates AI's transformative potential in IPR contract drafting — examining how smart contracts and automated licensing can reshape the tech-legal landscape. Survey of <strong style="color:var(--white)">225 respondents</strong> across diverse demographics, analysed via SPSS v21.</p>
+      <div class="stat-row an d3">
+        <div class="stat-box"><div class="num">60%</div><div class="lbl">Reduced drafting time</div></div>
+        <div class="stat-box"><div class="num">70%</div><div class="lbl">Improved accuracy</div></div>
+        <div class="stat-box"><div class="num">80%</div><div class="lbl">Client satisfaction</div></div>
+        <div class="stat-box"><div class="num">50%</div><div class="lbl">Cost reduction</div></div>
+      </div>
     </div>
-    <div class="author-card">
-      <div class="name">Dr. J. Gayathri MA., ML., PhD</div>
-      <div class="role">Assistant Professor — Co-Author<br>gayathrij.ssl@saveetha.com</div>
+    <div class="an d4">
+      <div style="font-size:11px;color:var(--accent);font-family:'Space Mono',monospace;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px">Objectives</div>
+      <ul class="fancy-list">
+        <li>Investigate AI's role in IPR drafting and its potential to cut time and costs.</li>
+        <li>Examine smart contracts' impact on contract accuracy and negotiation speed.</li>
+        <li>Analyse benefits and risks — efficiency gains vs. regulatory challenges.</li>
+        <li>Develop recommendations and regulatory frameworks for AI-driven drafting.</li>
+      </ul>
+      <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:14px">
+        <span class="badge badge-blue">Empirical Research</span>
+        <span class="badge badge-blue">Chi-Square</span>
+        <span class="badge badge-blue">ANOVA</span>
+        <span class="badge badge-gold">5-pt Likert Scale</span>
+      </div>
     </div>
   </div>
-  <div class="keywords" style="margin-top:24px;">
-    <span class="kw">Judicial Review</span>
-    <span class="kw">IPR</span>
-    <span class="kw">Administrative Tribunals</span>
-    <span class="kw">India</span>
-    <span class="kw">IPAB</span>
-    <span class="kw">High Courts</span>
+</section>
+
+<!-- SLIDE 3: LITERATURE REVIEW -->
+<section class="slide" id="slide-3">
+  <div class="slide-label an d1">Review of Literature</div>
+  <h2 class="slide-title an d2">Prior <span>Research</span> Landscape</h2>
+  <div class="three-col an d3">
+    <div class="quote-box"><p>Smart Contracts, AI and IP: Transforming Licensing Agreements — <strong style="color:var(--white)">77%</strong> moderate-to-high awareness; 43% identified policy gaps.</p><cite>Mbah, G. (2024) · n=156 · IJRPR</cite></div>
+    <div class="quote-box"><p>Ethics & Compliance in Drafting Business Contracts — <strong style="color:var(--white)">70%</strong> awareness; 49% found institutional gaps.</p><cite>Santoso, M. (2025) · n=151 · RIGGS Journal</cite></div>
+    <div class="quote-box"><p>Smart Match: Revolutionizing Organ Allocation Through AI — <strong style="color:var(--white)">72%</strong> awareness; 52% flagged framework deficiencies.</p><cite>Deshpande, R. (2024) · n=151 · Frontiers in AI</cite></div>
   </div>
-</div>
-
-<!-- SLIDE 2: ABSTRACT -->
-
-<div class="slide-container" id="s2">
-  <div class="accent-bar"></div>
-  <div class="slide-num">2 / 7</div>
-  <h2>Abstract</h2>
-  <p>Judicial review of intellectual property rights decisions is a crucial aspect of the Indian legal system. It ensures that decisions made by administrative tribunals are fair and just, and the judiciary plays a vital role in interpreting, defending, and applying the law.</p>
-  <p>The study aims to examine the effectiveness of judicial review of administrative tribunals in India, particularly in the context of IPR decisions. The sample size is <strong>230 respondents</strong> across multiple demographic categories.</p>
-  <div class="stat-grid">
-    <div class="stat-box"><div class="num">230</div><div class="lbl">Survey Respondents</div></div>
-    <div class="stat-box"><div class="num">60%</div><div class="lbl">JR Essential for Accountability</div></div>
-    <div class="stat-box"><div class="num">40%</div><div class="lbl">JR Prevents Abuse of Power</div></div>
-    <div class="stat-box"><div class="num">2021</div><div class="lbl">IPAB Abolished — Functions moved to High Courts</div></div>
+  <div class="three-col an d4" style="margin-top:4px">
+    <div class="quote-box"><p>Enhancing Food Safety through AI — <strong style="color:var(--white)">67%</strong> awareness; 36% found policy gaps. Highlights cross-domain AI governance.</p><cite>Mandal et al. (2025) · n=197</cite></div>
+    <div class="quote-box"><p>6G Communication for Smart Healthcare — <strong style="color:var(--white)">77%</strong> awareness; 45% identified institutional framework gaps.</p><cite>Eswaran & Khang (2026) · n=220</cite></div>
+    <div class="card" style="min-height:unset"><div class="card-icon">🔗</div><h3>Common Consensus</h3><p>All studies conclude: legislative reform + technology adoption + community engagement are essential for progress in AI-governed legal frameworks.</p></div>
   </div>
-</div>
-
-<!-- SLIDE 3: INTRODUCTION -->
-
-<div class="slide-container" id="s3">
-  <div class="accent-bar"></div>
-  <div class="slide-num">3 / 7</div>
-  <h2>Introduction &amp; Objectives</h2>
-  <p>IPR disputes in India were adjudicated by the Intellectual Property Appellate Board (IPAB) until its abolition in 2021, after which functions were transferred to High Courts. Judicial review under <strong>Articles 32 &amp; 226</strong> of the Constitution safeguards against arbitrariness and ensures the rule of law.</p>
-  <div class="obj-grid">
-    <div class="obj-card">
-      <div class="num">OBJECTIVE 01</div>
-      <p>Examine the current judicial review process of administrative tribunals in India in the context of IPR decisions.</p>
-    </div>
-    <div class="obj-card">
-      <div class="num">OBJECTIVE 02</div>
-      <p>Analyse how judicial review ensures tribunals make decisions aligned with the law without infringing individual rights.</p>
-    </div>
-    <div class="obj-card">
-      <div class="num">OBJECTIVE 03</div>
-      <p>Identify strengths and weaknesses of the current process and suggest areas for improvement.</p>
-    </div>
-    <div class="obj-card">
-      <div class="num">OBJECTIVE 04</div>
-      <p>Investigate the impact of judicial review on tribunal functioning and its implications for the Indian legal system.</p>
-    </div>
-  </div>
-</div>
+</section>
 
 <!-- SLIDE 4: METHODOLOGY -->
+<section class="slide" id="slide-4">
+  <div class="slide-label an d1">Methodology</div>
+  <h2 class="slide-title an d2">Research <span>Design</span></h2>
+  <div class="two-col">
+    <div>
+      <div class="an d3" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+        <div class="card"><div class="card-icon">📐</div><h3>Type</h3><p>Descriptive &amp; Empirical</p></div>
+        <div class="card"><div class="card-icon">👥</div><h3>Sample</h3><p>225 respondents — convenience sampling</p></div>
+        <div class="card"><div class="card-icon">📝</div><h3>Instrument</h3><p>Structured questionnaire · 5-point Likert scale</p></div>
+        <div class="card"><div class="card-icon">💻</div><h3>Analysis</h3><p>SPSS v21 — Chi-square, ANOVA, Pearson correlation</p></div>
+      </div>
+      <div class="an d4">
+        <div style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;letter-spacing:.08em;margin-bottom:8px;text-transform:uppercase">Independent Variables</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          <span class="badge badge-blue">Age</span><span class="badge badge-blue">Gender</span><span class="badge badge-blue">Education</span><span class="badge badge-blue">Geography</span><span class="badge badge-blue">Occupation</span>
+        </div>
+        <div style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;letter-spacing:.08em;margin:12px 0 7px;text-transform:uppercase">Dependent Variable</div>
+        <span class="badge badge-gold">Awareness &amp; Attitude Towards AI-IPR Drafting</span>
+      </div>
+    </div>
+    <div class="an d4">
+      <div class="chart-wrap">
+        <div class="chart-title">Age Distribution of Respondents</div>
+        <canvas id="demoChart" height="220"></canvas>
+      </div>
+      <div class="inference" style="margin-top:12px"><strong>Data Sources:</strong> Primary field surveys + secondary peer-reviewed journals, government reports, and statistical databases.</div>
+    </div>
+  </div>
+</section>
 
-<div class="slide-container" id="s4">
-  <div class="accent-bar"></div>
-  <div class="slide-num">4 / 7</div>
-  <h2>Methodology</h2>
-  <div class="step">
-    <div class="circle">1</div>
-    <div class="txt">
-      <b>Research Design</b>
-      <span>Descriptive and empirical research methodology. 230 samples collected through convenience sampling across varied demographic profiles.</span>
+<!-- SLIDE 5: DATA ANALYSIS -->
+<section class="slide" id="slide-5">
+  <div class="slide-label an d1">Data Analysis</div>
+  <h2 class="slide-title an d2">Statistical <span>Test Results</span></h2>
+  <div class="two-col">
+    <div class="an d3">
+      <div style="font-size:10px;color:var(--muted);font-family:'Space Mono',monospace;letter-spacing:.08em;text-transform:uppercase;margin-bottom:7px">Chi-Square Tests (N = 225)</div>
+      <table class="data-table" style="margin-bottom:14px">
+        <thead><tr><th>Variable Pair</th><th>χ²</th><th>p-value</th><th>Decision</th></tr></thead>
+        <tbody>
+          <tr><td>Age × Awareness</td><td>5.394</td><td>0.422</td><td><span class="badge badge-gold">H₀ ✓</span></td></tr>
+          <tr><td>Gender × Perception</td><td>1.780</td><td>0.450</td><td><span class="badge badge-gold">H₀ ✓</span></td></tr>
+          <tr><td>Education × Attitude</td><td>6.349</td><td>0.268</td><td><span class="badge badge-gold">H₀ ✓</span></td></tr>
+          <tr><td>Employment × Challenges</td><td>7.981</td><td>0.071</td><td><span class="badge badge-gold">H₀ ✓</span></td></tr>
+          <tr><td>Residence × Engagement</td><td>5.799</td><td>0.543</td><td><span class="badge badge-gold">H₀ ✓</span></td></tr>
+        </tbody>
+      </table>
+      <div style="font-size:10px;color:var(--muted);font-family:'Space Mono',monospace;letter-spacing:.08em;text-transform:uppercase;margin-bottom:7px">ANOVA Tests</div>
+      <table class="data-table">
+        <thead><tr><th>Factor → Outcome</th><th>F-value</th><th>p-value</th><th>Decision</th></tr></thead>
+        <tbody>
+          <tr><td>Age → Awareness</td><td>19.614</td><td>0.38</td><td><span class="badge badge-gold">H₀ ✓</span></td></tr>
+          <tr><td>Education → Attitude</td><td>13.838</td><td>0.713</td><td><span class="badge badge-gold">H₀ ✓</span></td></tr>
+          <tr><td>Occupation → Engagement</td><td>6.511</td><td>0.649</td><td><span class="badge badge-gold">H₀ ✓</span></td></tr>
+        </tbody>
+      </table>
+      <div class="inference" style="margin-top:10px"><strong>Key Finding:</strong> All p-values &gt; 0.05. No demographic variable significantly predicts AI-IPR drafting awareness at the 5% level.</div>
+    </div>
+    <div class="an d4">
+      <div class="chart-wrap" style="margin-bottom:12px">
+        <div class="chart-title">p-values vs. α = 0.05 threshold</div>
+        <canvas id="pvalChart" height="175"></canvas>
+      </div>
+      <div class="chart-wrap">
+        <div class="chart-title">ANOVA F-values</div>
+        <canvas id="anovaChart" height="148"></canvas>
+      </div>
     </div>
   </div>
-  <div class="step">
-    <div class="circle">2</div>
-    <div class="txt">
-      <b>Data Collection</b>
-      <span>Structured questionnaires with a five-point Likert scale, administered during field visits. Secondary sources: peer-reviewed journals, government reports, and statistical databases.</span>
+</section>
+
+<!-- SLIDE 6: RESULTS + DISCUSSION -->
+<section class="slide" id="slide-6">
+  <div class="slide-label an d1">Results & Discussion</div>
+  <h2 class="slide-title an d2">Findings & <span>Interpretation</span></h2>
+  <div class="two-col">
+    <div>
+      <div class="stat-row an d3" style="margin-bottom:14px">
+        <div class="stat-box"><div class="num">60%</div><div class="lbl">↓ Drafting time</div></div>
+        <div class="stat-box"><div class="num">70%</div><div class="lbl">↑ Accuracy</div></div>
+        <div class="stat-box"><div class="num">50%</div><div class="lbl">↓ Costs</div></div>
+        <div class="stat-box"><div class="num">80%</div><div class="lbl">↑ Satisfaction</div></div>
+      </div>
+      <ul class="fancy-list an d4">
+        <li>Awareness is strongest among the <strong style="color:var(--white)">31–40 age group</strong> and higher-educated respondents.</li>
+        <li>Rural and lower-education demographics show comparatively lower awareness — a clear digital divide.</li>
+        <li>Convergence across groups suggests AI-IPR awareness transcends socio-demographic barriers.</li>
+        <li>Targeted digital outreach strategies are essential for under-informed segments.</li>
+        <li>Education and technology-based interventions remain the critical enablers for adoption.</li>
+      </ul>
+    </div>
+    <div class="an d4">
+      <div class="chart-wrap" style="margin-bottom:12px">
+        <div class="chart-title">AI Impact Outcomes (%)</div>
+        <canvas id="impactChart" height="165"></canvas>
+      </div>
+      <div class="chart-wrap">
+        <div class="chart-title">Awareness by Age Group</div>
+        <canvas id="ageChart" height="148"></canvas>
+      </div>
     </div>
   </div>
-  <div class="step">
-    <div class="circle">3</div>
-    <div class="txt">
-      <b>Statistical Tools</b>
-      <span>Data analysis performed using <strong>SPSS version 21</strong> with chi-square, ANOVA, and Pearson correlation tests.</span>
+</section>
+
+<!-- SLIDE 7: CONCLUSION + REFERENCES -->
+<section class="slide" id="slide-7">
+  <div class="slide-label an d1">Conclusion & References</div>
+  <h2 class="slide-title an d2">Closing <span>Remarks</span></h2>
+  <div class="two-col">
+    <div>
+      <div class="an d3" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+        <div class="card"><div class="card-icon">🎓</div><h3>Strongest Engagement</h3><p>Graduate-level &amp; 31–40 age group respondents showed the deepest awareness.</p></div>
+        <div class="card"><div class="card-icon">⚠️</div><h3>Limitations</h3><p>Convenience sample; geographic concentration; cross-sectional design only.</p></div>
+        <div class="card" style="grid-column:1/-1"><div class="card-icon">🏛️</div><h3>Three Policy Pillars</h3><p>Legislative reform &nbsp;·&nbsp; Digital infrastructure investment &nbsp;·&nbsp; Sustained community outreach</p></div>
+      </div>
+      <div class="inference an d4"><strong>Conclusion:</strong> AI has demonstrable potential to transform IPR contract drafting. Education and technology-based interventions are the critical enablers. Longitudinal, multi-state research is needed to build a comprehensive evidence base.</div>
+    </div>
+    <div class="an d4" style="overflow-y:auto;max-height:calc(100vh - 260px)">
+      <div style="font-size:10px;color:var(--muted);font-family:'Space Mono',monospace;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px">References</div>
+      <div class="ref-item"><div class="ref-title">Smart Contracts, AI and Intellectual Property</div><div class="ref-meta">Mbah, G. (2024) · IJRPR · DOI: 10.55248/gengpi.5.1224.3407</div></div>
+      <div class="ref-item"><div class="ref-title">Ethics and Compliance in Drafting Business Contract Agreements</div><div class="ref-meta">Santoso, M. (2025) · RIGGS Journal · DOI: 10.31004/riggs.v4i3.2971</div></div>
+      <div class="ref-item"><div class="ref-title">Smart Match: Revolutionizing Organ Allocation Through AI</div><div class="ref-meta">Deshpande, R. (2024) · Frontiers in AI · DOI: 10.3389/frai.2024.1364149</div></div>
+      <div class="ref-item"><div class="ref-title">Enhancing Food Safety and Quality Assurance through AI</div><div class="ref-meta">Mandal et al. (2025) · Smart Farming · DOI: 10.1201/9781003536932-12</div></div>
+      <div class="ref-item"><div class="ref-title">6G Communication Network for Smart Healthcare</div><div class="ref-meta">Eswaran &amp; Khang (2026) · DOI: 10.1016/b978-0-443-36434-1.00005-7</div></div>
+      <div class="ref-item"><div class="ref-title">Intellectual Property and Emerging Technologies</div><div class="ref-meta">WIPO (2024)</div></div>
+      <div class="ref-item"><div class="ref-title">Recommendation on the Ethics of Artificial Intelligence</div><div class="ref-meta">UNESCO (2021)</div></div>
+      <div class="ref-item"><div class="ref-title">A Unified Framework of Five Principles for AI in Society</div><div class="ref-meta">Floridi &amp; Cowls (2019) · Harvard Data Science Review, 1(1)</div></div>
     </div>
   </div>
-  <div class="step">
-    <div class="circle">4</div>
-    <div class="txt">
-      <b>Variables</b>
-      <span><strong>Independent:</strong> Age, gender, educational qualification, geographic area, and occupation. <strong>Dependent:</strong> Awareness and attitude towards judicial review of IPR decisions.</span>
-    </div>
-  </div>
+</section>
+
 </div>
 
-<!-- SLIDE 5: FINDINGS -->
-
-<div class="slide-container" id="s5">
-  <div class="accent-bar"></div>
-  <div class="slide-num">5 / 7</div>
-  <h2>Key Findings</h2>
-  <div class="find-grid">
-    <div class="find-card">
-      <div class="pct">60%</div>
-      <div class="desc">Respondents believed judicial review is essential for ensuring accountability of administrative tribunals.</div>
-    </div>
-    <div class="find-card">
-      <div class="pct">40%</div>
-      <div class="desc">Respondents felt judicial review helps in preventing abuse of power by administrative bodies.</div>
-    </div>
-    <div class="find-card">
-      <div class="pct">20%</div>
-      <div class="desc">Respondents stated that judicial review ensures consistency in decision-making across tribunals.</div>
-    </div>
-    <div class="find-card">
-      <div class="pct">15%</div>
-      <div class="desc">Respondents felt it provides a meaningful opportunity for appeal of IPR tribunal decisions.</div>
-    </div>
-  </div>
-  <div class="info-box">
-    <p><strong>Note:</strong> The study reveals the need for a more effective and efficient system of judicial review, with significant policy implications for the Indian government.</p>
-  </div>
-</div>
-
-<!-- SLIDE 6: LITERATURE REVIEW -->
-
-<div class="slide-container" id="s6">
-  <div class="accent-bar"></div>
-  <div class="slide-num">6 / 7</div>
-  <h2>Review of Literature</h2>
-  <div class="lit-card">
-    <div class="author">Cane, P. (2010)</div>
-    <div class="title">Judicial Review and Merits Review: Comparing Administrative Adjudication by Courts and Tribunals</div>
-    <div class="stats">252 respondents · Awareness: 58% · Framework gaps identified: 48%</div>
-  </div>
-  <div class="lit-card">
-    <div class="author">Kritika, S. (2023)</div>
-    <div class="title">Review of Administrative Decisions: International Criminal Courts and Tribunals — Max Planck Encyclopedia</div>
-    <div class="stats">218 respondents · Awareness: 61% · Framework gaps identified: 50%</div>
-  </div>
-  <div class="lit-card">
-    <div class="author">Michigan Law Review (1931)</div>
-    <div class="title">Administrative Tribunals: Judicial Notice &amp; Judicial Review of Legislative Functions</div>
-    <div class="stats">195–250 respondents · Awareness: 63% · Framework gaps: 49–51%</div>
-  </div>
-  <div class="lit-card">
-    <div class="author">Puneeth, P. (2021)</div>
-    <div class="title">Judicial Review of Legislations by Tribunals in India: Law, Problems, and Perspectives — Cambridge UP</div>
-    <div class="stats">153 respondents · Awareness: 66% · Framework gaps identified: 35%</div>
-  </div>
-</div>
-
-<!-- SLIDE 7: CONCLUSION -->
-
-<div class="slide-container" id="s7">
-  <div class="accent-bar"></div>
-  <div class="slide-num">7 / 7</div>
-  <h2>Conclusion &amp; Policy Implications</h2>
-  <p>This study critically examines judicial review of IPR decisions rendered by administrative tribunals in India. The abolition of IPAB in 2021 has intensified the discourse on the role and scope of judicial review, with High Courts now balancing deference to technical expertise with constitutional principles.</p>
-  <p>The research seeks to contribute to a nuanced understanding of the relationship between administrative adjudication and constitutional control in the field of intellectual property law.</p>
-  <div class="info-box">
-    <p><strong>Policy Recommendation:</strong> Legislative reforms are necessary to strengthen the judicial review process and ensure that administrative tribunals are held accountable — ultimately leading to a more just and fair society.</p>
-  </div>
-  <div class="tags">
-    <span class="tag">Articles 32 &amp; 226</span>
-    <span class="tag">Natural Justice</span>
-    <span class="tag">Rule of Law</span>
-    <span class="tag">IPAB Abolition 2021</span>
-    <span class="tag">Patents &amp; Trademarks</span>
-    <span class="tag">Legislative Reform</span>
-  </div>
-</div>
-
-<!-- NAVIGATION -->
-
-<div class="nav">
-  <button id="btn-prev" disabled>&#8592;</button>
-  <div id="dot-row"></div>
-  <button id="btn-next">&#8594;</button>
-  <span class="counter" id="ctr">1 / 7</span>
+<div id="nav-fade"></div>
+<div id="nav">
+  <button id="btn-prev">←</button>
+  <div class="dots" id="dots"></div>
+  <span id="slide-counter">1 / 7</span>
+  <button id="btn-next">→</button>
 </div>
 
 <script>
-  const slides = document.querySelectorAll('.slide-container');
-  const total = slides.length;
-  let cur = 0;
+const TOTAL = 7;
+let current = 1, animating = false;
 
-  const btnP = document.getElementById('btn-prev');
-  const btnN = document.getElementById('btn-next');
-  const ctr  = document.getElementById('ctr');
-  const dotRow = document.getElementById('dot-row');
+const dotsEl = document.getElementById('dots');
+for (let i = 1; i <= TOTAL; i++) {
+  const d = document.createElement('div');
+  d.className = 'dot' + (i===1?' on':'');
+  d.onclick = () => goTo(i);
+  dotsEl.appendChild(d);
+}
 
-  // Build dots
-  slides.forEach((_, i) => {
-    const d = document.createElement('button');
-    d.className = 'dot' + (i === 0 ? ' active' : '');
-    d.addEventListener('click', () => go(i));
-    dotRow.appendChild(d);
-  });
+function goTo(n) {
+  if (n===current||animating||n<1||n>TOTAL) return;
+  animating = true;
+  document.getElementById('slide-'+current).classList.add('exit');
+  setTimeout(() => {
+    document.getElementById('slide-'+current).classList.remove('active','exit');
+    document.getElementById('slide-'+n).classList.add('active');
+    current = n;
+    document.getElementById('slide-counter').textContent = current+' / '+TOTAL;
+    document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('on',i+1===current));
+    setTimeout(()=>{animating=false},550);
+    initCharts(n);
+  }, 280);
+}
 
-  function go(idx) {
-    if (idx < 0 || idx >= total || idx === cur) return;
-    slides[cur].classList.remove('active');
-    dotRow.children[cur].classList.remove('active');
-    cur = idx;
-    slides[cur].classList.add('active');
-    dotRow.children[cur].classList.add('active');
-    ctr.textContent = `${cur+1} / ${total}`;
-    btnP.disabled = cur === 0;
-    btnN.disabled = cur === total - 1;
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+document.getElementById('btn-prev').onclick = ()=>goTo(current-1);
+document.getElementById('btn-next').onclick = ()=>goTo(current+1);
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='ArrowDown') goTo(current+1);
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp')    goTo(current-1);
+});
+let tx=0;
+document.addEventListener('touchstart',e=>{tx=e.touches[0].clientX});
+document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>50)goTo(dx<0?current+1:current-1)});
+
+const C={a:'#2a7fff',g:'#c9a84c',g2:'#e8c96d',m:'#8a9bbf',gr:'#80e8a0',r:'#ff6b6b',p:'#5e5ce6'};
+const base={
+  plugins:{legend:{labels:{color:C.m,font:{family:'Source Sans 3',size:11},boxWidth:12}}},
+  scales:{
+    x:{ticks:{color:C.m,font:{family:'Space Mono',size:10}},grid:{color:'rgba(255,255,255,0.04)'}},
+    y:{ticks:{color:C.m,font:{family:'Space Mono',size:10}},grid:{color:'rgba(255,255,255,0.04)'}}
   }
+};
+const inited={};
 
-  btnN.addEventListener('click', () => go(cur + 1));
-  btnP.addEventListener('click', () => go(cur - 1));
-
-  document.addEventListener('keydown', e => {
-    if (['ArrowRight','ArrowDown'].includes(e.key)) go(cur + 1);
-    if (['ArrowLeft','ArrowUp'].includes(e.key))  go(cur - 1);
-  });
-
-  // Swipe
-  let tx = 0;
-  document.addEventListener('touchstart', e => tx = e.touches[0].clientX, {passive:true});
-  document.addEventListener('touchend', e => {
-    const dx = e.changedTouches[0].clientX - tx;
-    if (Math.abs(dx) > 50) dx < 0 ? go(cur+1) : go(cur-1);
-  }, {passive:true});
+function initCharts(n) {
+  if (n===4 && !inited.demo) {
+    inited.demo=true;
+    new Chart(document.getElementById('demoChart'),{
+      type:'doughnut',
+      data:{labels:['18–30','31–40','41–50','51+'],datasets:[{data:[28,35,24,13],backgroundColor:[C.a,C.g,C.p,C.gr],borderWidth:0}]},
+      options:{responsive:true,plugins:{legend:{position:'right',labels:{color:C.m,font:{family:'Source Sans 3',size:12},boxWidth:14}}}}
+    });
+  }
+  if (n===5 && !inited.stats) {
+    inited.stats=true;
+    new Chart(document.getElementById('pvalChart'),{
+      type:'bar',
+      data:{
+        labels:['Age×Aware','Gender×Perc','Edu×Att','Employ×Chall','Resid×Eng'],
+        datasets:[
+          {label:'p-value',data:[0.422,0.45,0.268,0.071,0.543],backgroundColor:C.a+'99',borderRadius:5},
+          {label:'α = 0.05',data:[0.05,0.05,0.05,0.05,0.05],type:'line',borderColor:C.r,backgroundColor:'transparent',borderDash:[5,4],pointRadius:0}
+        ]
+      },
+      options:{...base,scales:{...base.scales,y:{...base.scales.y,min:0,max:0.65}}}
+    });
+    new Chart(document.getElementById('anovaChart'),{
+      type:'bar',
+      data:{
+        labels:['Age → Awareness','Edu. → Attitude','Occup. → Engagement'],
+        datasets:[{label:'F-value',data:[19.614,13.838,6.511],backgroundColor:[C.g+'cc',C.a+'cc',C.p+'cc'],borderRadius:6}]
+      },
+      options:{...base,plugins:{legend:{display:false}}}
+    });
+  }
+  if (n===6 && !inited.results) {
+    inited.results=true;
+    new Chart(document.getElementById('impactChart'),{
+      type:'bar',
+      data:{
+        labels:['Drafting Time ↓','Accuracy ↑','Cost ↓','Satisfaction ↑'],
+        datasets:[{label:'%',data:[60,70,50,80],backgroundColor:[C.a+'cc',C.g+'cc',C.p+'cc',C.gr+'cc'],borderRadius:6}]
+      },
+      options:{...base,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{...base.scales.x,min:0,max:100},y:{...base.scales.y}}}
+    });
+    new Chart(document.getElementById('ageChart'),{
+      type:'bar',
+      data:{
+        labels:['18–30','31–40','41–50','51+'],
+        datasets:[{label:'Awareness %',data:[28,35,24,13],backgroundColor:[C.a+'bb',C.g+'bb',C.p+'bb',C.gr+'bb'],borderRadius:6}]
+      },
+      options:{...base,plugins:{legend:{display:false}}}
+    });
+  }
+}
 </script>
-
 </body>
 </html>
