@@ -1,605 +1,531 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI & IPR Licensing — Research Questionnaire</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>K. Balakrishnan v. K. Kamalam — (2004) 1 SCC 581</title>
 <style>
-  :root{
-    --ink:#16213a;
-    --ink-soft:#3a4664;
-    --parchment:#f3eee2;
-    --parchment-deep:#e8e0cc;
-    --brass:#a9762f;
-    --brass-light:#c99a55;
-    --circuit:#1f8a8a;
-    --circuit-light:#56c2c2;
-    --line:#d8cfb6;
-    --danger:#9c3b3b;
-  }
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
-  body{
-    background:var(--parchment);
-    background-image:
-      radial-gradient(circle at 15% 8%, rgba(169,118,47,0.07), transparent 40%),
-      radial-gradient(circle at 85% 90%, rgba(31,138,138,0.06), transparent 40%);
-    color:var(--ink);
-    font-family: 'Iowan Old Style','Palatino Linotype',Georgia,serif;
-    min-height:100vh;
-  }
-  @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Spectral:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap');
-  body{font-family:'Source Serif 4', Georgia, serif;}
-  .mono{font-family:'IBM Plex Mono', monospace;}
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
 
-  .wrap{
-    max-width:760px;
-    margin:0 auto;
-    padding:48px 24px 90px;
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black:   #060608;
+    --white:   #f5f5f7;
+    --silver:  #a1a1a6;
+    --blue:    #0071e3;
+    --gold:    #f0c040;
+    --red:     #e74c3c;
+    --green:   #2ecc71;
   }
 
-  /* header / clause-seal */
-  .masthead{
-    text-align:center;
-    margin-bottom:40px;
-    position:relative;
-  }
-  .seal{
-    width:78px;height:78px;
-    margin:0 auto 18px;
-    border-radius:50%;
-    border:2px solid var(--brass);
-    display:flex;align-items:center;justify-content:center;
-    position:relative;
-    background:
-      repeating-conic-gradient(from 0deg, rgba(169,118,47,0.12) 0deg 6deg, transparent 6deg 12deg);
-  }
-  .seal::before{
-    content:'';
-    position:absolute;
-    inset:8px;
-    border:1px dashed var(--brass-light);
-    border-radius:50%;
-  }
-  .seal span{
-    font-family:'IBM Plex Mono',monospace;
-    font-size:10px;
-    letter-spacing:0.12em;
-    color:var(--brass);
-    font-weight:500;
-  }
-  .eyebrow{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:11px;
-    letter-spacing:0.22em;
-    text-transform:uppercase;
-    color:var(--circuit);
-    margin-bottom:10px;
-  }
-  h1{
-    font-family:'Spectral', serif;
-    font-weight:600;
-    font-size:clamp(28px,4.4vw,38px);
-    line-height:1.15;
-    margin:0 0 12px;
-    letter-spacing:-0.01em;
-  }
-  .sub{
-    color:var(--ink-soft);
-    font-size:15.5px;
-    font-style:italic;
-    max-width:480px;
-    margin:0 auto;
-    line-height:1.55;
+  html, body {
+    width: 100%; height: 100%;
+    background: var(--black);
+    font-family: 'Inter', -apple-system, sans-serif;
+    color: var(--white);
+    overflow: hidden;
+    user-select: none;
   }
 
-  /* ledger progress */
-  .ledger{
-    display:flex;
-    align-items:center;
-    gap:0;
-    margin:34px 0 6px;
-    border-top:1px solid var(--line);
-    border-bottom:1px solid var(--line);
-    padding:10px 0;
-  }
-  .ledger-track{
-    flex:1;
-    height:3px;
-    background:var(--line);
-    position:relative;
-    border-radius:2px;
-    margin:0 14px;
-    overflow:hidden;
-  }
-  .ledger-fill{
-    position:absolute;left:0;top:0;bottom:0;
-    background:linear-gradient(90deg,var(--circuit),var(--circuit-light));
-    width:0%;
-    transition:width .45s ease;
-  }
-  .ledger-label{
-    font-family:'IBM Plex Mono',monospace;
-    font-size:11.5px;
-    color:var(--ink-soft);
-    white-space:nowrap;
-    letter-spacing:0.04em;
+  /* ── SLIDE DECK ── */
+  #deck {
+    width: 100%; height: 100%;
+    position: relative;
   }
 
-  /* card / clause panel */
-  .panel{
-    background:#fffdf8;
-    border:1px solid var(--line);
-    border-radius:3px;
-    padding:36px 34px;
-    box-shadow:0 1px 0 rgba(0,0,0,0.02), 0 14px 30px -18px rgba(22,33,58,0.25);
-    position:relative;
+  .slide {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 5vw;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.6s ease;
+    text-align: center;
   }
-  .panel::before{
-    content:'';
-    position:absolute;
-    top:0;left:28px;right:28px;
-    height:1px;
-    background:repeating-linear-gradient(90deg, var(--brass-light) 0 6px, transparent 6px 12px);
-    opacity:0.5;
-  }
-  .section-tag{
-    font-family:'IBM Plex Mono',monospace;
-    font-size:11px;
-    letter-spacing:0.16em;
-    text-transform:uppercase;
-    color:var(--brass);
-    margin-bottom:6px;
-  }
-  .section-title{
-    font-family:'Spectral',serif;
-    font-weight:600;
-    font-size:22px;
-    margin:0 0 26px;
+  .slide.active {
+    opacity: 1;
+    pointer-events: all;
   }
 
-  .q{ margin-bottom:26px; }
-  .q:last-child{ margin-bottom:0; }
-  .q-text{
-    font-size:16px;
-    font-weight:600;
-    color:var(--ink);
-    margin-bottom:12px;
-    line-height:1.4;
+  /* ── TYPOGRAPHY ── */
+  .eyebrow {
+    font-size: clamp(11px, 1.3vw, 14px);
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--silver);
+    margin-bottom: 1.6rem;
   }
-  .q-text .opt{
-    font-family:'IBM Plex Mono',monospace;
-    font-weight:400;
-    font-size:11px;
-    color:var(--ink-soft);
-    text-transform:uppercase;
-    letter-spacing:0.06em;
-    margin-left:6px;
+  .hero {
+    font-size: clamp(36px, 7vw, 96px);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    color: var(--white);
+  }
+  .hero em { font-style: normal; color: var(--gold); }
+  .hero .blu { color: var(--blue); }
+  .hero .red { color: var(--red); }
+  .hero .grn { color: var(--green); }
+
+  .sub {
+    margin-top: 1.6rem;
+    font-size: clamp(15px, 2vw, 22px);
+    font-weight: 300;
+    color: var(--silver);
+    max-width: 680px;
+    line-height: 1.6;
+  }
+  .sub strong { color: var(--white); font-weight: 600; }
+
+  /* ── SPECIAL SLIDES ── */
+  /* Slide 0 – Title */
+  #s0 { background: var(--black); }
+  #s0 .case-tag {
+    font-size: clamp(10px, 1.1vw, 13px);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 2.2rem;
+    font-weight: 600;
+  }
+  #s0 .title-main {
+    font-size: clamp(30px, 5.5vw, 76px);
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    line-height: 1.0;
+  }
+  #s0 .title-v {
+    font-size: clamp(16px, 2.5vw, 32px);
+    color: var(--silver);
+    margin: 0.5rem 0;
+    font-weight: 300;
+  }
+  #s0 .title-sub {
+    margin-top: 2rem;
+    font-size: clamp(12px, 1.4vw, 16px);
+    color: var(--silver);
+    letter-spacing: 0.06em;
+  }
+  #s0 .orb {
+    position: absolute;
+    width: 520px; height: 520px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,113,227,0.18) 0%, transparent 70%);
+    pointer-events: none;
+    animation: pulse 4s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.6; }
+    50%       { transform: scale(1.12); opacity: 1; }
   }
 
-  input[type="text"], textarea{
-    width:100%;
-    border:none;
-    border-bottom:1.5px solid var(--line);
-    background:transparent;
-    font-family:'Spectral',serif;
-    font-size:15px;
-    padding:8px 2px;
-    color:var(--ink);
-    transition:border-color .2s;
+  /* Timeline slide */
+  .timeline-row {
+    display: flex; align-items: flex-start; gap: 2rem;
+    text-align: left; margin-top: 2.4rem;
+    max-width: 720px;
   }
-  input[type="text"]:focus, textarea:focus{
-    outline:none;
-    border-color:var(--circuit);
+  .tl-year {
+    font-size: clamp(26px, 4vw, 52px);
+    font-weight: 900;
+    color: var(--blue);
+    min-width: 90px;
+    line-height: 1;
   }
-  textarea{ resize:vertical; min-height:74px; }
+  .tl-text {
+    font-size: clamp(14px, 1.8vw, 20px);
+    color: var(--silver);
+    line-height: 1.55;
+    padding-top: 0.3rem;
+  }
+  .tl-text strong { color: var(--white); }
 
-  .choices{ display:flex; flex-direction:column; gap:9px; }
-  .choice{
-    display:flex; align-items:center; gap:11px;
-    padding:11px 14px;
-    border:1px solid var(--line);
-    border-radius:2px;
-    cursor:pointer;
-    background:#fff;
-    transition: border-color .15s, background .15s;
+  /* Three-column cards */
+  .cards {
+    display: flex; gap: 2rem; margin-top: 2.6rem;
+    flex-wrap: wrap; justify-content: center;
+    max-width: 900px;
   }
-  .choice:hover{ border-color:var(--brass-light); background:#fbf7ec; }
-  .choice input{ accent-color:var(--circuit); width:15px;height:15px; flex-shrink:0; }
-  .choice.selected{
-    border-color:var(--circuit);
-    background:rgba(31,138,138,0.06);
+  .card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 18px;
+    padding: 2rem 1.8rem;
+    flex: 1; min-width: 200px;
+    text-align: left;
   }
-  .choice label{ cursor:pointer; font-size:14.5px; flex:1; }
-  .choice-other input[type="text"]{
-    border-bottom:1px solid var(--line);
-    margin-left:6px;
-    font-size:13.5px;
-    padding:3px 2px;
+  .card .num {
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--blue); margin-bottom: 0.8rem;
   }
-
-  /* matrix */
-  .matrix{ width:100%; border-collapse:collapse; font-size:13px; }
-  .matrix th{
-    font-family:'IBM Plex Mono',monospace;
-    font-weight:500;
-    font-size:10.5px;
-    color:var(--ink-soft);
-    padding:4px 4px 10px;
-    text-align:center;
-  }
-  .matrix td.row-label{
-    text-align:left;
-    padding:9px 8px 9px 0;
-    font-size:13.5px;
-    border-top:1px solid var(--line);
-  }
-  .matrix td{
-    text-align:center;
-    border-top:1px solid var(--line);
-    padding:9px 4px;
-  }
-  .matrix input{ accent-color:var(--circuit); width:15px;height:15px; }
-  .matrix-scroll{ overflow-x:auto; }
-  .matrix-hint{
-    font-family:'IBM Plex Mono',monospace;
-    font-size:10.5px;
-    color:var(--ink-soft);
-    margin-bottom:10px;
+  .card .q {
+    font-size: clamp(14px, 1.6vw, 17px);
+    font-weight: 600; color: var(--white);
+    line-height: 1.4;
   }
 
-  /* nav buttons */
-  .nav-row{
-    display:flex; justify-content:space-between; align-items:center;
-    margin-top:32px;
+  /* Answer slide — big YES / NO */
+  .verdict {
+    font-size: clamp(80px, 18vw, 200px);
+    font-weight: 900;
+    letter-spacing: -0.05em;
+    line-height: 0.9;
   }
-  button{
-    font-family:'IBM Plex Mono',monospace;
-    font-size:12.5px;
-    letter-spacing:0.05em;
-    text-transform:uppercase;
-    padding:13px 22px;
-    border-radius:2px;
-    cursor:pointer;
-    border:1px solid var(--ink);
-    background:transparent;
-    color:var(--ink);
-    transition: transform .12s, background .15s, color .15s;
-  }
-  button:hover{ background:var(--ink); color:var(--parchment); }
-  button:active{ transform:scale(0.97); }
-  button.primary{
-    background:var(--ink); color:var(--parchment);
-    border-color:var(--ink);
-  }
-  button.primary:hover{ background:var(--ink-soft); }
-  button.ghost{ border-color:var(--line); color:var(--ink-soft); }
-  button.ghost:hover{ background:var(--parchment-deep); color:var(--ink); }
-  button:focus-visible{ outline:3px solid var(--circuit-light); outline-offset:2px; }
-  button:disabled{ opacity:0.35; cursor:not-allowed; }
-  button:disabled:hover{ background:transparent; color:var(--ink); }
+  .verdict.yes { color: var(--green); }
+  .verdict.no  { color: var(--red); }
 
-  .step-count{
-    font-family:'IBM Plex Mono',monospace;
-    font-size:11px;
-    color:var(--ink-soft);
+  /* Ratio slide */
+  .ratio-block {
+    max-width: 760px;
+    border-left: 4px solid var(--gold);
+    padding: 1.6rem 2rem;
+    text-align: left;
+    margin-top: 2rem;
+    background: rgba(240,192,64,0.06);
+    border-radius: 0 14px 14px 0;
+  }
+  .ratio-block p {
+    font-size: clamp(15px, 2vw, 22px);
+    line-height: 1.7;
+    color: var(--white);
+    font-weight: 300;
+  }
+  .ratio-block p strong { color: var(--gold); font-weight: 700; }
+
+  /* Significance pillars */
+  .pillars {
+    display: flex; gap: 1.4rem; margin-top: 2.4rem;
+    flex-wrap: wrap; justify-content: center;
+    max-width: 860px;
+  }
+  .pillar {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.09);
+    border-radius: 14px;
+    padding: 1.4rem 1.6rem;
+    flex: 1; min-width: 180px; max-width: 220px;
+    text-align: center;
+  }
+  .pillar .icon { font-size: 2.2rem; margin-bottom: 0.7rem; }
+  .pillar .label {
+    font-size: clamp(12px, 1.3vw, 14px);
+    font-weight: 600; color: var(--silver);
+    line-height: 1.4;
+  }
+  .pillar .label strong { color: var(--white); display: block; margin-bottom: 0.25rem; }
+
+  /* Final slide */
+  #s-end .big {
+    font-size: clamp(18px, 3.5vw, 46px);
+    font-weight: 300;
+    color: var(--silver);
+    margin-bottom: 0.6rem;
+  }
+  #s-end .coda {
+    font-size: clamp(9px, 1vw, 12px);
+    color: rgba(161,161,166,0.5);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 2.4rem;
+  }
+  .apple-dot {
+    display: inline-block;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--blue);
+    margin-bottom: 2rem;
+    animation: blink 2s ease-in-out infinite;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.2; }
   }
 
-  /* completion screen */
-  .done{ text-align:center; padding:20px 10px; }
-  .done .seal{ width:100px;height:100px; margin-bottom:24px; border-width:2.5px;}
-  .done .seal span{ font-size:11px; }
-  .done h2{ font-family:'Spectral',serif; font-size:26px; margin:0 0 10px; }
-  .done p{ color:var(--ink-soft); font-size:15px; line-height:1.6; max-width:420px; margin:0 auto 26px; }
-  .summary-box{
-    text-align:left;
-    background:var(--parchment-deep);
-    border:1px solid var(--line);
-    border-radius:3px;
-    padding:18px 20px;
-    margin-top:22px;
-    font-family:'IBM Plex Mono',monospace;
-    font-size:12px;
-    color:var(--ink-soft);
-    max-height:220px;
-    overflow-y:auto;
-    text-align:left;
+  /* ── NAVIGATION ── */
+  #nav {
+    position: fixed; bottom: 2.4rem; left: 50%;
+    transform: translateX(-50%);
+    display: flex; align-items: center; gap: 1.4rem;
+    z-index: 100;
   }
-  .summary-box .row{ margin-bottom:8px; line-height:1.5; }
-  .summary-box .row b{ color:var(--ink); }
+  .nav-btn {
+    width: 46px; height: 46px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(12px);
+    color: var(--white);
+    font-size: 18px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.25s, border-color 0.25s;
+  }
+  .nav-btn:hover { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.3); }
+  .nav-btn:disabled { opacity: 0.25; cursor: default; }
 
-  @media (max-width:560px){
-    .panel{ padding:26px 20px; }
-    .wrap{ padding:32px 16px 70px; }
+  /* Progress dots */
+  #dots {
+    display: flex; gap: 7px; align-items: center;
+  }
+  .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.22);
+    transition: background 0.3s, transform 0.3s;
+    cursor: pointer;
+  }
+  .dot.on {
+    background: var(--white);
+    transform: scale(1.5);
   }
 
-  .sr-only{
-    position:absolute; width:1px;height:1px;
-    overflow:hidden; clip:rect(0 0 0 0);
+  /* Slide counter */
+  #counter {
+    position: fixed; top: 1.4rem; right: 2rem;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.1em;
+    color: rgba(161,161,166,0.5);
+    z-index: 100;
   }
 
-  @media (prefers-reduced-motion: reduce){
-    *{ transition:none !important; }
+  /* ── CONTENT REVEAL ── */
+  .reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.55s ease, transform 0.55s ease; }
+  .slide.active .reveal { opacity: 1; transform: translateY(0); }
+  .reveal:nth-child(2) { transition-delay: 0.10s; }
+  .reveal:nth-child(3) { transition-delay: 0.20s; }
+  .reveal:nth-child(4) { transition-delay: 0.30s; }
+  .reveal:nth-child(5) { transition-delay: 0.40s; }
+  .cards .card:nth-child(1) { transition-delay: 0.10s; }
+  .cards .card:nth-child(2) { transition-delay: 0.22s; }
+  .cards .card:nth-child(3) { transition-delay: 0.34s; }
+  .timeline-row { opacity: 0; transform: translateY(18px); transition: opacity 0.5s ease, transform 0.5s ease; }
+  .slide.active .timeline-row:nth-child(2) { opacity:1; transform:none; transition-delay:0.12s; }
+  .slide.active .timeline-row:nth-child(3) { opacity:1; transform:none; transition-delay:0.24s; }
+  .slide.active .timeline-row:nth-child(4) { opacity:1; transform:none; transition-delay:0.36s; }
+  .slide.active .timeline-row:nth-child(5) { opacity:1; transform:none; transition-delay:0.48s; }
+  .slide.active .card { opacity:1; transform:none; }
+  .card { opacity:0; transform:translateY(18px); transition: opacity 0.5s ease, transform 0.5s ease; }
+  .pillar { opacity:0; transform:translateY(18px); transition: opacity 0.5s ease, transform 0.5s ease; }
+  .slide.active .pillar:nth-child(1) { opacity:1; transform:none; transition-delay:0.10s; }
+  .slide.active .pillar:nth-child(2) { opacity:1; transform:none; transition-delay:0.22s; }
+  .slide.active .pillar:nth-child(3) { opacity:1; transform:none; transition-delay:0.34s; }
+  .slide.active .pillar:nth-child(4) { opacity:1; transform:none; transition-delay:0.46s; }
+
+  @media (max-width: 600px) {
+    .cards { flex-direction: column; }
+    .pillars { flex-direction: column; align-items: center; }
+    .pillar { max-width: 100%; }
   }
 </style>
 </head>
 <body>
 
-<div class="wrap">
-  <div class="masthead">
-    <div class="seal"><span>EXHIBIT A</span></div>
-    <div class="eyebrow">Field Research Instrument</div>
-    <h1>Revolutionizing IPR Contract Drafting Through Artificial Intelligence</h1>
-    <p class="sub">A study of smart and automated licensing agreements. Your responses are confidential and used solely for academic research.</p>
+<div id="counter"></div>
+
+<div id="deck">
+
+  <!-- SLIDE 0: Title -->
+  <div class="slide" id="s0">
+    <div class="orb"></div>
+    <p class="case-tag reveal">Supreme Court of India &nbsp;·&nbsp; (2004) 1 SCC 581</p>
+    <h1 class="title-main reveal">K. Balakrishnan</h1>
+    <p class="title-v reveal">versus</p>
+    <h1 class="title-main reveal">K. Kamalam <span style="color:var(--silver)">&amp; Ors.</span></h1>
+    <p class="title-sub reveal">A landmark ruling on gift deeds, minor donees &amp; irrevocability</p>
   </div>
 
-  <div class="ledger">
-    <span class="ledger-label mono" id="stepLabel">Clause 01 / 06</span>
-    <div class="ledger-track"><div class="ledger-fill" id="ledgerFill"></div></div>
-    <span class="ledger-label mono" id="pctLabel">0%</span>
+  <!-- SLIDE 1: The Story -->
+  <div class="slide" id="s1">
+    <p class="eyebrow reveal">The Story</p>
+    <h2 class="hero reveal">A mother.<br><em>A gift.</em><br>A conflict.</h2>
+    <p class="sub reveal">Everything began in <strong>1945</strong> — and ended decades later in the Supreme Court.</p>
   </div>
 
-  <div class="panel" id="panel"></div>
+  <!-- SLIDE 2: Timeline of Facts -->
+  <div class="slide" id="s2">
+    <p class="eyebrow reveal">The Facts</p>
+    <div class="timeline-row">
+      <div class="tl-year">1945</div>
+      <div class="tl-text">Mother executes a <strong>registered gift deed</strong> transferring her share in property to her <strong>minor son</strong> (Balakrishnan) and <strong>minor daughter</strong> (Kamalam). She reserves the right to manage and enjoy the property during her lifetime.</div>
+    </div>
+    <div class="timeline-row">
+      <div class="tl-year" style="color:var(--red)">Later</div>
+      <div class="tl-text">Mother executes a <strong>cancellation deed</strong> and a <strong>will</strong> in favour of the daughter only — attempting to revoke the original gift entirely.</div>
+    </div>
+    <div class="timeline-row">
+      <div class="tl-year" style="color:var(--blue)">After</div>
+      <div class="tl-text">Mother dies. The son <strong>sues</strong>, asserting title under the original 1945 gift deed.</div>
+    </div>
+    <div class="timeline-row">
+      <div class="tl-year" style="color:var(--gold)">2004</div>
+      <div class="tl-text">The <strong>Supreme Court of India</strong> settles the matter once and for all.</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: Three Questions -->
+  <div class="slide" id="s3">
+    <p class="eyebrow reveal">Three Questions Before the Court</p>
+    <h2 class="hero reveal" style="font-size:clamp(28px,5vw,62px)">The legal battle<br>came down to <em>three</em><br>fundamental questions.</h2>
+    <div class="cards">
+      <div class="card">
+        <p class="num">Question 01</p>
+        <p class="q">Can a minor validly accept a gift?</p>
+      </div>
+      <div class="card">
+        <p class="num">Question 02</p>
+        <p class="q">Is delivery of possession necessary for a valid gift of immovable property?</p>
+      </div>
+      <div class="card">
+        <p class="num">Question 03</p>
+        <p class="q">Can a donor unilaterally revoke a completed gift?</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: Q1 -->
+  <div class="slide" id="s4">
+    <p class="eyebrow reveal">Question 01 &nbsp;·&nbsp; Minor Donee</p>
+    <h2 class="hero reveal">Can a minor<br>accept a <em>gift</em>?</h2>
+    <p class="sub reveal">The Transfer of Property Act, 1882 is silent on this. The courts had to reason from first principles.</p>
+  </div>
+
+  <!-- SLIDE 5: A1 YES -->
+  <div class="slide" id="s5">
+    <p class="eyebrow reveal">The Court's Answer</p>
+    <div class="verdict yes reveal">Yes.</div>
+    <p class="sub reveal">A minor is not legally incapable of <strong>receiving</strong> property. When a parent makes a beneficial gift to a child, acceptance can be <strong>presumed</strong> — the donor's role as natural guardian is enough. Acceptance may be express or implied.</p>
+  </div>
+
+  <!-- SLIDE 6: Q2 -->
+  <div class="slide" id="s6">
+    <p class="eyebrow reveal">Question 02 &nbsp;·&nbsp; Delivery of Possession</p>
+    <h2 class="hero reveal">Must you hand<br>over <em>possession</em><br>to gift property?</h2>
+    <p class="sub reveal">The mother kept the right to manage and enjoy the property for life. Did that invalidate the gift?</p>
+  </div>
+
+  <!-- SLIDE 7: A2 NO -->
+  <div class="slide" id="s7">
+    <p class="eyebrow reveal">The Court's Answer</p>
+    <div class="verdict no reveal">No.</div>
+    <p class="sub reveal">A valid gift of immovable property does <strong>not</strong> require immediate transfer of possession. Ownership passes even if the donor reserves possession, management, or enjoyment for life. A life interest is perfectly compatible with a completed gift.</p>
+  </div>
+
+  <!-- SLIDE 8: Q3 -->
+  <div class="slide" id="s8">
+    <p class="eyebrow reveal">Question 03 &nbsp;·&nbsp; Revocation</p>
+    <h2 class="hero reveal">Can a donor take<br>back a <em>completed</em><br>gift?</h2>
+    <p class="sub reveal">The mother's cancellation deed and will attempted exactly this. Was it legally effective?</p>
+  </div>
+
+  <!-- SLIDE 9: A3 NO -->
+  <div class="slide" id="s9">
+    <p class="eyebrow reveal">The Court's Answer</p>
+    <div class="verdict no reveal">No.</div>
+    <p class="sub reveal">Once validly made, accepted, and <strong>completed</strong>, a gift cannot be revoked unilaterally. The conditions for revocation under law were not satisfied. The cancellation deed was <strong>legally ineffective</strong>.</p>
+  </div>
+
+  <!-- SLIDE 10: Ratio Decidendi -->
+  <div class="slide" id="s10">
+    <p class="eyebrow reveal">Ratio Decidendi</p>
+    <h2 class="hero reveal" style="font-size:clamp(26px,4.2vw,54px)"><em>The</em> Legal Principle</h2>
+    <div class="ratio-block reveal">
+      <p>A gift in favour of a minor is <strong>valid</strong> if it is beneficial to the minor and is accepted expressly or impliedly — acceptance may be <strong>presumed</strong> when the donor is the minor's parent or guardian.<br><br>
+      A donor may reserve a <strong>life interest</strong> without invalidating the gift.<br><br>
+      A <strong>completed gift</strong> cannot be revoked unilaterally.</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 11: Significance -->
+  <div class="slide" id="s11">
+    <p class="eyebrow reveal">Why It Matters</p>
+    <h2 class="hero reveal" style="font-size:clamp(28px,4.8vw,64px)">Four pillars of<br><em>settled law.</em></h2>
+    <div class="pillars">
+      <div class="pillar">
+        <div class="icon">👶</div>
+        <p class="label"><strong>Minors can be donees</strong>under a gift deed.</p>
+      </div>
+      <div class="pillar">
+        <div class="icon">✅</div>
+        <p class="label"><strong>Acceptance presumed</strong>when donor is parent or guardian.</p>
+      </div>
+      <div class="pillar">
+        <div class="icon">🏠</div>
+        <p class="label"><strong>Ownership ≠ possession</strong>Title transfers without delivery.</p>
+      </div>
+      <div class="pillar">
+        <div class="icon">🔒</div>
+        <p class="label"><strong>Gift is irrevocable</strong>once registered &amp; accepted.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 12: End -->
+  <div class="slide" id="s-end">
+    <div class="apple-dot"></div>
+    <p class="big reveal">The son prevailed.</p>
+    <p class="big reveal" style="color:var(--white); font-weight:700">The gift stood.</p>
+    <p class="sub reveal" style="margin-top:1.4rem">The Supreme Court allowed the appeal and upheld the <strong>1945 registered gift deed</strong> in its entirety — a decision that continues to shape Indian property law.</p>
+    <p class="coda reveal">K. Balakrishnan v. K. Kamalam &amp; Ors. &nbsp;·&nbsp; (2004) 1 SCC 581 &nbsp;·&nbsp; Supreme Court of India</p>
+  </div>
+
+</div><!-- /deck -->
+
+<!-- Navigation -->
+<div id="nav">
+  <button class="nav-btn" id="prevBtn" disabled>&#8592;</button>
+  <div id="dots"></div>
+  <button class="nav-btn" id="nextBtn">&#8594;</button>
 </div>
 
 <script>
-const sections = [
-  {
-    tag: "Section A", title: "Respondent profile",
-    questions: [
-      { id:"name", type:"text", text:"Name", optional:true },
-      { id:"email", type:"text", text:"Email address", optional:true },
-      { id:"role", type:"radio", text:"Which category best describes you?", options:[
-        "Lawyer / Legal practitioner (IP/IPR)","In-house counsel / Corporate legal team",
-        "Law student / Academic researcher","IP consultant / Patent or trademark agent",
-        "Technology / AI professional","Judge / Judicial officer"], other:true },
-      { id:"experience", type:"radio", text:"Years of experience in IPR/licensing-related work", options:[
-        "Less than 2 years","2–5 years","6–10 years","11–20 years","More than 20 years","Not applicable"] },
-      { id:"org", type:"radio", text:"Type of organization you are associated with", options:[
-        "Law firm","Corporate legal department","Government / Regulatory body",
-        "Academic institution","IT / AI technology company","Independent practice"], other:true }
-    ]
-  },
-  {
-    tag: "Section B", title: "Awareness & familiarity with AI in contract drafting",
-    questions: [
-      { id:"familiarity", type:"radio", text:"How familiar are you with AI-based tools used for contract drafting (e.g. LawGeex, Ironclad, Spellbook)?", options:[
-        "Not familiar at all","Slightly familiar","Moderately familiar","Very familiar","Expert user"] },
-      { id:"used_tool", type:"radio", text:"Have you personally used any AI tool for drafting, reviewing, or negotiating an IPR licensing agreement?", options:[
-        "Yes, frequently","Yes, occasionally","No, but I am aware of such tools","No, and I am not aware of such tools"] },
-      { id:"tool_names", type:"text", text:"If yes, please name the tool(s) used", optional:true },
-      { id:"adoption_level", type:"radio", text:"What is the current level of AI adoption in IPR licensing contract drafting in your jurisdiction/industry?", options:[
-        "Very low","Low","Moderate","High","Very high"] }
-    ]
-  },
-  {
-    tag: "Section C", title: "Perceived benefits",
-    questions: [
-      { id:"benefits", type:"matrix", text:"Rate the following potential benefits of AI in IPR licensing agreement drafting", scale:"agree",
-        rows:["Reduces time taken to draft agreements","Reduces drafting errors and inconsistencies",
-          "Improves standardization of clauses","Lowers overall legal costs",
-          "Enhances risk identification (royalty, infringement, termination)",
-          "Enables real-time monitoring/compliance (smart contracts)","Improves accessibility for SMEs/startups"] },
-      { id:"valuable_capability", type:"radio", text:"Which AI capability is most valuable for IPR licensing agreements?", options:[
-        "Automated clause generation","Risk / anomaly detection","Predictive analytics (e.g. royalty forecasting)",
-        "Smart contract execution via blockchain","Multilingual / cross-jurisdictional drafting"], other:true }
-    ]
-  },
-  {
-    tag: "Section D", title: "Concerns, risks & challenges",
-    questions: [
-      { id:"concerns", type:"matrix", text:"Rate your level of concern regarding the following issues", scale:"concern",
-        rows:["Accuracy/reliability of AI-generated clauses","Data privacy & confidentiality of licensing terms",
-          "Lack of human judgment in nuanced negotiation","Accountability for AI drafting errors",
-          "Bias in AI-generated terms","Lack of clear regulatory framework",
-          "Job displacement of legal professionals","Enforceability of AI-negotiated/smart contracts"] },
-      { id:"liability", type:"radio", text:"In a dispute arising from an AI-drafted licensing clause, who should bear primary responsibility?", options:[
-        "The AI tool developer / provider","The lawyer/firm using the tool","The licensing party relying on the agreement",
-        "Shared liability among all parties","Unclear / no framework exists currently"] },
-      { id:"law_adequacy", type:"radio", text:"Does current IP/contract law adequately address AI-generated or AI-assisted licensing agreements?", options:[
-        "Yes, fully adequate","Partially adequate","Not adequate at all","Not sure"] }
-    ]
-  },
-  {
-    tag: "Section E", title: "Smart contracts & blockchain integration",
-    questions: [
-      { id:"smart_contract_awareness", type:"radio", text:"Are you aware of blockchain-based smart contracts used for IP licensing (e.g. automatic royalty payments)?", options:[
-        "Yes, well aware and have used/encountered them","Aware, but no direct experience","Not aware"] },
-      { id:"feasibility", type:"matrix", text:"How feasible are blockchain-based smart licensing agreements for the following IP types?", scale:"feasible",
-        rows:["Patents","Trademarks","Copyrights","Trade secrets"] }
-    ]
-  },
-  {
-    tag: "Section F", title: "Future outlook",
-    questions: [
-      { id:"replace_lawyers", type:"radio", text:"Will AI eventually replace human lawyers in drafting IPR licensing agreements?", options:[
-        "Completely replace","Mostly replace, with human oversight","Assist but not replace","Will have minimal impact","Not sure"] },
-      { id:"safeguards", type:"checkbox", text:"What safeguards are necessary before widespread adoption of AI in IPR licensing?", options:[
-        "Mandatory human review/certification","Clear liability framework","Data protection standards",
-        "AI explainability / transparency requirements","Regulatory body oversight","Industry-specific guidelines"], other:true },
-      { id:"stakeholders", type:"checkbox", text:"Which stakeholders should be involved in regulating AI-based IPR contract tools?", options:[
-        "National IP offices","Bar councils / legal regulatory bodies","Technology / AI regulators",
-        "International bodies (e.g. WIPO)","Industry self-regulation"], other:true },
-      { id:"comments", type:"textarea", text:"Any additional comments, suggestions, or experiences you'd like to share?", optional:true }
-    ]
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const dotsEl = document.getElementById('dots');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const counter = document.getElementById('counter');
+  let cur = 0;
+
+  // Build dots
+  slides.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' on' : '');
+    d.addEventListener('click', () => go(i));
+    dotsEl.appendChild(d);
+  });
+
+  function go(n) {
+    slides[cur].classList.remove('active');
+    dotsEl.children[cur].classList.remove('on');
+    cur = Math.max(0, Math.min(n, slides.length - 1));
+    slides[cur].classList.add('active');
+    dotsEl.children[cur].classList.add('on');
+    prevBtn.disabled = cur === 0;
+    nextBtn.disabled = cur === slides.length - 1;
+    counter.textContent = (cur + 1) + ' / ' + slides.length;
   }
-];
 
-const scales = {
-  agree:["Strongly disagree","Disagree","Neutral","Agree","Strongly agree"],
-  concern:["Not concerned","Slightly concerned","Neutral","Concerned","Extremely concerned"],
-  feasible:["Highly not feasible","Not feasible","Neutral","Feasible","Highly feasible"]
-};
+  prevBtn.addEventListener('click', () => go(cur - 1));
+  nextBtn.addEventListener('click', () => go(cur + 1));
 
-let current = 0;
-const answers = {};
-
-function render(){
-  const panel = document.getElementById('panel');
-  if(current >= sections.length){ renderDone(); return; }
-  const s = sections[current];
-  let html = `<div class="section-tag">${s.tag}</div><h2 class="section-title">${s.title}</h2>`;
-
-  s.questions.forEach(q=>{
-    html += `<div class="q" data-qid="${q.id}">`;
-    html += `<div class="q-text">${q.text}${q.optional?'<span class="opt">optional</span>':''}</div>`;
-
-    if(q.type==="text"){
-      html += `<input type="text" id="${q.id}" value="${answers[q.id]||''}" autocomplete="off">`;
-    } else if(q.type==="textarea"){
-      html += `<textarea id="${q.id}">${answers[q.id]||''}</textarea>`;
-    } else if(q.type==="radio" || q.type==="checkbox"){
-      html += `<div class="choices">`;
-      const stored = answers[q.id] || (q.type==="checkbox"?[]:"");
-      q.options.forEach((opt,i)=>{
-        const checked = q.type==="checkbox" ? stored.includes(opt) : stored===opt;
-        html += `<div class="choice ${checked?'selected':''}" data-opt="${opt}" data-qid="${q.id}" data-qtype="${q.type}">
-          <input type="${q.type}" name="${q.id}" ${checked?'checked':''} tabindex="-1">
-          <label>${opt}</label></div>`;
-      });
-      if(q.other){
-        const otherChecked = q.type==="checkbox" ? stored.includes("__other__") : stored==="__other__";
-        html += `<div class="choice choice-other ${otherChecked?'selected':''}" data-opt="__other__" data-qid="${q.id}" data-qtype="${q.type}">
-          <input type="${q.type}" name="${q.id}" ${otherChecked?'checked':''} tabindex="-1">
-          <label style="flex:0 0 auto;">Other:</label>
-          <input type="text" data-other-for="${q.id}" value="${answers[q.id+'_other']||''}" placeholder="please specify">
-          </div>`;
-      }
-      html += `</div>`;
-    } else if(q.type==="matrix"){
-      const labels = scales[q.scale];
-      html += `<div class="matrix-hint">${labels[0]} &nbsp;→&nbsp; ${labels[labels.length-1]}</div>`;
-      html += `<div class="matrix-scroll"><table class="matrix"><thead><tr><th></th>`;
-      labels.forEach((l,i)=> html += `<th>${i+1}</th>`);
-      html += `</tr></thead><tbody>`;
-      q.rows.forEach((row,ri)=>{
-        const stored = (answers[q.id]||{})[row];
-        html += `<tr><td class="row-label">${row}</td>`;
-        labels.forEach((l,li)=>{
-          const val = li+1;
-          html += `<td><input type="radio" name="${q.id}__${ri}" data-qid="${q.id}" data-row="${row}" data-val="${val}" ${stored===val?'checked':''}></td>`;
-        });
-        html += `</tr>`;
-      });
-      html += `</tbody></table></div>`;
-    }
-    html += `</div>`;
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') go(cur + 1);
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp') go(cur - 1);
   });
 
-  html += `<div class="nav-row">
-    <button class="ghost" id="backBtn" ${current===0?'disabled':''}>← Back</button>
-    <span class="step-count mono">Step ${current+1} of ${sections.length}</span>
-    <button class="primary" id="nextBtn">${current===sections.length-1?'Submit':'Continue →'}</button>
-  </div>`;
+  // Touch / swipe
+  let tx = 0;
+  document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - tx;
+    if (Math.abs(dx) > 50) go(dx < 0 ? cur + 1 : cur - 1);
+  }, { passive: true });
 
-  panel.innerHTML = html;
-  attachHandlers();
-  updateProgress();
-  panel.scrollIntoView({behavior:'smooth', block:'start'});
-}
-
-function attachHandlers(){
-  document.querySelectorAll('input[type="text"]:not([data-other-for])').forEach(el=>{
-    el.addEventListener('input', e=> answers[el.id] = e.target.value);
-  });
-  document.querySelectorAll('textarea').forEach(el=>{
-    el.addEventListener('input', e=> answers[el.id] = e.target.value);
-  });
-  document.querySelectorAll('input[data-other-for]').forEach(el=>{
-    el.addEventListener('input', e=> answers[el.dataset.otherFor+'_other'] = e.target.value);
-  });
-
-  document.querySelectorAll('.choice').forEach(el=>{
-    el.addEventListener('click', e=>{
-      if(e.target.tagName === 'INPUT' && e.target.type === 'text') return;
-      const qid = el.dataset.qid, qtype = el.dataset.qtype, opt = el.dataset.opt;
-      if(qtype === 'radio'){
-        answers[qid] = opt;
-        document.querySelectorAll(`.choice[data-qid="${qid}"]`).forEach(c=>{
-          c.classList.toggle('selected', c.dataset.opt===opt);
-          c.querySelector('input').checked = (c.dataset.opt===opt);
-        });
-      } else { // checkbox
-        if(!answers[qid]) answers[qid] = [];
-        const idx = answers[qid].indexOf(opt);
-        if(idx>-1){ answers[qid].splice(idx,1); el.classList.remove('selected'); el.querySelector('input').checked=false; }
-        else { answers[qid].push(opt); el.classList.add('selected'); el.querySelector('input').checked=true; }
-      }
-    });
-  });
-
-  document.querySelectorAll('.matrix input[type="radio"]').forEach(el=>{
-    el.addEventListener('change', e=>{
-      const qid = el.dataset.qid, row = el.dataset.row, val = parseInt(el.dataset.val);
-      if(!answers[qid]) answers[qid] = {};
-      answers[qid][row] = val;
-    });
-  });
-
-  document.getElementById('nextBtn').addEventListener('click', ()=>{
-    current++;
-    render();
-  });
-  document.getElementById('backBtn').addEventListener('click', ()=>{
-    if(current>0){ current--; render(); }
-  });
-}
-
-function updateProgress(){
-  const pct = Math.round((current)/(sections.length)*100);
-  document.getElementById('ledgerFill').style.width = pct+'%';
-  document.getElementById('pctLabel').textContent = pct+'%';
-  document.getElementById('stepLabel').textContent = `Clause ${String(current+1).padStart(2,'0')} / ${String(sections.length).padStart(2,'0')}`;
-}
-
-function renderDone(){
-  document.getElementById('ledgerFill').style.width = '100%';
-  document.getElementById('pctLabel').textContent = '100%';
-  document.getElementById('stepLabel').textContent = 'Filed';
-
-  let answeredCount = 0;
-  Object.keys(answers).forEach(k=>{ if(!k.endsWith('_other')) answeredCount++; });
-
-  const panel = document.getElementById('panel');
-  panel.innerHTML = `
-    <div class="done">
-      <div class="seal"><span>FILED ✓</span></div>
-      <h2>Submission recorded</h2>
-      <p>Thank you for completing this questionnaire on AI-driven IPR licensing agreements. Your responses help inform research into smart and automated contract drafting.</p>
-      <div class="summary-box" id="summaryBox"></div>
-      <div class="nav-row" style="justify-content:center; gap:14px; margin-top:24px;">
-        <button class="ghost" id="editBtn">← Review answers</button>
-        <button class="primary" id="restartBtn">Start new response</button>
-      </div>
-    </div>
-  `;
-
-  const box = document.getElementById('summaryBox');
-  let rows = '';
-  sections.forEach(s=>{
-    s.questions.forEach(q=>{
-      let val = answers[q.id];
-      if(val===undefined || val==='' || (Array.isArray(val)&&val.length===0)) return;
-      if(typeof val === 'object' && !Array.isArray(val)){
-        val = Object.entries(val).map(([k,v])=>`${k}: ${v}/5`).join('; ');
-      } else if(Array.isArray(val)){
-        val = val.map(v=> v==='__other__' ? (answers[q.id+'_other']||'Other') : v).join(', ');
-      } else if(val === '__other__'){
-        val = answers[q.id+'_other'] || 'Other';
-      }
-      rows += `<div class="row"><b>${q.text.split('?')[0]}</b><br>${val}</div>`;
-    });
-  });
-  box.innerHTML = rows || '<div class="row">No responses recorded.</div>';
-
-  document.getElementById('editBtn').addEventListener('click', ()=>{ current = 0; render(); });
-  document.getElementById('restartBtn').addEventListener('click', ()=>{
-    Object.keys(answers).forEach(k=>delete answers[k]);
-    current = 0; render();
-  });
-}
-
-render();
+  // Init
+  go(0);
 </script>
 </body>
 </html>
