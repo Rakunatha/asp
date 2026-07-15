@@ -2,1106 +2,852 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>A Systems-Based Legal Workflow Intelligence Platform — Case File</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0D0C0A">
+<title>A Systems-Based Legal Workflow Intelligence Platform — Indian Family Law Practice</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
-    --ink:#16233B;
-    --ink-soft:#233855;
-    --parchment:#F6F1E4;
-    --parchment-dim:#EDE6D3;
-    --brass:#B08D3D;
-    --brass-light:#D3AE5C;
-    --teal:#2F6F63;
-    --teal-light:#4C9385;
-    --grey:#5C6B7A;
-    --line:rgba(22,35,59,0.14);
-    --paper-line: rgba(22,35,59,0.08);
-    --shadow: 0 30px 60px -20px rgba(22,35,59,0.45), 0 10px 20px -10px rgba(22,35,59,0.3);
+    --bg:#0D0C0A;
+    --surface:#17140F;
+    --surface-2:#1D1A14;
+    --rule: rgba(245,240,230,0.11);
+    --rule-strong: rgba(245,240,230,0.22);
+    --ink:#F3EFE6;
+    --ink-dim:#9A9484;
+    --gold:#C6A15B;
+    --gold-dim: rgba(198,161,91,0.35);
+    --indigo:#5E76E8;
+    --indigo-dim: rgba(94,118,232,0.35);
+    --bar-h: 60px;
+    --maxw: 1180px;
   }
-  *{box-sizing:border-box;}
-  html,body{height:100%;}
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; }
+  }
+
   body{
     margin:0;
-    background:
-      radial-gradient(ellipse at 20% -10%, #24395c 0%, transparent 55%),
-      radial-gradient(ellipse at 90% 110%, #1c2c47 0%, transparent 55%),
-      var(--ink);
-    font-family:'Inter',sans-serif;
+    background:var(--bg);
     color:var(--ink);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    overflow:hidden;
-    height:100vh;
-    height:100dvh;
-    width:100vw;
-    -webkit-text-size-adjust:100%;
-    text-size-adjust:100%;
+    font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight:400;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    scroll-snap-type: y proximity;
+    overflow-x:hidden;
   }
 
-  /* ---- Stage ----
-     16:9 letterboxed on landscape/desktop/smart-board displays;
-     overridden to a near-fullscreen portrait layout below 700px / portrait orientation. */
-  .stage{
-    position:relative;
-    width:min(94vw, 177.78vh);
-    height:min(52.875vw, 94vh);
-    display:flex;
-    align-items:center;
-    justify-content:center;
+  ::selection{ background:var(--gold-dim); color:var(--ink); }
+
+  h1,h2,h3{
+    font-family:'Fraunces', Georgia, serif;
+    font-weight:500;
+    letter-spacing:-0.01em;
+    margin:0;
+    color:var(--ink);
   }
 
-  .deck{
-    position:relative;
-    width:100%;
-    height:100%;
-    border-radius:6px;
-    overflow:hidden;
-    box-shadow:var(--shadow);
-    background:var(--parchment);
-  }
+  a{ color:inherit; }
 
-  .slide{
-    position:absolute;
-    inset:0;
-    opacity:0;
-    visibility:hidden;
-    transform:translateY(14px);
-    transition:opacity .5s ease, transform .5s ease, visibility 0s linear .5s;
-    background:var(--parchment);
-    background-image:
-      repeating-linear-gradient(0deg, transparent, transparent 27px, var(--paper-line) 27px, var(--paper-line) 28px);
-    display:flex;
-    flex-direction:column;
-  }
-  .slide.active{
-    opacity:1;
-    visibility:visible;
-    transform:translateY(0);
-    transition:opacity .5s ease, transform .5s ease, visibility 0s linear 0s;
-  }
-
-  /* Folder tab index rail */
-  .tab-rail{
-    position:absolute;
-    top:0; right:0; bottom:0;
-    width:38px;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    gap:0;
-    background:linear-gradient(180deg, rgba(22,35,59,0.03), rgba(22,35,59,0.03));
-    border-left:1px solid var(--line);
-    z-index:20;
-  }
-  .tab-btn{
-    all:unset;
-    cursor:pointer;
-    width:26px;
-    height:8.6%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-family:'IBM Plex Mono',monospace;
-    font-size:9px;
-    letter-spacing:.03em;
-    color:var(--grey);
-    position:relative;
-    transition:color .25s ease;
-  }
-  .tab-btn span{ transform:rotate(0deg); }
-  .tab-btn::before{
-    content:"";
-    position:absolute;
-    left:2px; top:8%; bottom:8%;
-    width:3px;
-    border-radius:2px;
-    background:var(--line);
-    transition:background .25s ease, width .25s ease;
-  }
-  .tab-btn.on{ color:var(--ink); }
-  .tab-btn.on::before{ background:var(--brass); width:4px; }
-  .tab-btn:hover{ color:var(--teal); }
-
-  /* Common slide chrome */
-  .slide-inner{
-    flex:1;
-    padding:56px 78px 42px 68px;
-    padding-right:104px;
-    display:flex;
-    flex-direction:column;
-    position:relative;
-    overflow-y:auto;
-    -webkit-overflow-scrolling:touch;
-    overscroll-behavior:contain;
-  }
-  .slide-inner::-webkit-scrollbar{ width:6px; }
-  .slide-inner::-webkit-scrollbar-thumb{ background:var(--line); border-radius:3px; }
-  .slide-inner::-webkit-scrollbar-track{ background:transparent; }
-  .kicker{
-    font-family:'IBM Plex Mono',monospace;
-    font-size:12.5px;
-    letter-spacing:.14em;
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    letter-spacing:0.14em;
     text-transform:uppercase;
-    color:var(--teal);
+    color:var(--gold);
     display:flex;
     align-items:center;
-    gap:10px;
-    margin-bottom:8px;
+    gap:0.6em;
+    margin-bottom:1.1rem;
   }
-  .kicker::before{
+  .eyebrow::before{
     content:"";
     width:22px; height:1px;
-    background:var(--brass);
-  }
-  .folio{
-    position:absolute;
-    left:68px; bottom:22px;
-    font-family:'IBM Plex Mono',monospace;
-    font-size:10.5px;
-    color:var(--grey);
-    letter-spacing:.08em;
-  }
-  .folio b{ color:var(--ink); font-weight:600; }
-
-  h1,h2,h3{ font-family:'Fraunces',serif; margin:0; color:var(--ink); }
-  .section-h2{ font-size:clamp(19px, 2.6vw, 27px); font-weight:600; line-height:1.25; }
-
-  /* ===================== SLIDE 1 — TITLE ===================== */
-  .slide-1 .slide-inner{
-    justify-content:center;
-    align-items:flex-start;
-    padding-left:80px;
-    background-image:none;
-  }
-  .seal{
-    position:absolute;
-    right:120px; top:56px;
-    width:132px; height:132px;
-  }
-  .title-eyebrow{
-    font-family:'IBM Plex Mono',monospace;
-    font-size:clamp(9.5px, 0.85vw, 12px);
-    letter-spacing:.2em;
-    text-transform:uppercase;
-    color:var(--teal);
-    margin-bottom:22px;
-    padding-bottom:14px;
-    border-bottom:1px solid var(--line);
-    width:70%;
-  }
-  h1.doc-title{
-    font-size:clamp(24px, 3.4vw, 46px);
-    font-weight:600;
-    line-height:1.12;
-    max-width:800px;
-    letter-spacing:-.01em;
-  }
-  h1.doc-title em{
-    font-style:italic;
-    color:var(--brass);
-    font-weight:500;
-  }
-  .title-rule{
-    width:56px; height:3px; background:var(--brass);
-    margin:26px 0 26px 0;
-  }
-  .author-block{
-    display:flex;
-    gap:64px;
-    margin-top:6px;
-  }
-  .author{
-    font-family:'Inter',sans-serif;
-  }
-  .author .name{
-    font-family:'Fraunces',serif;
-    font-size:17px;
-    font-weight:600;
-    color:var(--ink);
-  }
-  .author .role{
-    font-size:12.5px;
-    color:var(--grey);
-    margin-top:4px;
-    line-height:1.5;
-    max-width:220px;
-  }
-  .author .tag{
+    background:var(--gold-dim);
     display:inline-block;
-    font-family:'IBM Plex Mono',monospace;
-    font-size:10px;
-    letter-spacing:.1em;
-    color:var(--teal);
-    text-transform:uppercase;
-    margin-bottom:6px;
   }
-  .institution-strip{
-    position:absolute;
-    left:0; right:38px; bottom:0;
-    padding:16px 80px;
-    background:var(--ink);
-    color:var(--parchment-dim);
+
+  .rule{
+    border:none;
+    border-top:1px solid var(--rule);
+    margin: 1.6rem 0 2.2rem;
+    width:100%;
+  }
+
+  section{
+    min-height:100svh;
+    min-height:100vh;
+    width:100%;
     display:flex;
     align-items:center;
-    justify-content:space-between;
-    font-family:'IBM Plex Mono',monospace;
-    font-size:11px;
-    letter-spacing:.06em;
+    padding: calc(4rem + var(--bar-h)) 6vw 4rem;
+    scroll-snap-align:start;
+    position:relative;
+    border-bottom:1px solid var(--rule);
   }
-  .institution-strip .loc{ color:var(--brass-light); }
+  section:last-of-type{ border-bottom:none; }
 
-  /* ===================== SLIDE 2 — ABSTRACT / AIM ===================== */
-  .abstract-grid{
+  .wrap{
+    max-width:var(--maxw);
+    margin:0 auto;
+    width:100%;
+  }
+
+  /* ---------- HERO ---------- */
+  #s00{
+    background:
+      radial-gradient(1100px 550px at 82% 18%, rgba(94,118,232,0.10), transparent 60%),
+      radial-gradient(900px 500px at 10% 85%, rgba(198,161,91,0.08), transparent 60%),
+      var(--bg);
+  }
+  .hero-grid{
     display:grid;
-    grid-template-columns:1.15fr 1fr;
-    gap:48px;
-    flex:1;
-    margin-top:8px;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap:3rem;
+    align-items:center;
   }
-  .abstract-text h2{ font-size:clamp(19px, 2.7vw, 29px); font-weight:600; line-height:1.25; margin-bottom:16px; max-width:480px;}
-  .abstract-text p{ font-size:clamp(12px, 1.15vw, 15px); line-height:1.75; color:var(--ink-soft); max-width:480px; }
-  .aim-card{
-    margin-top:20px;
-    border-left:3px solid var(--brass);
-    padding:4px 0 4px 18px;
+  .hero-kicker{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--ink-dim);
+    margin-bottom:1.4rem;
   }
-  .aim-card .label{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.12em; color:var(--brass); text-transform:uppercase;}
-  .aim-card p{ font-size:13.5px; margin-top:6px; color:var(--ink-soft); }
-
-  .stat-panel{
-    background:var(--ink);
-    border-radius:4px;
-    padding:26px 26px;
+  .hero-kicker span{ color:var(--gold); }
+  h1.title{
+    font-size:clamp(2.1rem, 4.6vw, 3.9rem);
+    line-height:1.06;
+    max-width:15ch;
+  }
+  .hero-sub{
+    margin-top:1.6rem;
+    max-width:46ch;
+    color:var(--ink-dim);
+    font-size:clamp(1rem, 1.2vw, 1.15rem);
+    line-height:1.65;
+  }
+  .scroll-cue{
+    margin-top:2.6rem;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.75rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--ink-dim);
     display:flex;
-    flex-direction:column;
-    justify-content:center;
-    gap:16px;
-    color:var(--parchment);
+    align-items:center;
+    gap:0.6rem;
   }
-  .stat-panel .panel-label{
-    font-family:'IBM Plex Mono',monospace;
-    font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--brass-light);
-    margin-bottom:2px;
+  .scroll-cue .dn{
+    display:inline-block;
+    animation: bob 1.8s ease-in-out infinite;
   }
-  .stat-row{ display:flex; align-items:center; gap:14px; }
-  .stat-row .pct{ font-family:'Fraunces',serif; font-size:24px; font-weight:600; width:62px; color:#fff;}
-  .stat-row .bar-wrap{ flex:1; height:8px; background:rgba(246,241,228,0.14); border-radius:4px; overflow:hidden;}
-  .stat-row .bar{ height:100%; border-radius:4px; background:linear-gradient(90deg, var(--teal-light), var(--brass-light)); }
-  .stat-row .lbl{ font-size:11.5px; color:var(--parchment-dim); width:150px; line-height:1.4;}
-  .sample-n{
-    margin-top:6px;
-    padding-top:14px;
-    border-top:1px solid rgba(246,241,228,0.16);
-    font-family:'IBM Plex Mono',monospace;
-    font-size:11px;
-    color:var(--parchment-dim);
-    display:flex; justify-content:space-between;
-  }
-  .sample-n b{ color:#fff; font-size:14px; }
+  @keyframes bob{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(5px); } }
 
-  /* ===================== SLIDE 3 — OBJECTIVES ===================== */
+  .sig-wrap{ display:flex; justify-content:center; align-items:center; }
+  .sig-wrap svg{ width:100%; max-width:380px; height:auto; }
+  .c-gold{ stroke:var(--gold); }
+  .c-indigo{ stroke:var(--indigo); }
+  .c-dim{ stroke:var(--ink-dim); }
+  .f-gold{ fill:var(--gold); }
+  .f-indigo{ fill:var(--indigo); }
+  .sig line, .sig path{
+    stroke-dasharray:1;
+    stroke-dashoffset:1;
+    transition: stroke-dashoffset 1.4s ease;
+  }
+  .sig.in line, .sig.in path{ stroke-dashoffset:0; }
+  .sig circle.node{
+    opacity:0;
+    transition: opacity 0.8s ease;
+    transform-origin:center;
+    animation: pulse 3.6s ease-in-out infinite;
+  }
+  .sig.in circle.node{ opacity:1; }
+  @keyframes pulse{ 0%,100%{ opacity:0.65; } 50%{ opacity:1; } }
+
+  /* ---------- SHARED CONTENT ---------- */
+  h2.head{
+    font-size:clamp(1.7rem, 3.4vw, 2.9rem);
+    max-width:16ch;
+    line-height:1.12;
+  }
+  .body-txt{
+    max-width:58ch;
+    color:var(--ink-dim);
+    font-size:1.05rem;
+    line-height:1.7;
+  }
+  .lede{
+    max-width:60ch;
+    color:var(--ink);
+    font-size:1.15rem;
+    line-height:1.7;
+    margin-bottom:0.4rem;
+  }
+
+  .two-col{
+    display:grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap:3.5rem;
+    align-items:start;
+  }
+
+  ul.plain{ list-style:none; margin:1.6rem 0 0; padding:0; }
+  ul.plain li{
+    padding: 0.9rem 0;
+    border-top:1px solid var(--rule);
+    color:var(--ink-dim);
+    font-size:1rem;
+    line-height:1.6;
+    max-width:56ch;
+  }
+  ul.plain li:first-child{ border-top:none; }
+  ul.plain li strong{ color:var(--ink); font-weight:500; }
+
+  .forum-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.6rem;
+    margin-top:1.8rem;
+  }
+  .forum-chip{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    letter-spacing:0.03em;
+    color:var(--ink-dim);
+    border:1px solid var(--rule-strong);
+    padding:0.5rem 0.9rem;
+    border-radius:3px;
+  }
+
   .obj-list{
-    flex:1;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
+    display:grid;
     gap:0;
-    margin-top:4px;
+    margin-top:2rem;
+    max-width:62ch;
   }
   .obj-item{
     display:grid;
-    grid-template-columns:64px 1fr;
-    align-items:start;
-    padding:18px 0;
-    border-bottom:1px solid var(--line);
+    grid-template-columns: 3.4rem 1fr;
+    gap:1.2rem;
+    padding:1.3rem 0;
+    border-top:1px solid var(--rule);
   }
-  .obj-item:first-child{ border-top:1px solid var(--line); }
+  .obj-item:first-child{ border-top:none; }
   .obj-num{
-    font-family:'Fraunces',serif;
-    font-size:26px;
-    font-weight:500;
-    color:var(--brass);
-    font-style:italic;
+    font-family:'IBM Plex Mono', monospace;
+    color:var(--gold);
+    font-size:0.95rem;
+    padding-top:0.15rem;
   }
-  .obj-item p{ font-size:clamp(12.5px, 1.2vw, 15.5px); line-height:1.55; color:var(--ink-soft); max-width:640px; margin:0; padding-top:4px;}
-  .obj-item .obj-tag{
+  .obj-item h3{ font-size:1.15rem; font-weight:500; margin-bottom:0.35rem; }
+  .obj-item p{ margin:0; color:var(--ink-dim); font-size:0.98rem; line-height:1.6; }
+
+  .layer-stack{ margin-top:2rem; max-width:64ch; }
+  .layer{
+    border:1px solid var(--rule-strong);
+    background:var(--surface);
+    border-radius:4px;
+    padding:1.3rem 1.5rem;
+    margin-bottom:0.9rem;
+    position:relative;
+  }
+  .layer::before{
+    content:attr(data-tag);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.7rem;
+    letter-spacing:0.1em;
+    color:var(--indigo);
     display:block;
-    font-family:'IBM Plex Mono',monospace;
-    font-size:10px;
-    color:var(--teal);
-    text-transform:uppercase;
-    letter-spacing:.1em;
-    margin-bottom:5px;
+    margin-bottom:0.5rem;
   }
+  .layer h3{ font-size:1.05rem; font-weight:500; margin-bottom:0.3rem; }
+  .layer p{ margin:0; color:var(--ink-dim); font-size:0.95rem; line-height:1.55; }
+  .layer-link{
+    display:flex; justify-content:center; align-items:center; height:0.9rem; margin:-0.3rem 0;
+  }
+  .layer-link .l{ width:1px; height:100%; background:var(--rule-strong); }
 
-  /* ===================== SLIDE 4 — LITERATURE ===================== */
-  .lit-grid{
-    flex:1;
+  .card-grid{
     display:grid;
-    grid-template-columns:1fr 1fr;
-    grid-template-rows:1fr 1fr;
-    gap:16px;
-    margin-top:10px;
+    grid-template-columns:repeat(3,1fr);
+    gap:1rem;
+    margin-top:2.2rem;
   }
-  .lit-card{
-    border:1px solid var(--line);
-    background:rgba(255,255,255,0.35);
-    border-radius:3px;
-    padding:16px 18px;
-    display:flex;
-    flex-direction:column;
+  .card{
+    border:1px solid var(--rule-strong);
+    background:var(--surface);
+    border-radius:4px;
+    padding:1.5rem;
   }
-  .lit-card .theme{
-    font-family:'Fraunces',serif;
-    font-weight:600;
-    font-size:15.5px;
-    color:var(--ink);
-    margin-bottom:6px;
-    display:flex;
-    align-items:center;
-    gap:8px;
+  .card .m{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.7rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--ink-dim);
+    margin-bottom:0.8rem;
   }
-  .lit-card .theme::before{
+  .card h3{ font-size:1.05rem; font-weight:500; margin-bottom:0.5rem; }
+  .card p{ margin:0; color:var(--ink-dim); font-size:0.92rem; line-height:1.6; }
+
+  .phase-list{ margin-top:2rem; max-width:66ch; }
+  .phase{
+    display:grid;
+    grid-template-columns: 7rem 1fr;
+    gap:1.4rem;
+    padding:1.2rem 0;
+    border-top:1px solid var(--rule);
+  }
+  .phase:first-child{ border-top:none; }
+  .phase .tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    color:var(--gold);
+    letter-spacing:0.05em;
+    padding-top:0.2rem;
+  }
+  .phase h3{ font-size:1.05rem; font-weight:500; margin-bottom:0.3rem; }
+  .phase p{ margin:0; color:var(--ink-dim); font-size:0.95rem; line-height:1.6; }
+
+  .impact-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap: 0;
+    margin-top:2rem;
+    max-width:70ch;
+    border-top:1px solid var(--rule);
+    border-left:1px solid var(--rule);
+  }
+  .impact-cell{
+    padding:1.6rem 1.7rem;
+    border-right:1px solid var(--rule);
+    border-bottom:1px solid var(--rule);
+  }
+  .impact-cell .m{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.7rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--indigo);
+    margin-bottom:0.6rem;
+    display:block;
+  }
+  .impact-cell p{ margin:0; color:var(--ink-dim); font-size:0.96rem; line-height:1.6; }
+
+  .roadmap{
+    margin-top:2.4rem;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:0;
+    max-width:900px;
+  }
+  .rm-item{
+    position:relative;
+    padding: 1.6rem 1.2rem 0 0;
+    border-top:2px solid var(--rule-strong);
+  }
+  .rm-item::before{
     content:"";
-    width:7px;height:7px;border-radius:50%;
-    background:var(--teal);
-    flex-shrink:0;
+    position:absolute;
+    top:-2px; left:0;
+    width:2.4rem; height:2px;
+    background:var(--gold);
   }
-  .lit-card p{ font-size:12px; line-height:1.6; color:var(--ink-soft); margin:0 0 8px 0;}
-  .lit-card .cites{
-    margin-top:auto;
-    font-family:'IBM Plex Mono',monospace;
-    font-size:10px;
-    color:var(--grey);
-    letter-spacing:.02em;
-    border-top:1px dashed var(--line);
-    padding-top:8px;
+  .rm-item .tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem;
+    color:var(--gold);
+    letter-spacing:0.06em;
+    display:block;
+    margin-bottom:0.7rem;
   }
+  .rm-item h3{ font-size:1rem; font-weight:500; margin-bottom:0.4rem; }
+  .rm-item p{ margin:0; color:var(--ink-dim); font-size:0.88rem; line-height:1.55; }
 
-  /* ===================== SLIDE 5 — METHODOLOGY ===================== */
-  .method-layout{
-    flex:1;
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:44px;
-    margin-top:6px;
+  /* ---------- CLOSING ---------- */
+  #s10{ text-align:left; }
+  .close-seal{ width:64px; height:64px; margin-bottom:2rem; opacity:0.85; }
+  h2.close-head{
+    font-size:clamp(1.8rem, 4vw, 3.2rem);
+    max-width:18ch;
+    line-height:1.15;
   }
-  .method-col h3{
-    font-size:13px;
-    font-family:'IBM Plex Mono',monospace;
-    letter-spacing:.1em;
-    text-transform:uppercase;
-    color:var(--teal);
-    margin-bottom:14px;
-    font-weight:600;
+  .close-sub{
+    margin-top:1.6rem;
+    color:var(--ink-dim);
+    max-width:48ch;
+    font-size:1.02rem;
+    line-height:1.7;
   }
-  .method-facts{ display:flex; flex-direction:column; gap:12px; }
-  .method-fact{ display:flex; gap:12px; align-items:baseline; border-bottom:1px solid var(--paper-line); padding-bottom:10px;}
-  .method-fact .k{ font-family:'Fraunces',serif; font-weight:600; font-size:13.5px; color:var(--ink); width:150px; flex-shrink:0;}
-  .method-fact .v{ font-size:12.5px; color:var(--ink-soft); line-height:1.5;}
-  .var-chip-row{ display:flex; flex-wrap:wrap; gap:8px; margin-top:4px;}
-  .var-chip{
-    font-family:'IBM Plex Mono',monospace;
-    font-size:10.5px;
-    padding:5px 10px;
-    border-radius:20px;
-    border:1px solid var(--line);
-    color:var(--ink-soft);
-    background:rgba(255,255,255,0.4);
-  }
-  .var-chip.dv{ background:var(--ink); color:var(--parchment); border-color:var(--ink);}
-  .tools-row{ display:flex; gap:10px; margin-top:6px; flex-wrap:wrap;}
-  .tool-pill{
-    font-family:'IBM Plex Mono',monospace;
-    font-size:10.5px;
-    padding:6px 12px;
-    border-radius:3px;
-    background:var(--brass);
-    color:#fff;
-    font-weight:600;
-  }
-
-  /* ===================== SLIDE 6 — FINDINGS ===================== */
-  .findings-layout{
-    flex:1;
-    display:grid;
-    grid-template-columns:1.1fr 1fr;
-    gap:36px;
-    margin-top:6px;
-  }
-  .hyp-table{ width:100%; border-collapse:collapse; font-size:11.5px;}
-  .hyp-table th{
-    text-align:left;
-    font-family:'IBM Plex Mono',monospace;
-    font-size:9.5px;
-    letter-spacing:.06em;
-    text-transform:uppercase;
-    color:var(--grey);
-    padding:8px 6px;
-    border-bottom:1px solid var(--line);
-  }
-  .hyp-table td{
-    padding:9px 6px;
-    border-bottom:1px solid var(--paper-line);
-    color:var(--ink-soft);
-    vertical-align:top;
-  }
-  .hyp-table td.var-name{ color:var(--ink); font-weight:600; font-family:'Fraunces',serif; font-size:12.5px;}
-  .status-chip{
-    display:inline-block;
-    font-family:'IBM Plex Mono',monospace;
-    font-size:9.5px;
-    padding:2px 8px;
-    border-radius:20px;
-    background:rgba(47,111,99,0.12);
-    color:var(--teal);
-    font-weight:600;
-    white-space:nowrap;
-  }
-  .findings-notes{ display:flex; flex-direction:column; gap:14px; }
-  .note-card{
-    border-left:3px solid var(--teal);
-    padding:2px 0 2px 16px;
-  }
-  .note-card .label{ font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--teal); text-transform:uppercase; letter-spacing:.1em;}
-  .note-card p{ font-size:12.5px; color:var(--ink-soft); line-height:1.6; margin:4px 0 0 0;}
-
-  /* ===================== SLIDE 7 — DISCUSSION ===================== */
-  .disc-layout{
-    flex:1;
-    display:grid;
-    grid-template-columns:1fr 1fr 1fr;
-    gap:22px;
-    margin-top:8px;
-  }
-  .disc-col{ display:flex; flex-direction:column; gap:12px; }
-  .disc-col h3{
-    font-family:'IBM Plex Mono',monospace;
-    font-size:11px;
-    letter-spacing:.1em;
-    text-transform:uppercase;
-    padding-bottom:10px;
-    border-bottom:2px solid var(--ink);
-    margin-bottom:2px;
-  }
-  .disc-col.divide h3{ color:var(--ink); border-color:#8a3f2f;}
-  .disc-col.limits h3{ color:var(--ink); border-color:var(--brass);}
-  .disc-col.suggest h3{ color:var(--ink); border-color:var(--teal);}
-  .disc-col li{ font-size:12px; line-height:1.6; color:var(--ink-soft); margin-bottom:10px; list-style:none; padding-left:14px; position:relative;}
-  .disc-col li::before{
-    content:"";
-    position:absolute; left:0; top:6px;
-    width:5px;height:5px;border-radius:50%;
-    background:var(--grey);
-  }
-  .disc-col ul{ margin:0; padding:0; }
-
-  /* ===================== SLIDE 8 — CONCLUSION / DEMO ===================== */
-  .final-layout{
-    flex:1;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    gap:20px;
-    max-width:720px;
-  }
-  .final-layout h2{ font-size:clamp(20px, 2.9vw, 31px); font-weight:600; line-height:1.25;}
-  .final-layout p{ font-size:clamp(12px, 1.1vw, 14.5px); line-height:1.7; color:var(--ink-soft); max-width:640px;}
-  .pillars{ display:flex; gap:14px; margin-top:6px; flex-wrap:wrap;}
-  .pillar{
-    font-family:'IBM Plex Mono',monospace;
-    font-size:11px;
-    padding:8px 14px;
-    border:1px solid var(--line);
-    border-radius:3px;
-    color:var(--ink);
-    background:rgba(255,255,255,0.5);
-  }
-  .pillar b{ color:var(--brass); }
-  .demo-cta{
-    margin-top:22px;
-    display:flex;
-    align-items:center;
-    gap:18px;
+  .close-meta{
+    margin-top:3rem;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.8rem;
+    color:var(--ink-dim);
+    letter-spacing:0.03em;
   }
   .demo-btn{
-    all:unset;
-    cursor:pointer;
-    font-family:'IBM Plex Mono',monospace;
-    font-size:13px;
-    letter-spacing:.06em;
-    font-weight:600;
-    color:#fff;
-    background:var(--ink);
-    padding:15px 26px;
-    border-radius:4px;
     display:inline-flex;
     align-items:center;
-    gap:10px;
-    transition:background .25s ease, transform .2s ease;
-    text-transform:uppercase;
+    gap:0.7rem;
+    margin-top:2.2rem;
+    padding:1rem 1.8rem;
+    background:var(--gold);
+    color:#100E0C;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.92rem;
+    font-weight:500;
+    letter-spacing:0.03em;
+    text-decoration:none;
+    border-radius:4px;
+    border:1px solid var(--gold);
+    transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
   }
-  .demo-btn:hover{ background:var(--teal); transform:translateY(-2px); }
-  .demo-btn svg{ width:14px; height:14px; }
-  .demo-sub{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--grey); }
-  .seal-mini{ position:absolute; right:110px; bottom:70px; width:96px; height:96px; opacity:.9;}
+  .demo-btn:hover{ background:#D6B471; transform:translateY(-2px); box-shadow:0 10px 30px rgba(198,161,91,0.22); }
+  .demo-btn:focus-visible{ outline:2px solid var(--indigo); outline-offset:4px; }
+  .demo-btn svg{ width:16px; height:16px; transition: transform 0.2s ease; }
+  .demo-btn:hover svg{ transform:translate(3px,-3px); }
+  .url-note{
+    margin-top:1rem;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.8rem;
+    color:var(--ink-dim);
+    word-break:break-all;
+  }
+  .two-col.impact-approach{ grid-template-columns:0.95fr 1.05fr; }
+  .compact-list{ margin-top:1.6rem; max-width:52ch; }
+  .compact-item{
+    display:grid;
+    grid-template-columns: 4.6rem 1fr;
+    gap:1rem;
+    padding:1rem 0;
+    border-top:1px solid var(--rule);
+  }
+  .compact-item:first-child{ border-top:none; }
+  .compact-item .tag{
+    font-family:'IBM Plex Mono', monospace;
+    color:var(--gold);
+    font-size:0.78rem;
+    letter-spacing:0.04em;
+    padding-top:0.15rem;
+  }
+  .compact-item h3{ font-size:1rem; font-weight:500; margin-bottom:0.25rem; }
+  .compact-item p{ margin:0; color:var(--ink-dim); font-size:0.92rem; line-height:1.55; }
+  ul.plain.tight li{ padding:0.7rem 0; font-size:0.95rem; }
 
-  /* ===================== SLIDE 9 — LIVE DEMO ===================== */
-  .slide-9 .slide-inner{ justify-content:center; }
-  .demo-layout{
-    flex:1;
+  /* ---------- NAV: side rail (desktop) ---------- */
+  .rail{
+    position:fixed;
+    right:1.6rem;
+    top:50%;
+    transform:translateY(-50%);
+    display:flex;
+    flex-direction:column;
+    gap:0.85rem;
+    z-index:40;
+  }
+  .rail button{
+    width:8px; height:8px;
+    border-radius:50%;
+    background:transparent;
+    border:1px solid var(--rule-strong);
+    padding:0;
+    cursor:pointer;
+    transition: background 0.25s, border-color 0.25s, transform 0.25s;
+  }
+  .rail button:hover{ border-color:var(--gold); transform:scale(1.25); }
+  .rail button[aria-current="true"]{
+    background:var(--gold);
+    border-color:var(--gold);
+  }
+
+  /* ---------- NAV: bottom bar (all sizes) ---------- */
+  .bar{
+    position:fixed;
+    left:0; right:0; bottom:0;
+    height:var(--bar-h);
+    padding-bottom:env(safe-area-inset-bottom);
     display:flex;
     align-items:center;
     justify-content:space-between;
-    gap:40px;
-    max-width:980px;
+    padding-left:1.4rem;
+    padding-right:1.4rem;
+    background:rgba(13,12,10,0.72);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    border-top:1px solid var(--rule);
+    z-index:50;
   }
-  .demo-copy{ max-width:560px; }
-  .demo-copy h2{ font-size:clamp(21px, 3.1vw, 33px); font-weight:600; line-height:1.25; margin-bottom:16px; }
-  .demo-copy p{ font-size:clamp(12px, 1.15vw, 15px); line-height:1.75; color:var(--ink-soft); margin-bottom:28px; }
-  .seal-demo{ width:180px; height:180px; flex-shrink:0; opacity:.92; }
-
-  /* ===================== NAV CONTROLS ===================== */
-  .nav-arrow{
-    position:absolute;
-    top:50%; transform:translateY(-50%);
-    width:44px; height:44px;
-    border-radius:50%;
-    background:rgba(246,241,228,0.9);
-    border:1px solid var(--line);
-    display:flex; align-items:center; justify-content:center;
-    cursor:pointer;
-    z-index:40;
-    transition:background .2s ease, transform .2s ease;
-    box-shadow:0 6px 16px rgba(22,35,59,0.25);
+  .bar .count{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    color:var(--ink-dim);
+    letter-spacing:0.04em;
   }
-  .nav-arrow:hover{ background:#fff; transform:translateY(-50%) scale(1.06); }
-  .nav-arrow.prev{ left:-58px; }
-  .nav-arrow.next{ right:-58px; }
-  .nav-arrow svg{ width:18px; height:18px; stroke:var(--ink); }
-  .nav-arrow.disabled{ opacity:.25; pointer-events:none; }
-
-  .fullscreen-btn{
-    position:absolute;
-    top:-52px; right:0;
-    width:38px; height:38px;
+  .bar .count b{ color:var(--gold); font-weight:500; }
+  .bar-btns{ display:flex; gap:0.5rem; }
+  .navbtn{
+    width:40px; height:40px;
     border-radius:50%;
-    background:rgba(246,241,228,0.9);
-    border:1px solid var(--line);
-    display:flex; align-items:center; justify-content:center;
-    cursor:pointer;
-    z-index:40;
+    border:1px solid var(--rule-strong);
+    background:transparent;
     color:var(--ink);
-    transition:background .2s ease;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition: border-color 0.2s, background 0.2s;
   }
-  .fullscreen-btn:hover{ background:#fff; }
-  .fullscreen-btn svg{ width:16px; height:16px; }
-
-  .progress-bar{
-    position:absolute;
-    left:0; right:38px; bottom:0;
-    height:3px;
-    background:rgba(22,35,59,0.08);
-    z-index:30;
-  }
-  .progress-fill{
-    height:100%;
-    background:var(--brass);
-    transition:width .5s ease;
-  }
-
-  .hint{
-    position:absolute;
-    bottom:-34px; left:0; right:0;
-    text-align:center;
-    font-family:'IBM Plex Mono',monospace;
-    font-size:10.5px;
-    color:rgba(246,241,228,0.55);
-    letter-spacing:.08em;
-  }
-
-  /* ---- Touch-friendly targets for tablets / touch-screen smart boards ---- */
-  @media (pointer: coarse){
-    .nav-arrow{ width:52px; height:52px; }
-    .nav-arrow svg{ width:22px; height:22px; }
-    .tab-btn{ width:34px; }
-    .demo-btn{ padding:17px 28px; }
-  }
-
-  /* ---- Tablets (portrait) & small laptops: collapse multi-column grids earlier ---- */
-  @media (max-width: 1000px){
-    .abstract-grid, .method-layout, .findings-layout{ grid-template-columns:1fr; }
-    .disc-layout{ grid-template-columns:1fr 1fr; }
-    .lit-grid{ grid-template-columns:1fr; grid-template-rows:auto; }
-  }
-
-  /* ---- Phones & narrow tablets ---- */
-  @media (max-width: 760px){
-    .nav-arrow.prev{ left:8px; }
-    .nav-arrow.next{ right:8px; }
-    .slide-inner{ padding:34px 50px 30px 26px; padding-right:56px; }
-    .abstract-grid, .method-layout, .findings-layout, .disc-layout{ grid-template-columns:1fr; }
-    .lit-grid{ grid-template-columns:1fr; grid-template-rows:auto; }
-    .author-block{ flex-direction:column; gap:16px; }
-    .tab-rail{ width:22px; }
-    .demo-layout{ flex-direction:column-reverse; align-items:flex-start; gap:24px; }
-    .seal-demo{ width:110px; height:110px; }
-    .seal{ width:88px; height:88px; right:26px; top:34px; }
-  }
-
-  /* ---- Portrait phones/tablets: let the deck use most of the viewport
-         instead of forcing a letterboxed 16:9, so there's less scrolling. ---- */
-  @media (orientation: portrait) and (max-width: 900px){
-    .stage{ width:97vw; height:92dvh; }
-    .seal{ display:none; }
-    .institution-strip{ padding:14px 26px; flex-direction:column; align-items:flex-start; gap:4px; }
-  }
-
-  /* ---- Very small phones ---- */
-  @media (max-width: 400px){
-    .slide-inner{ padding:26px 44px 24px 20px; }
-    .kicker{ font-size:10.5px; }
-    .obj-num{ font-size:20px; }
-    .pillars{ gap:8px; }
-    .pillar{ font-size:10px; padding:6px 10px; }
-  }
-
-  /* ---- Large displays & interactive smart boards: roomier chrome, bigger touch zones ---- */
-  @media (min-width: 1600px){
-    .slide-inner{ padding:64px 92px 50px 84px; padding-right:120px; }
-    .nav-arrow{ width:56px; height:56px; }
-    .nav-arrow.prev{ left:-72px; }
-    .nav-arrow.next{ right:-72px; }
-    .tab-rail{ width:44px; }
-    .tab-btn{ font-size:10.5px; }
-  }
-
-  /* ---- Very large displays (4K smart boards viewed from a distance) ---- */
-  @media (min-width: 2400px){
-    h1.doc-title{ font-size:64px; }
-    .section-h2, .abstract-text h2, .final-layout h2, .demo-copy h2{ font-size:38px; }
-    .abstract-text p, .obj-item p, .final-layout p, .demo-copy p{ font-size:19px; }
-    .kicker{ font-size:16px; }
-    .title-eyebrow{ font-size:15px; }
-  }
-
-  /* ---- Respect reduced-motion preferences ---- */
-  @media (prefers-reduced-motion: reduce){
-    .slide{ transition:opacity .01ms linear, visibility 0s linear !important; transform:none !important; }
-    .demo-btn, .nav-arrow{ transition:none !important; }
-  }
-
-  /* ---- Keyboard accessibility ---- */
-  .nav-arrow:focus-visible,
-  .tab-btn:focus-visible,
-  .demo-btn:focus-visible{
-    outline:2px solid var(--teal);
+  .navbtn:hover{ border-color:var(--gold); }
+  .navbtn:focus-visible, .rail button:focus-visible{
+    outline:2px solid var(--indigo);
     outline-offset:3px;
+  }
+  .navbtn svg{ width:16px; height:16px; }
+  .brand-mark{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem;
+    letter-spacing:0.08em;
+    color:var(--ink-dim);
+    display:none;
+  }
+
+  @media (min-width: 760px){
+    .brand-mark{ display:block; }
+  }
+
+  @media (max-width: 900px){
+    .hero-grid{ grid-template-columns:1fr; }
+    .sig-wrap{ order:-1; margin-bottom:1rem; }
+    .sig-wrap svg{ max-width:220px; }
+    .two-col{ grid-template-columns:1fr; gap:2rem; }
+    .card-grid{ grid-template-columns:1fr 1fr; }
+    .impact-grid{ grid-template-columns:1fr; }
+    .roadmap{ grid-template-columns:1fr 1fr; gap:1.6rem; }
+    .rail{ display:none; }
+  }
+  @media (max-width: 560px){
+    section{ padding: calc(3rem + var(--bar-h)) 6vw 3rem; }
+    .card-grid{ grid-template-columns:1fr; }
+    .roadmap{ grid-template-columns:1fr; }
+    .obj-item{ grid-template-columns: 2.4rem 1fr; }
   }
 </style>
 </head>
 <body>
 
-<div class="stage">
-  <div class="deck" id="deck">
+<nav class="rail" aria-label="Slide navigation">
+  <button data-target="s00" aria-current="true" aria-label="Slide 1: Title"></button>
+  <button data-target="s01" aria-label="Slide 2: The Problem"></button>
+  <button data-target="s02" aria-label="Slide 3: The Gap and Objectives"></button>
+  <button data-target="s03" aria-label="Slide 4: Architecture"></button>
+  <button data-target="s04" aria-label="Slide 5: Core Modules"></button>
+  <button data-target="s05" aria-label="Slide 6: Approach and Impact"></button>
+  <button data-target="s06" aria-label="Slide 7: Live Demo"></button>
+</nav>
 
-    <!-- SLIDE 1 : TITLE -->
-    <section class="slide active" data-title="Title" role="group" aria-roledescription="slide" aria-label="Slide 1 of 9: Title">
-      <div class="slide-inner">
-        <div class="title-eyebrow">Empirical Legal Research · Saveetha School of Law</div>
-        <svg class="seal" viewBox="0 0 132 132" fill="none">
-          <circle cx="66" cy="66" r="63" stroke="#B08D3D" stroke-width="1.4"/>
-          <circle cx="66" cy="66" r="52" stroke="#2F6F63" stroke-width="1" stroke-dasharray="2 4"/>
-          <g stroke="#16233B" stroke-width="1.1" opacity="0.85">
-            <line x1="66" y1="30" x2="66" y2="102"/>
-            <line x1="30" y1="66" x2="102" y2="66"/>
-            <line x1="42" y1="42" x2="90" y2="90"/>
-            <line x1="90" y1="42" x2="42" y2="90"/>
+<div class="bar">
+  <span class="count" id="slideCount"><b>01</b> / 7</span>
+  <span class="brand-mark">SYSTEMS · FAMILY LAW · INDIA</span>
+  <div class="bar-btns">
+    <button class="navbtn" id="prevBtn" aria-label="Previous slide">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M18 15l-6-6-6 6"/></svg>
+    </button>
+    <button class="navbtn" id="nextBtn" aria-label="Next slide">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+  </div>
+</div>
+
+<main>
+
+  <!-- 00 HERO -->
+  <section id="s00">
+    <div class="wrap hero-grid">
+      <div>
+        <div class="hero-kicker"><span>§ 00</span> — Research Study · 2026</div>
+        <h1 class="title">A Systems-Based Legal Workflow Intelligence Platform for Indian Family Law Practice</h1>
+        <p class="hero-sub">Rebuilding the plumbing beneath divorce, maintenance and custody cases — so the case moves as fast as the law allows, not as slow as its paperwork demands.</p>
+        <div class="scroll-cue">Begin <span class="dn">↓</span></div>
+      </div>
+      <div class="sig-wrap">
+        <svg class="sig" viewBox="0 0 400 300" fill="none" aria-hidden="true">
+          <!-- seal -->
+          <circle class="c-gold" cx="200" cy="46" r="17" stroke-width="1.4" pathLength="1"/>
+          <circle class="c-gold" cx="200" cy="46" r="6" stroke-width="1.2" pathLength="1"/>
+          <g class="c-gold" stroke-width="1.2">
+            <line x1="200" y1="21" x2="200" y2="27" pathLength="1"/>
+            <line x1="200" y1="65" x2="200" y2="71" pathLength="1"/>
+            <line x1="175" y1="46" x2="181" y2="46" pathLength="1"/>
+            <line x1="219" y1="46" x2="225" y2="46" pathLength="1"/>
+            <line x1="182" y1="28" x2="186" y2="32" pathLength="1"/>
+            <line x1="214" y1="60" x2="218" y2="64" pathLength="1"/>
+            <line x1="218" y1="28" x2="214" y2="32" pathLength="1"/>
+            <line x1="186" y1="60" x2="182" y2="64" pathLength="1"/>
           </g>
-          <circle cx="66" cy="66" r="5" fill="#B08D3D"/>
-          <circle cx="66" cy="30" r="3" fill="#2F6F63"/>
-          <circle cx="66" cy="102" r="3" fill="#2F6F63"/>
-          <circle cx="30" cy="66" r="3" fill="#2F6F63"/>
-          <circle cx="102" cy="66" r="3" fill="#2F6F63"/>
-          <text x="66" y="120" text-anchor="middle" font-family="IBM Plex Mono" font-size="7" fill="#5C6B7A" letter-spacing="1">EST. WORKFLOW AI</text>
+          <!-- post -->
+          <line class="c-dim" x1="200" y1="63" x2="200" y2="190" stroke-width="1.4" pathLength="1"/>
+          <!-- base -->
+          <line class="c-dim" x1="200" y1="190" x2="200" y2="214" stroke-width="1.4" pathLength="1"/>
+          <line class="c-dim" x1="168" y1="214" x2="232" y2="214" stroke-width="1.4" pathLength="1"/>
+          <!-- beam -->
+          <line class="c-dim" x1="78" y1="98" x2="322" y2="98" stroke-width="1.4" pathLength="1"/>
+          <line class="c-dim" x1="200" y1="80" x2="200" y2="98" stroke-width="1.4" pathLength="1"/>
+          <!-- left arm -->
+          <line class="c-indigo" x1="78" y1="98" x2="58" y2="168" stroke-width="1.3" pathLength="1"/>
+          <!-- right arm -->
+          <line class="c-gold" x1="322" y1="98" x2="342" y2="168" stroke-width="1.3" pathLength="1"/>
+          <!-- left node cluster -->
+          <g class="c-indigo" stroke-width="1.1">
+            <line x1="58" y1="168" x2="38" y2="192" pathLength="1"/>
+            <line x1="58" y1="168" x2="66" y2="198" pathLength="1"/>
+            <line x1="38" y1="192" x2="66" y2="198" pathLength="1"/>
+          </g>
+          <circle class="node f-indigo" cx="58" cy="168" r="4"/>
+          <circle class="node f-indigo" cx="38" cy="192" r="4"/>
+          <circle class="node f-indigo" cx="66" cy="198" r="4"/>
+          <!-- right node cluster -->
+          <g class="c-gold" stroke-width="1.1">
+            <line x1="342" y1="168" x2="362" y2="192" pathLength="1"/>
+            <line x1="342" y1="168" x2="334" y2="198" pathLength="1"/>
+            <line x1="362" y1="192" x2="334" y2="198" pathLength="1"/>
+          </g>
+          <circle class="node f-gold" cx="342" cy="168" r="4"/>
+          <circle class="node f-gold" cx="362" cy="192" r="4"/>
+          <circle class="node f-gold" cx="334" cy="198" r="4"/>
         </svg>
+      </div>
+    </div>
+  </section>
 
-        <h1 class="doc-title">A Systems-Based <em>Legal Workflow Intelligence</em> Platform for Indian Family Law Practice</h1>
-        <div class="title-rule"></div>
-
-        <div class="author-block">
-          <div class="author">
-            <span class="tag">Author</span>
-            <div class="name">Rakunatha Khrishanth Manathra</div>
-            <div class="role">B.A., LL.B. (Hons.)<br>Saveetha School of Law</div>
-          </div>
-          <div class="author">
-            <span class="tag">Co-Author</span>
-            <div class="name">Dr. M. Shamima Parveen</div>
-            <div class="role">Associate Professor, Department of International Law<br>Saveetha School of Law (SIMATS)</div>
-          </div>
+  <!-- 01 PROBLEM -->
+  <section id="s01">
+    <div class="wrap two-col">
+      <div>
+        <div class="eyebrow">§ 01 — The Problem</div>
+        <h2 class="head">Justice, delayed by design.</h2>
+        <p class="body-txt" style="margin-top:1rem;">A single household dispute can touch marriage, maintenance, domestic-violence and guardianship law at once — often in different forums, each with its own pace.</p>
+        <div class="forum-row">
+          <span class="forum-chip">Family Court</span>
+          <span class="forum-chip">Magistrate — Maintenance</span>
+          <span class="forum-chip">District — Guardianship</span>
+          <span class="forum-chip">Mediation Centre</span>
+          <span class="forum-chip">High Court — Appeals</span>
         </div>
       </div>
-      <div class="institution-strip">
-        <span>SAVEETHA INSTITUTE OF MEDICAL &amp; TECHNICAL SCIENCES (SIMATS)</span>
-        <span class="loc">CHENNAI — 600077</span>
+      <div>
+        <p class="lede">Family law in India doesn't lack rules. It lacks a system to hold them together.</p>
+        <ul class="plain">
+          <li><strong>Cases outlive the events that caused them.</strong> A maintenance or custody dispute can stretch across years — longer than the marriage itself lasted.</li>
+          <li><strong>The file lives everywhere and nowhere.</strong> Petitions, affidavits and prior orders are scattered across registries, desks and memory.</li>
+          <li><strong>No one holds the whole picture.</strong> Not the litigant waiting for news, and often not the advocate juggling dozens of files.</li>
+        </ul>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- SLIDE 2 : ABSTRACT / AIM -->
-    <section class="slide" data-title="Abstract" role="group" aria-roledescription="slide" aria-label="Slide 2 of 9: Abstract">
-      <div class="slide-inner">
-        <div class="kicker">Case Brief No. 01 — Abstract &amp; Aim</div>
-        <div class="abstract-grid">
-          <div class="abstract-text">
-            <h2>Can systems intelligence make family law practice faster, fairer, and more accessible?</h2>
-            <p>The study designs and evaluates a systems-based legal workflow intelligence platform for Indian family law, applying artificial intelligence to analyse large datasets and inform legal decision-making across a sample of 220 legal professionals and stakeholders.</p>
-            <div class="aim-card">
-              <div class="label">Aim</div>
-              <p>Design and develop a systems-based legal workflow intelligence platform capable of effectively supporting Indian family law practice through AI-driven analysis and insight generation.</p>
-            </div>
-          </div>
-
-          <div class="stat-panel">
-            <div class="panel-label">Respondent Belief — Impact of AI on Legal Practice</div>
-            <div class="stat-row"><div class="pct">75%</div><div class="bar-wrap"><div class="bar" style="width:75%"></div></div><div class="lbl">Improved efficiency of legal processes</div></div>
-            <div class="stat-row"><div class="pct">60%</div><div class="bar-wrap"><div class="bar" style="width:60%"></div></div><div class="lbl">Enhanced access to justice</div></div>
-            <div class="stat-row"><div class="pct">50%</div><div class="bar-wrap"><div class="bar" style="width:50%"></div></div><div class="lbl">Reduced litigation costs</div></div>
-            <div class="stat-row"><div class="pct">40%</div><div class="bar-wrap"><div class="bar" style="width:40%"></div></div><div class="lbl">Improved accuracy of legal decisions</div></div>
-            <div class="sample-n"><span>Sample size</span><b>N = 220 respondents</b></div>
-          </div>
-        </div>
+  <!-- 02 GAP + OBJECTIVES -->
+  <section id="s02">
+    <div class="wrap two-col">
+      <div>
+        <div class="eyebrow">§ 02 — The Gap</div>
+        <h2 class="head">Digitised paperwork isn't a system.</h2>
+        <p class="body-txt" style="margin-top:1rem;">Most legal-tech in this space stores documents and manages calendars. Very little models the workflow itself — the sequence of filings, forums and deadlines a family case has to move through.</p>
+        <p class="body-txt">This study asks a harder question: what would it take to make that path mappable, automated and intelligent — not just recorded?</p>
       </div>
-      <div class="folio">SLIDE <b>02</b> / 09 — ABSTRACT</div>
-    </section>
-
-    <!-- SLIDE 3 : OBJECTIVES -->
-    <section class="slide" data-title="Objectives" role="group" aria-roledescription="slide" aria-label="Slide 3 of 9: Objectives">
-      <div class="slide-inner">
-        <div class="kicker">Case Brief No. 02 — Objectives of the Study</div>
-        <h2 class="section-h2" style="margin-bottom:4px;">Four objectives anchor the inquiry</h2>
-        <div class="obj-list">
+      <div>
+        <div class="eyebrow">§ 02 — Objectives</div>
+        <div class="obj-list" style="margin-top:0;">
           <div class="obj-item">
             <div class="obj-num">01</div>
-            <p><span class="obj-tag">Design</span>To design and develop a systems-based legal workflow intelligence platform that can effectively support Indian family law practice.</p>
+            <div><h3>Map</h3><p>Chart how family cases actually move across statutes and forums.</p></div>
           </div>
           <div class="obj-item">
             <div class="obj-num">02</div>
-            <p><span class="obj-tag">Investigate</span>To investigate the application of artificial intelligence in the Indian legal system, with a specific focus on family law.</p>
+            <div><h3>Design</h3><p>Architect a workflow engine purpose-built for that complexity.</p></div>
           </div>
           <div class="obj-item">
             <div class="obj-num">03</div>
-            <p><span class="obj-tag">Identify</span>To identify the key challenges and opportunities that arise from the adoption of artificial intelligence in Indian family law practice.</p>
+            <div><h3>Build</h3><p>Prototype an intelligence layer for deadlines, drafting and precedent.</p></div>
           </div>
           <div class="obj-item">
             <div class="obj-num">04</div>
-            <p><span class="obj-tag">Evaluate</span>To evaluate the impact of the legal workflow intelligence platform on access to justice, legal process efficiency, and cost reduction.</p>
+            <div><h3>Evaluate</h3><p>Test with practising advocates and measure real workflow impact.</p></div>
           </div>
         </div>
       </div>
-      <div class="folio">SLIDE <b>03</b> / 09 — OBJECTIVES</div>
-    </section>
+    </div>
+  </section>
 
-    <!-- SLIDE 4 : LITERATURE -->
-    <section class="slide" data-title="Literature" role="group" aria-roledescription="slide" aria-label="Slide 4 of 9: Literature Review">
-      <div class="slide-inner">
-        <div class="kicker">Case Brief No. 03 — Review of Literature</div>
-        <h2 class="section-h2" style="margin-bottom:4px;">Twenty studies, four recurring themes</h2>
-        <div class="lit-grid">
-          <div class="lit-card">
-            <div class="theme">Digital Judiciary Awareness</div>
-            <p>Public awareness of e-filing, virtual hearings and the National Judicial Data Grid remains fragmented and low despite high institutional usage, with usability and guidance cited as recurring gaps.</p>
-            <div class="cites">Sundaram &amp; Iyer 2024 · Mehta &amp; Rao 2021 · Krishnan 2010 · Priya 2013</div>
-          </div>
-          <div class="lit-card">
-            <div class="theme">AI Adoption &amp; Ethics</div>
-            <p>Legal professionals show cautious acceptance of AI tools such as translation and case-summarisation software, driven by concerns over accountability and the need for clear regulatory frameworks.</p>
-            <div class="cites">Anand 2022 · Bhattacharya &amp; Ghosh 2020 · Simshaw 2021</div>
-          </div>
-          <div class="lit-card">
-            <div class="theme">Access &amp; Equity</div>
-            <p>Rural and economically weaker populations face compounding barriers — device access, connectivity and digital literacy — that limit uptake of e-Judiciary services regardless of awareness.</p>
-            <div class="cites">Joseph &amp; Thomas 2022 · Sharma 2018 · Prabhavathi &amp; Durai 2024</div>
-          </div>
-          <div class="lit-card">
-            <div class="theme">Global &amp; Comparative Perspectives</div>
-            <p>Cross-jurisdictional research shows public trust in algorithmic adjudication still lags trust in human judges, even as chatbots and virtual assistants improve first-touch access to legal guidance.</p>
-            <div class="cites">Yalcin et al. 2022 · Fine et al. 2024 · OECD 2025 · UNESCO 2025</div>
-          </div>
+  <!-- 03 ARCHITECTURE -->
+  <section id="s03">
+    <div class="wrap two-col">
+      <div>
+        <div class="eyebrow">§ 03 — System Architecture</div>
+        <h2 class="head">Four layers, one case.</h2>
+        <p class="body-txt" style="margin-top:1rem;">Every case enters once and is understood by all four layers — instead of being re-entered and re-tracked at each stage.</p>
+      </div>
+      <div class="layer-stack">
+        <div class="layer" data-tag="Layer 01 · Intake">
+          <h3>Intake &amp; Classification</h3>
+          <p>Identifies case type, applicable statute(s) and correct forum the moment a matter opens.</p>
+        </div>
+        <div class="layer-link"><div class="l"></div></div>
+        <div class="layer" data-tag="Layer 02 · Engine">
+          <h3>Workflow Engine</h3>
+          <p>Models the case as a living process — stage, next action, owner — not a static file.</p>
+        </div>
+        <div class="layer-link"><div class="l"></div></div>
+        <div class="layer" data-tag="Layer 03 · Intelligence">
+          <h3>Intelligence Layer</h3>
+          <p>Assists drafting, predicts deadlines, retrieves precedent tuned to family law.</p>
+        </div>
+        <div class="layer-link"><div class="l"></div></div>
+        <div class="layer" data-tag="Layer 04 · Interface">
+          <h3>Interface Layer</h3>
+          <p>Gives advocate, litigant and registry a dedicated view of the same case.</p>
         </div>
       </div>
-      <div class="folio">SLIDE <b>04</b> / 09 — LITERATURE REVIEW</div>
-    </section>
+    </div>
+  </section>
 
-    <!-- SLIDE 5 : METHODOLOGY -->
-    <section class="slide" data-title="Methodology" role="group" aria-roledescription="slide" aria-label="Slide 5 of 9: Methodology">
-      <div class="slide-inner">
-        <div class="kicker">Case Brief No. 04 — Methodology</div>
-        <h2 class="section-h2" style="margin-bottom:6px;">An empirical, questionnaire-based design</h2>
-        <div class="method-layout">
-          <div class="method-col">
-            <h3>Data Collection</h3>
-            <div class="method-facts">
-              <div class="method-fact"><div class="k">Design</div><div class="v">Descriptive &amp; empirical research, suited to systematic study of real-world attitudes and behaviour.</div></div>
-              <div class="method-fact"><div class="k">Sample</div><div class="v">220 respondents, gathered via convenience sampling across multiple demographic categories.</div></div>
-              <div class="method-fact"><div class="k">Instrument</div><div class="v">Structured questionnaire with a five-point Likert scale, administered during field visits.</div></div>
-              <div class="method-fact"><div class="k">Secondary sources</div><div class="v">Peer-reviewed journals, government reports and statistical databases.</div></div>
-            </div>
-          </div>
-          <div class="method-col">
-            <h3>Analysis Framework</h3>
-            <div class="method-facts">
-              <div class="method-fact"><div class="k">Software</div><div class="v"><span class="tools-row"><span class="tool-pill">SPSS v21</span></span></div></div>
-              <div class="method-fact"><div class="k">Statistical tests</div><div class="v"><span class="tools-row"><span class="tool-pill">Chi-Square</span><span class="tool-pill">ANOVA</span><span class="tool-pill">Pearson Correlation</span></span></div></div>
-              <div class="method-fact"><div class="k">Independent variables</div><div class="v"><span class="var-chip-row"><span class="var-chip">Age</span><span class="var-chip">Gender</span><span class="var-chip">Education</span><span class="var-chip">Geography</span><span class="var-chip">Occupation</span></span></div></div>
-              <div class="method-fact"><div class="k">Dependent variable</div><div class="v"><span class="var-chip-row"><span class="var-chip dv">Awareness &amp; attitude toward the platform</span></span></div></div>
-            </div>
-          </div>
+  <!-- 04 MODULES -->
+  <section id="s04">
+    <div class="wrap">
+      <div class="eyebrow">§ 04 — Core Modules</div>
+      <h2 class="head">What the platform actually does.</h2>
+      <div class="card-grid">
+        <div class="card"><div class="m">Module</div><h3>Statute &amp; Forum Mapper</h3><p>Flags every applicable law and the correct forum the moment a case is opened.</p></div>
+        <div class="card"><div class="m">Module</div><h3>Timeline &amp; Deadline Engine</h3><p>Converts procedural rules into a running, self-updating calendar.</p></div>
+        <div class="card"><div class="m">Module</div><h3>Document Automation</h3><p>Drafts petitions, affidavits and draft orders from structured case data.</p></div>
+        <div class="card"><div class="m">Module</div><h3>Precedent Intelligence</h3><p>Surfaces relevant judgments ranked by the facts of the case.</p></div>
+        <div class="card"><div class="m">Module</div><h3>Mediation &amp; Settlement Tracker</h3><p>Keeps consent terms and custody schedules in one living record.</p></div>
+        <div class="card"><div class="m">Module</div><h3>Analytics Dashboard</h3><p>Gives courts and advocates a real view of where cases stall.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 APPROACH + IMPACT -->
+  <section id="s05">
+    <div class="wrap two-col impact-approach">
+      <div>
+        <div class="eyebrow">§ 05 — Approach</div>
+        <h2 class="head">Built from practice, not assumptions.</h2>
+        <div class="compact-list">
+          <div class="compact-item"><div class="tag">Phase 1</div><div><h3>Field study</h3><p>Interviews and shadowing of advocates, litigants and registry staff.</p></div></div>
+          <div class="compact-item"><div class="tag">Phase 2</div><div><h3>Process mapping</h3><p>Translating observed workflows into formal process models.</p></div></div>
+          <div class="compact-item"><div class="tag">Phase 3</div><div><h3>Prototype &amp; pilot</h3><p>Build the platform, test it with a small cohort at one family court.</p></div></div>
+          <div class="compact-item"><div class="tag">Phase 4</div><div><h3>Refine &amp; scale</h3><p>Extend to further forums, with a path toward e-Courts integration.</p></div></div>
         </div>
       </div>
-      <div class="folio">SLIDE <b>05</b> / 09 — METHODOLOGY</div>
-    </section>
-
-    <!-- SLIDE 6 : FINDINGS -->
-    <section class="slide" data-title="Findings" role="group" aria-roledescription="slide" aria-label="Slide 6 of 9: Findings">
-      <div class="slide-inner">
-        <div class="kicker">Case Brief No. 05 — Data Analysis &amp; Findings</div>
-        <h2 class="section-h2" style="margin-bottom:6px;">Demographics don't predict awareness — but patterns still emerge</h2>
-        <div class="findings-layout">
-          <div>
-            <table class="hyp-table">
-              <thead><tr><th>Association tested</th><th>p-value</th><th>Result</th></tr></thead>
-              <tbody>
-                <tr><td class="var-name">Age × Awareness</td><td>0.285</td><td><span class="status-chip">H₀ accepted</span></td></tr>
-                <tr><td class="var-name">Gender × Perception</td><td>0.404</td><td><span class="status-chip">H₀ accepted</span></td></tr>
-                <tr><td class="var-name">Education × Attitude</td><td>0.466</td><td><span class="status-chip">H₀ accepted</span></td></tr>
-                <tr><td class="var-name">Employment × Challenges</td><td>0.398</td><td><span class="status-chip">H₀ accepted</span></td></tr>
-                <tr><td class="var-name">Residence × Engagement</td><td>0.221</td><td><span class="status-chip">H₀ accepted</span></td></tr>
-              </tbody>
-            </table>
-            <p style="font-size:11px; color:var(--grey); margin-top:10px; font-family:'IBM Plex Mono',monospace;">All tests at N = 220, 5% significance level — no statistically significant demographic association detected.</p>
-          </div>
-          <div class="findings-notes">
-            <div class="note-card">
-              <div class="label">Age Trend</div>
-              <p>The 31–40 age bracket consistently shows the strongest awareness and engagement across every measure recorded.</p>
-            </div>
-            <div class="note-card">
-              <div class="label">Moderating Factor</div>
-              <p>Educational qualification repeatedly emerges as a moderating influence on awareness, even where the formal chi-square test is non-significant.</p>
-            </div>
-            <div class="note-card">
-              <div class="label">Gender Gap</div>
-              <p>Awareness is broadly shared across genders, but actual usage of digital legal services skews markedly male.</p>
-            </div>
-            <div class="note-card">
-              <div class="label">Occupation</div>
-              <p>Private-sector and self-employed respondents show the highest platform engagement; retired respondents show the lowest.</p>
-            </div>
-          </div>
-        </div>
+      <div>
+        <div class="eyebrow">§ 05 — Expected Impact</div>
+        <ul class="plain tight">
+          <li><strong>For litigants —</strong> a visible, honest answer to "where does my case stand."</li>
+          <li><strong>For advocates —</strong> less time lost to manual tracking, more spent on the argument.</li>
+          <li><strong>For courts —</strong> aggregate data on where cases genuinely stall.</li>
+          <li><strong>For research —</strong> a reusable systems model for other fragmented civil practice.</li>
+        </ul>
       </div>
-      <div class="folio">SLIDE <b>06</b> / 09 — FINDINGS</div>
-    </section>
+    </div>
+  </section>
 
-    <!-- SLIDE 7 : DISCUSSION -->
-    <section class="slide" data-title="Discussion" role="group" aria-roledescription="slide" aria-label="Slide 7 of 9: Discussion">
-      <div class="slide-inner">
-        <div class="kicker">Case Brief No. 06 — Discussion, Limitations &amp; Recommendations</div>
-        <h2 class="section-h2" style="margin-bottom:6px;">Broad legitimacy, uneven reach</h2>
-        <div class="disc-layout">
-          <div class="disc-col divide">
-            <h3>Digital Divide</h3>
-            <ul>
-              <li>Awareness is not merely infrastructural — confidence and fear of error drive exclusion among older users.</li>
-              <li>Lawyers and family remain the dominant awareness channel over institutional digital outreach.</li>
-              <li>Women show comparable awareness to men but markedly lower actual usage.</li>
-            </ul>
-          </div>
-          <div class="disc-col limits">
-            <h3>Limitations</h3>
-            <ul>
-              <li>Convenience sample of 220 limits generalisability across all relevant population groups.</li>
-              <li>Geographic concentration under-represents rural and remote populations.</li>
-              <li>Self-report and social desirability bias may shape responses on sensitive items.</li>
-            </ul>
-          </div>
-          <div class="disc-col suggest">
-            <h3>Recommendations</h3>
-            <ul>
-              <li>Strengthen legislative and regulatory frameworks, enforced consistently across states.</li>
-              <li>Accelerate AI-driven monitoring tools alongside human help-desks and training.</li>
-              <li>Expand awareness campaigns into rural and underserved communities.</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="folio">SLIDE <b>07</b> / 09 — DISCUSSION</div>
-    </section>
+  <!-- 06 DEMO -->
+  <section id="s06">
+    <div class="wrap">
+      <svg class="close-seal" viewBox="0 0 60 60" fill="none" aria-hidden="true">
+        <circle class="c-gold" cx="30" cy="30" r="18" stroke-width="1.4"/>
+        <circle class="c-gold" cx="30" cy="30" r="6" stroke-width="1.2"/>
+        <g class="c-gold" stroke-width="1.2">
+          <line x1="30" y1="6" x2="30" y2="12"/>
+          <line x1="30" y1="48" x2="30" y2="54"/>
+          <line x1="6" y1="30" x2="12" y2="30"/>
+          <line x1="48" y1="30" x2="54" y2="30"/>
+          <line x1="13" y1="13" x2="17" y2="17"/>
+          <line x1="43" y1="43" x2="47" y2="47"/>
+          <line x1="47" y1="13" x2="43" y2="17"/>
+          <line x1="17" y1="43" x2="13" y2="47"/>
+        </g>
+      </svg>
+      <div class="eyebrow">§ 06 — Live Demo</div>
+      <h2 class="close-head">See the system in motion.</h2>
+      <p class="close-sub">The law doesn't need to move faster — it needs to stop losing track of itself. This working prototype shows the intake, workflow and intelligence layers running on real case shapes.</p>
+      <a class="demo-btn" href="https://clientdat.onrender.com" target="_blank" rel="noopener noreferrer">
+        Launch the demo
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 17L17 7M7 7h10v10"/></svg>
+      </a>
+      <div class="url-note">clientdat.onrender.com</div>
+      <div class="close-meta">RESEARCH STUDY · 2026 — SYSTEMS-BASED LEGAL WORKFLOW INTELLIGENCE</div>
+    </div>
+  </section>
 
-    <!-- SLIDE 8 : CONCLUSION -->
-    <section class="slide" data-title="Conclusion" role="group" aria-roledescription="slide" aria-label="Slide 8 of 9: Conclusion">
-      <div class="slide-inner">
-        <div class="kicker">Case Brief No. 07 — Conclusion</div>
-        <div class="final-layout">
-          <h2>Education and technology, together, close the access-to-justice gap</h2>
-          <p>Across 220 respondents, the 31–40 age group and graduate-level participants showed the strongest engagement with systems-based legal workflow intelligence, while rural and lower-education respondents lagged behind. The findings confirm the study's objectives and point to three pillars for an integrated response.</p>
-          <div class="pillars">
-            <div class="pillar"><b>01·</b> Legislative reform</div>
-            <div class="pillar"><b>02·</b> Digital infrastructure investment</div>
-            <div class="pillar"><b>03·</b> Sustained community outreach</div>
-          </div>
-        </div>
-      </div>
-      <div class="folio">SLIDE <b>08</b> / 09 — CONCLUSION</div>
-    </section>
-
-    <!-- SLIDE 9 : LIVE DEMO -->
-    <section class="slide slide-9" data-title="Demo" role="group" aria-roledescription="slide" aria-label="Slide 9 of 9: Live Demo">
-      <div class="slide-inner">
-        <div class="kicker">Case Brief No. 08 — Live Demonstration</div>
-        <div class="demo-layout">
-          <div class="demo-copy">
-            <h2>See the platform in action</h2>
-            <p>The research translates into a working prototype — a systems-based workflow intelligence tool built to support Indian family law practice end to end. Launch the live build to explore it directly.</p>
-            <div class="demo-cta">
-              <button class="demo-btn" onclick="window.open('https://clientdat.onrender.com', '_blank', 'noopener')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg>
-                Launch Live Demo
-              </button>
-              <span class="demo-sub">clientdat.onrender.com — opens in a new tab</span>
-            </div>
-          </div>
-          <svg class="seal seal-demo" viewBox="0 0 132 132" fill="none">
-            <circle cx="66" cy="66" r="63" stroke="#B08D3D" stroke-width="1.4"/>
-            <circle cx="66" cy="66" r="52" stroke="#2F6F63" stroke-width="1" stroke-dasharray="2 4"/>
-            <g stroke="#16233B" stroke-width="1.1" opacity="0.85">
-              <line x1="66" y1="30" x2="66" y2="102"/>
-              <line x1="30" y1="66" x2="102" y2="66"/>
-              <line x1="42" y1="42" x2="90" y2="90"/>
-              <line x1="90" y1="42" x2="42" y2="90"/>
-            </g>
-            <circle cx="66" cy="66" r="5" fill="#B08D3D"/>
-            <circle cx="66" cy="30" r="3" fill="#2F6F63"/>
-            <circle cx="66" cy="102" r="3" fill="#2F6F63"/>
-            <circle cx="30" cy="66" r="3" fill="#2F6F63"/>
-            <circle cx="102" cy="66" r="3" fill="#2F6F63"/>
-            <text x="66" y="120" text-anchor="middle" font-family="IBM Plex Mono" font-size="7" fill="#5C6B7A" letter-spacing="1">LIVE PROTOTYPE</text>
-          </svg>
-        </div>
-      </div>
-      <div class="folio">SLIDE <b>09</b> / 09 — LIVE DEMO</div>
-    </section>
-
-    <!-- Tab rail (index) -->
-    <div class="tab-rail" id="tabRail"></div>
-
-    <!-- Progress -->
-    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-
-    <!-- Arrows -->
-    <button class="nav-arrow prev" id="prevBtn" aria-label="Previous slide">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-    </button>
-    <button class="nav-arrow next" id="nextBtn" aria-label="Next slide">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-    </button>
-
-    <!-- Fullscreen toggle (handy for kiosk / smart-board presenting) -->
-    <button class="fullscreen-btn" id="fullscreenBtn" aria-label="Toggle fullscreen">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
-    </button>
-  </div>
-  <div class="hint">← → or click arrows to navigate · 9 slides</div>
-  <div id="slideAnnouncer" aria-live="polite" style="position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0);"></div>
-</div>
+</main>
 
 <script>
-  const slides = Array.from(document.querySelectorAll('.slide'));
-  const tabRail = document.getElementById('tabRail');
-  const progressFill = document.getElementById('progressFill');
-  const prevBtn = document.getElementById('prevBtn');
-  const nextBtn = document.getElementById('nextBtn');
-  const announcer = document.getElementById('slideAnnouncer');
-  const fullscreenBtn = document.getElementById('fullscreenBtn');
-  const stageEl = document.querySelector('.stage');
-  let current = 0;
+(function(){
+  var sections = Array.prototype.slice.call(document.querySelectorAll('main > section'));
+  var railBtns = Array.prototype.slice.call(document.querySelectorAll('.rail button'));
+  var countEl = document.getElementById('slideCount');
+  var prevBtn = document.getElementById('prevBtn');
+  var nextBtn = document.getElementById('nextBtn');
+  var total = sections.length;
+  var current = 0;
 
-  slides.forEach((s, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'tab-btn';
-    btn.innerHTML = '<span>' + String(i+1).padStart(2,'0') + '</span>';
-    btn.title = s.dataset.title;
-    btn.setAttribute('aria-label', 'Go to slide ' + (i+1) + ': ' + s.dataset.title);
-    btn.addEventListener('click', () => goTo(i));
-    tabRail.appendChild(btn);
-  });
-  const tabBtns = Array.from(tabRail.children);
+  function pad(n){ return (n < 9 ? '0' : '') + (n + 1); }
 
-  function render(){
-    slides.forEach((s,i) => s.classList.toggle('active', i === current));
-    tabBtns.forEach((b,i) => b.classList.toggle('on', i === current));
-    progressFill.style.width = ((current+1)/slides.length*100) + '%';
-    prevBtn.classList.toggle('disabled', current === 0);
-    nextBtn.classList.toggle('disabled', current === slides.length - 1);
-    announcer.textContent = 'Slide ' + (current+1) + ' of ' + slides.length + ': ' + slides[current].dataset.title;
-    // reset scroll position of the newly active slide
-    const activeInner = slides[current].querySelector('.slide-inner');
-    if(activeInner) activeInner.scrollTop = 0;
+  function setActive(idx){
+    current = idx;
+    railBtns.forEach(function(b, i){
+      b.setAttribute('aria-current', i === idx ? 'true' : 'false');
+    });
+    countEl.innerHTML = '<b>' + pad(idx) + '</b> / ' + total;
   }
 
-  function goTo(i){
-    current = Math.max(0, Math.min(slides.length - 1, i));
-    render();
+  function goTo(idx){
+    idx = Math.max(0, Math.min(total - 1, idx));
+    sections[idx].scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-  prevBtn.addEventListener('click', () => goTo(current - 1));
-  nextBtn.addEventListener('click', () => goTo(current + 1));
+  railBtns.forEach(function(btn, i){
+    btn.addEventListener('click', function(){ goTo(i); });
+  });
+  prevBtn.addEventListener('click', function(){ goTo(current - 1); });
+  nextBtn.addEventListener('click', function(){ goTo(current + 1); });
 
-  window.addEventListener('keydown', (e) => {
-    if(e.key === 'ArrowRight'){ e.preventDefault(); goTo(current + 1); }
-    else if(e.key === 'ArrowLeft'){ e.preventDefault(); goTo(current - 1); }
-    else if(e.key === ' ' && e.target === document.body){ e.preventDefault(); goTo(current + 1); }
+  document.addEventListener('keydown', function(e){
+    if (['ArrowDown','PageDown'].indexOf(e.key) > -1){ e.preventDefault(); goTo(current + 1); }
+    else if (['ArrowUp','PageUp'].indexOf(e.key) > -1){ e.preventDefault(); goTo(current - 1); }
+    else if (e.key === 'Home'){ e.preventDefault(); goTo(0); }
+    else if (e.key === 'End'){ e.preventDefault(); goTo(total - 1); }
   });
 
-  // basic swipe support (ignored when the gesture is mostly vertical scrolling)
-  let touchX = null, touchY = null;
-  document.getElementById('deck').addEventListener('touchstart', e => {
-    touchX = e.touches[0].clientX;
-    touchY = e.touches[0].clientY;
-  });
-  document.getElementById('deck').addEventListener('touchend', e => {
-    if(touchX === null) return;
-    const dx = e.changedTouches[0].clientX - touchX;
-    const dy = e.changedTouches[0].clientY - touchY;
-    if(Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5){
-      if(dx > 0) goTo(current - 1);
-      else goTo(current + 1);
-    }
-    touchX = null; touchY = null;
-  });
-
-  // fullscreen toggle — useful for kiosk-style presenting on smart boards
-  if(fullscreenBtn){
-    if(!document.fullscreenEnabled && !document.webkitFullscreenEnabled){
-      fullscreenBtn.style.display = 'none';
-    }
-    fullscreenBtn.addEventListener('click', () => {
-      const target = document.documentElement;
-      if(!document.fullscreenElement){
-        (target.requestFullscreen || target.webkitRequestFullscreen)?.call(target);
-      } else {
-        (document.exitFullscreen || document.webkitExitFullscreen)?.call(document);
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if (entry.isIntersecting && entry.intersectionRatio > 0.5){
+        var idx = sections.indexOf(entry.target);
+        if (idx > -1) setActive(idx);
       }
     });
-  }
+  }, { threshold: [0.5] });
+  sections.forEach(function(s){ io.observe(s); });
 
-  render();
+  var sig = document.querySelector('.sig');
+  if (sig){
+    requestAnimationFrame(function(){
+      setTimeout(function(){ sig.classList.add('in'); }, 150);
+    });
+  }
+})();
 </script>
+
 </body>
 </html>
