@@ -36,14 +36,19 @@
     justify-content:center;
     overflow:hidden;
     height:100vh;
+    height:100dvh;
     width:100vw;
+    -webkit-text-size-adjust:100%;
+    text-size-adjust:100%;
   }
 
-  /* ---- Stage ---- */
+  /* ---- Stage ----
+     16:9 letterboxed on landscape/desktop/smart-board displays;
+     overridden to a near-fullscreen portrait layout below 700px / portrait orientation. */
   .stage{
     position:relative;
-    width:min(94vw, 177.7vh);
-    height:min(52.87vw, 94vh);
+    width:min(94vw, 177.78vh);
+    height:min(52.875vw, 94vh);
     display:flex;
     align-items:center;
     justify-content:center;
@@ -164,6 +169,7 @@
   .folio b{ color:var(--ink); font-weight:600; }
 
   h1,h2,h3{ font-family:'Fraunces',serif; margin:0; color:var(--ink); }
+  .section-h2{ font-size:clamp(19px, 2.6vw, 27px); font-weight:600; line-height:1.25; }
 
   /* ===================== SLIDE 1 — TITLE ===================== */
   .slide-1 .slide-inner{
@@ -179,7 +185,7 @@
   }
   .title-eyebrow{
     font-family:'IBM Plex Mono',monospace;
-    font-size:12px;
+    font-size:clamp(9.5px, 0.85vw, 12px);
     letter-spacing:.2em;
     text-transform:uppercase;
     color:var(--teal);
@@ -189,7 +195,7 @@
     width:70%;
   }
   h1.doc-title{
-    font-size:44px;
+    font-size:clamp(24px, 3.4vw, 46px);
     font-weight:600;
     line-height:1.12;
     max-width:800px;
@@ -257,8 +263,8 @@
     flex:1;
     margin-top:8px;
   }
-  .abstract-text h2{ font-size:28px; font-weight:600; line-height:1.2; margin-bottom:16px; max-width:480px;}
-  .abstract-text p{ font-size:14.5px; line-height:1.75; color:var(--ink-soft); max-width:480px; }
+  .abstract-text h2{ font-size:clamp(19px, 2.7vw, 29px); font-weight:600; line-height:1.25; margin-bottom:16px; max-width:480px;}
+  .abstract-text p{ font-size:clamp(12px, 1.15vw, 15px); line-height:1.75; color:var(--ink-soft); max-width:480px; }
   .aim-card{
     margin-top:20px;
     border-left:3px solid var(--brass);
@@ -322,7 +328,7 @@
     color:var(--brass);
     font-style:italic;
   }
-  .obj-item p{ font-size:15px; line-height:1.55; color:var(--ink-soft); max-width:640px; margin:0; padding-top:4px;}
+  .obj-item p{ font-size:clamp(12.5px, 1.2vw, 15.5px); line-height:1.55; color:var(--ink-soft); max-width:640px; margin:0; padding-top:4px;}
   .obj-item .obj-tag{
     display:block;
     font-family:'IBM Plex Mono',monospace;
@@ -504,8 +510,8 @@
     gap:20px;
     max-width:720px;
   }
-  .final-layout h2{ font-size:30px; font-weight:600; line-height:1.2;}
-  .final-layout p{ font-size:14px; line-height:1.7; color:var(--ink-soft); max-width:640px;}
+  .final-layout h2{ font-size:clamp(20px, 2.9vw, 31px); font-weight:600; line-height:1.25;}
+  .final-layout p{ font-size:clamp(12px, 1.1vw, 14.5px); line-height:1.7; color:var(--ink-soft); max-width:640px;}
   .pillars{ display:flex; gap:14px; margin-top:6px; flex-wrap:wrap;}
   .pillar{
     font-family:'IBM Plex Mono',monospace;
@@ -556,8 +562,8 @@
     max-width:980px;
   }
   .demo-copy{ max-width:560px; }
-  .demo-copy h2{ font-size:32px; font-weight:600; line-height:1.2; margin-bottom:16px; }
-  .demo-copy p{ font-size:14.5px; line-height:1.75; color:var(--ink-soft); margin-bottom:28px; }
+  .demo-copy h2{ font-size:clamp(21px, 3.1vw, 33px); font-weight:600; line-height:1.25; margin-bottom:16px; }
+  .demo-copy p{ font-size:clamp(12px, 1.15vw, 15px); line-height:1.75; color:var(--ink-soft); margin-bottom:28px; }
   .seal-demo{ width:180px; height:180px; flex-shrink:0; opacity:.92; }
 
   /* ===================== NAV CONTROLS ===================== */
@@ -579,6 +585,22 @@
   .nav-arrow.next{ right:-58px; }
   .nav-arrow svg{ width:18px; height:18px; stroke:var(--ink); }
   .nav-arrow.disabled{ opacity:.25; pointer-events:none; }
+
+  .fullscreen-btn{
+    position:absolute;
+    top:-52px; right:0;
+    width:38px; height:38px;
+    border-radius:50%;
+    background:rgba(246,241,228,0.9);
+    border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    z-index:40;
+    color:var(--ink);
+    transition:background .2s ease;
+  }
+  .fullscreen-btn:hover{ background:#fff; }
+  .fullscreen-btn svg{ width:16px; height:16px; }
 
   .progress-bar{
     position:absolute;
@@ -603,17 +625,83 @@
     letter-spacing:.08em;
   }
 
+  /* ---- Touch-friendly targets for tablets / touch-screen smart boards ---- */
+  @media (pointer: coarse){
+    .nav-arrow{ width:52px; height:52px; }
+    .nav-arrow svg{ width:22px; height:22px; }
+    .tab-btn{ width:34px; }
+    .demo-btn{ padding:17px 28px; }
+  }
+
+  /* ---- Tablets (portrait) & small laptops: collapse multi-column grids earlier ---- */
+  @media (max-width: 1000px){
+    .abstract-grid, .method-layout, .findings-layout{ grid-template-columns:1fr; }
+    .disc-layout{ grid-template-columns:1fr 1fr; }
+    .lit-grid{ grid-template-columns:1fr; grid-template-rows:auto; }
+  }
+
+  /* ---- Phones & narrow tablets ---- */
   @media (max-width: 760px){
     .nav-arrow.prev{ left:8px; }
     .nav-arrow.next{ right:8px; }
-    .slide-inner{ padding:34px 50px 30px 26px; }
-    h1.doc-title{ font-size:26px; }
-    .abstract-grid, .method-layout, .findings-layout{ grid-template-columns:1fr; }
-    .disc-layout{ grid-template-columns:1fr; }
+    .slide-inner{ padding:34px 50px 30px 26px; padding-right:56px; }
+    .abstract-grid, .method-layout, .findings-layout, .disc-layout{ grid-template-columns:1fr; }
     .lit-grid{ grid-template-columns:1fr; grid-template-rows:auto; }
     .author-block{ flex-direction:column; gap:16px; }
-    .tab-rail{ width:24px; }
-    .slide-inner{ padding-right:60px; }
+    .tab-rail{ width:22px; }
+    .demo-layout{ flex-direction:column-reverse; align-items:flex-start; gap:24px; }
+    .seal-demo{ width:110px; height:110px; }
+    .seal{ width:88px; height:88px; right:26px; top:34px; }
+  }
+
+  /* ---- Portrait phones/tablets: let the deck use most of the viewport
+         instead of forcing a letterboxed 16:9, so there's less scrolling. ---- */
+  @media (orientation: portrait) and (max-width: 900px){
+    .stage{ width:97vw; height:92dvh; }
+    .seal{ display:none; }
+    .institution-strip{ padding:14px 26px; flex-direction:column; align-items:flex-start; gap:4px; }
+  }
+
+  /* ---- Very small phones ---- */
+  @media (max-width: 400px){
+    .slide-inner{ padding:26px 44px 24px 20px; }
+    .kicker{ font-size:10.5px; }
+    .obj-num{ font-size:20px; }
+    .pillars{ gap:8px; }
+    .pillar{ font-size:10px; padding:6px 10px; }
+  }
+
+  /* ---- Large displays & interactive smart boards: roomier chrome, bigger touch zones ---- */
+  @media (min-width: 1600px){
+    .slide-inner{ padding:64px 92px 50px 84px; padding-right:120px; }
+    .nav-arrow{ width:56px; height:56px; }
+    .nav-arrow.prev{ left:-72px; }
+    .nav-arrow.next{ right:-72px; }
+    .tab-rail{ width:44px; }
+    .tab-btn{ font-size:10.5px; }
+  }
+
+  /* ---- Very large displays (4K smart boards viewed from a distance) ---- */
+  @media (min-width: 2400px){
+    h1.doc-title{ font-size:64px; }
+    .section-h2, .abstract-text h2, .final-layout h2, .demo-copy h2{ font-size:38px; }
+    .abstract-text p, .obj-item p, .final-layout p, .demo-copy p{ font-size:19px; }
+    .kicker{ font-size:16px; }
+    .title-eyebrow{ font-size:15px; }
+  }
+
+  /* ---- Respect reduced-motion preferences ---- */
+  @media (prefers-reduced-motion: reduce){
+    .slide{ transition:opacity .01ms linear, visibility 0s linear !important; transform:none !important; }
+    .demo-btn, .nav-arrow{ transition:none !important; }
+  }
+
+  /* ---- Keyboard accessibility ---- */
+  .nav-arrow:focus-visible,
+  .tab-btn:focus-visible,
+  .demo-btn:focus-visible{
+    outline:2px solid var(--teal);
+    outline-offset:3px;
   }
 </style>
 </head>
@@ -623,7 +711,7 @@
   <div class="deck" id="deck">
 
     <!-- SLIDE 1 : TITLE -->
-    <section class="slide active" data-title="Title">
+    <section class="slide active" data-title="Title" role="group" aria-roledescription="slide" aria-label="Slide 1 of 9: Title">
       <div class="slide-inner">
         <div class="title-eyebrow">Empirical Legal Research · Saveetha School of Law</div>
         <svg class="seal" viewBox="0 0 132 132" fill="none">
@@ -666,7 +754,7 @@
     </section>
 
     <!-- SLIDE 2 : ABSTRACT / AIM -->
-    <section class="slide" data-title="Abstract">
+    <section class="slide" data-title="Abstract" role="group" aria-roledescription="slide" aria-label="Slide 2 of 9: Abstract">
       <div class="slide-inner">
         <div class="kicker">Case Brief No. 01 — Abstract &amp; Aim</div>
         <div class="abstract-grid">
@@ -693,10 +781,10 @@
     </section>
 
     <!-- SLIDE 3 : OBJECTIVES -->
-    <section class="slide" data-title="Objectives">
+    <section class="slide" data-title="Objectives" role="group" aria-roledescription="slide" aria-label="Slide 3 of 9: Objectives">
       <div class="slide-inner">
         <div class="kicker">Case Brief No. 02 — Objectives of the Study</div>
-        <h2 style="font-size:26px; font-weight:600; margin-bottom:4px;">Four objectives anchor the inquiry</h2>
+        <h2 class="section-h2" style="margin-bottom:4px;">Four objectives anchor the inquiry</h2>
         <div class="obj-list">
           <div class="obj-item">
             <div class="obj-num">01</div>
@@ -720,10 +808,10 @@
     </section>
 
     <!-- SLIDE 4 : LITERATURE -->
-    <section class="slide" data-title="Literature">
+    <section class="slide" data-title="Literature" role="group" aria-roledescription="slide" aria-label="Slide 4 of 9: Literature Review">
       <div class="slide-inner">
         <div class="kicker">Case Brief No. 03 — Review of Literature</div>
-        <h2 style="font-size:26px; font-weight:600; margin-bottom:4px;">Twenty studies, four recurring themes</h2>
+        <h2 class="section-h2" style="margin-bottom:4px;">Twenty studies, four recurring themes</h2>
         <div class="lit-grid">
           <div class="lit-card">
             <div class="theme">Digital Judiciary Awareness</div>
@@ -751,10 +839,10 @@
     </section>
 
     <!-- SLIDE 5 : METHODOLOGY -->
-    <section class="slide" data-title="Methodology">
+    <section class="slide" data-title="Methodology" role="group" aria-roledescription="slide" aria-label="Slide 5 of 9: Methodology">
       <div class="slide-inner">
         <div class="kicker">Case Brief No. 04 — Methodology</div>
-        <h2 style="font-size:26px; font-weight:600; margin-bottom:6px;">An empirical, questionnaire-based design</h2>
+        <h2 class="section-h2" style="margin-bottom:6px;">An empirical, questionnaire-based design</h2>
         <div class="method-layout">
           <div class="method-col">
             <h3>Data Collection</h3>
@@ -780,10 +868,10 @@
     </section>
 
     <!-- SLIDE 6 : FINDINGS -->
-    <section class="slide" data-title="Findings">
+    <section class="slide" data-title="Findings" role="group" aria-roledescription="slide" aria-label="Slide 6 of 9: Findings">
       <div class="slide-inner">
         <div class="kicker">Case Brief No. 05 — Data Analysis &amp; Findings</div>
-        <h2 style="font-size:26px; font-weight:600; margin-bottom:6px;">Demographics don't predict awareness — but patterns still emerge</h2>
+        <h2 class="section-h2" style="margin-bottom:6px;">Demographics don't predict awareness — but patterns still emerge</h2>
         <div class="findings-layout">
           <div>
             <table class="hyp-table">
@@ -822,10 +910,10 @@
     </section>
 
     <!-- SLIDE 7 : DISCUSSION -->
-    <section class="slide" data-title="Discussion">
+    <section class="slide" data-title="Discussion" role="group" aria-roledescription="slide" aria-label="Slide 7 of 9: Discussion">
       <div class="slide-inner">
         <div class="kicker">Case Brief No. 06 — Discussion, Limitations &amp; Recommendations</div>
-        <h2 style="font-size:26px; font-weight:600; margin-bottom:6px;">Broad legitimacy, uneven reach</h2>
+        <h2 class="section-h2" style="margin-bottom:6px;">Broad legitimacy, uneven reach</h2>
         <div class="disc-layout">
           <div class="disc-col divide">
             <h3>Digital Divide</h3>
@@ -857,7 +945,7 @@
     </section>
 
     <!-- SLIDE 8 : CONCLUSION -->
-    <section class="slide" data-title="Conclusion">
+    <section class="slide" data-title="Conclusion" role="group" aria-roledescription="slide" aria-label="Slide 8 of 9: Conclusion">
       <div class="slide-inner">
         <div class="kicker">Case Brief No. 07 — Conclusion</div>
         <div class="final-layout">
@@ -874,7 +962,7 @@
     </section>
 
     <!-- SLIDE 9 : LIVE DEMO -->
-    <section class="slide slide-9" data-title="Demo">
+    <section class="slide slide-9" data-title="Demo" role="group" aria-roledescription="slide" aria-label="Slide 9 of 9: Live Demo">
       <div class="slide-inner">
         <div class="kicker">Case Brief No. 08 — Live Demonstration</div>
         <div class="demo-layout">
@@ -923,8 +1011,14 @@
     <button class="nav-arrow next" id="nextBtn" aria-label="Next slide">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
     </button>
+
+    <!-- Fullscreen toggle (handy for kiosk / smart-board presenting) -->
+    <button class="fullscreen-btn" id="fullscreenBtn" aria-label="Toggle fullscreen">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+    </button>
   </div>
   <div class="hint">← → or click arrows to navigate · 9 slides</div>
+  <div id="slideAnnouncer" aria-live="polite" style="position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0);"></div>
 </div>
 
 <script>
@@ -933,6 +1027,9 @@
   const progressFill = document.getElementById('progressFill');
   const prevBtn = document.getElementById('prevBtn');
   const nextBtn = document.getElementById('nextBtn');
+  const announcer = document.getElementById('slideAnnouncer');
+  const fullscreenBtn = document.getElementById('fullscreenBtn');
+  const stageEl = document.querySelector('.stage');
   let current = 0;
 
   slides.forEach((s, i) => {
@@ -940,6 +1037,7 @@
     btn.className = 'tab-btn';
     btn.innerHTML = '<span>' + String(i+1).padStart(2,'0') + '</span>';
     btn.title = s.dataset.title;
+    btn.setAttribute('aria-label', 'Go to slide ' + (i+1) + ': ' + s.dataset.title);
     btn.addEventListener('click', () => goTo(i));
     tabRail.appendChild(btn);
   });
@@ -951,6 +1049,10 @@
     progressFill.style.width = ((current+1)/slides.length*100) + '%';
     prevBtn.classList.toggle('disabled', current === 0);
     nextBtn.classList.toggle('disabled', current === slides.length - 1);
+    announcer.textContent = 'Slide ' + (current+1) + ' of ' + slides.length + ': ' + slides[current].dataset.title;
+    // reset scroll position of the newly active slide
+    const activeInner = slides[current].querySelector('.slide-inner');
+    if(activeInner) activeInner.scrollTop = 0;
   }
 
   function goTo(i){
@@ -962,8 +1064,9 @@
   nextBtn.addEventListener('click', () => goTo(current + 1));
 
   window.addEventListener('keydown', (e) => {
-    if(e.key === 'ArrowRight' || e.key === ' '){ goTo(current + 1); }
-    else if(e.key === 'ArrowLeft'){ goTo(current - 1); }
+    if(e.key === 'ArrowRight'){ e.preventDefault(); goTo(current + 1); }
+    else if(e.key === 'ArrowLeft'){ e.preventDefault(); goTo(current - 1); }
+    else if(e.key === ' ' && e.target === document.body){ e.preventDefault(); goTo(current + 1); }
   });
 
   // basic swipe support (ignored when the gesture is mostly vertical scrolling)
@@ -982,6 +1085,21 @@
     }
     touchX = null; touchY = null;
   });
+
+  // fullscreen toggle — useful for kiosk-style presenting on smart boards
+  if(fullscreenBtn){
+    if(!document.fullscreenEnabled && !document.webkitFullscreenEnabled){
+      fullscreenBtn.style.display = 'none';
+    }
+    fullscreenBtn.addEventListener('click', () => {
+      const target = document.documentElement;
+      if(!document.fullscreenElement){
+        (target.requestFullscreen || target.webkitRequestFullscreen)?.call(target);
+      } else {
+        (document.exitFullscreen || document.webkitExitFullscreen)?.call(document);
+      }
+    });
+  }
 
   render();
 </script>
