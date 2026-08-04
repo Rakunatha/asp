@@ -2,851 +2,493 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0D0C0A">
-<title>A Systems-Based Legal Workflow Intelligence Platform — Indian Family Law Practice</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>E-Nyaya+ | Digital Governance Mission</title>
 <style>
   :root{
-    --bg:#0D0C0A;
-    --surface:#17140F;
-    --surface-2:#1D1A14;
-    --rule: rgba(245,240,230,0.11);
-    --rule-strong: rgba(245,240,230,0.22);
-    --ink:#F3EFE6;
-    --ink-dim:#9A9484;
-    --gold:#C6A15B;
-    --gold-dim: rgba(198,161,91,0.35);
-    --indigo:#5E76E8;
-    --indigo-dim: rgba(94,118,232,0.35);
-    --bar-h: 60px;
-    --maxw: 1180px;
+    --navy:#0B1E3D;
+    --navy-deep:#071527;
+    --paper:#F3EEE2;
+    --gold:#C9A227;
+    --gold-soft:#E4CD7C;
+    --teal:#2E6E62;
+    --red:#B3261E;
+    --ink:#20242B;
+    --line:rgba(11,30,61,0.14);
+    --mono: 'IBM Plex Mono', 'Courier New', monospace;
+    --serif: 'Spectral', Georgia, 'Times New Roman', serif;
+    --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   }
+  @import url('https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
 
-  *{ box-sizing:border-box; }
-  html{ scroll-behavior:smooth; }
-  @media (prefers-reduced-motion: reduce){
-    html{ scroll-behavior:auto; }
-    *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; }
-  }
-
+  *{box-sizing:border-box; margin:0; padding:0;}
   body{
-    margin:0;
-    background:var(--bg);
+    background:var(--paper);
     color:var(--ink);
-    font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    font-weight:400;
-    line-height:1.5;
+    font-family:var(--sans);
     -webkit-font-smoothing:antialiased;
-    scroll-snap-type: y proximity;
-    overflow-x:hidden;
+    padding-bottom:60px;
   }
+  a{color:inherit;}
 
-  ::selection{ background:var(--gold-dim); color:var(--ink); }
-
-  h1,h2,h3{
-    font-family:'Fraunces', Georgia, serif;
-    font-weight:500;
-    letter-spacing:-0.01em;
-    margin:0;
-    color:var(--ink);
+  /* ---------- Header ---------- */
+  header.gov{
+    background:linear-gradient(180deg,var(--navy) 0%, var(--navy-deep) 100%);
+    color:var(--paper);
+    padding:22px 20px 18px;
+    border-bottom:4px solid var(--gold);
   }
-
-  a{ color:inherit; }
-
+  .gov-top{
+    display:flex; align-items:center; gap:14px; max-width:920px; margin:0 auto;
+  }
+  .seal{
+    width:46px; height:46px; flex:0 0 auto;
+  }
+  .gov-titles{flex:1; min-width:0;}
   .eyebrow{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.78rem;
-    letter-spacing:0.14em;
-    text-transform:uppercase;
-    color:var(--gold);
-    display:flex;
-    align-items:center;
-    gap:0.6em;
-    margin-bottom:1.1rem;
+    font-family:var(--mono); font-size:10.5px; letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--gold-soft); opacity:0.9;
   }
-  .eyebrow::before{
-    content:"";
-    width:22px; height:1px;
-    background:var(--gold-dim);
-    display:inline-block;
+  .brand{
+    font-family:var(--serif); font-weight:700; font-size:clamp(24px,6vw,32px);
+    letter-spacing:0.01em; margin-top:2px;
   }
-
-  .rule{
-    border:none;
-    border-top:1px solid var(--rule);
-    margin: 1.6rem 0 2.2rem;
-    width:100%;
+  .brand .plus{color:var(--gold);}
+  .sub{
+    font-size:12.5px; color:rgba(243,238,226,0.72); margin-top:4px; line-height:1.5;
+  }
+  .fictional-tag{
+    display:inline-block; margin-top:10px; font-family:var(--mono); font-size:10px;
+    letter-spacing:0.06em; text-transform:uppercase; color:var(--navy-deep);
+    background:var(--gold-soft); padding:3px 8px; border-radius:2px;
   }
 
-  section{
-    min-height:100svh;
-    min-height:100vh;
-    width:100%;
-    display:flex;
-    align-items:center;
-    padding: calc(4rem + var(--bar-h)) 6vw 4rem;
-    scroll-snap-align:start;
-    position:relative;
-    border-bottom:1px solid var(--rule);
+  /* ---------- Tabs ---------- */
+  nav.tabs{
+    max-width:920px; margin:18px auto 0; padding:0 20px;
+    display:flex; gap:6px; flex-wrap:wrap;
   }
-  section:last-of-type{ border-bottom:none; }
-
-  .wrap{
-    max-width:var(--maxw);
-    margin:0 auto;
-    width:100%;
+  .tab-btn{
+    font-family:var(--mono); font-size:11.5px; letter-spacing:0.04em; text-transform:uppercase;
+    background:transparent; border:1px solid var(--line); color:var(--navy);
+    padding:9px 14px; border-radius:2px; cursor:pointer; transition:all .15s ease;
+  }
+  .tab-btn:hover{border-color:var(--navy);}
+  .tab-btn.active{
+    background:var(--navy); color:var(--paper); border-color:var(--navy);
   }
 
-  /* ---------- HERO ---------- */
-  #s00{
-    background:
-      radial-gradient(1100px 550px at 82% 18%, rgba(94,118,232,0.10), transparent 60%),
-      radial-gradient(900px 500px at 10% 85%, rgba(198,161,91,0.08), transparent 60%),
-      var(--bg);
-  }
-  .hero-grid{
-    display:grid;
-    grid-template-columns: 1.15fr 0.85fr;
-    gap:3rem;
-    align-items:center;
-  }
-  .hero-kicker{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.78rem;
-    letter-spacing:0.16em;
-    text-transform:uppercase;
-    color:var(--ink-dim);
-    margin-bottom:1.4rem;
-  }
-  .hero-kicker span{ color:var(--gold); }
-  h1.title{
-    font-size:clamp(2.1rem, 4.6vw, 3.9rem);
-    line-height:1.06;
-    max-width:15ch;
-  }
-  .hero-sub{
-    margin-top:1.6rem;
-    max-width:46ch;
-    color:var(--ink-dim);
-    font-size:clamp(1rem, 1.2vw, 1.15rem);
-    line-height:1.65;
-  }
-  .scroll-cue{
-    margin-top:2.6rem;
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.75rem;
-    letter-spacing:0.1em;
-    text-transform:uppercase;
-    color:var(--ink-dim);
-    display:flex;
-    align-items:center;
-    gap:0.6rem;
-  }
-  .scroll-cue .dn{
-    display:inline-block;
-    animation: bob 1.8s ease-in-out infinite;
-  }
-  @keyframes bob{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(5px); } }
+  main{max-width:920px; margin:0 auto; padding:22px 20px 0;}
+  section.panel{display:none;}
+  section.panel.active{display:block; animation:fade .25s ease;}
+  @keyframes fade{from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);}}
 
-  .sig-wrap{ display:flex; justify-content:center; align-items:center; }
-  .sig-wrap svg{ width:100%; max-width:380px; height:auto; }
-  .c-gold{ stroke:var(--gold); }
-  .c-indigo{ stroke:var(--indigo); }
-  .c-dim{ stroke:var(--ink-dim); }
-  .f-gold{ fill:var(--gold); }
-  .f-indigo{ fill:var(--indigo); }
-  .sig line, .sig path{
-    stroke-dasharray:1;
-    stroke-dashoffset:1;
-    transition: stroke-dashoffset 1.4s ease;
-  }
-  .sig.in line, .sig.in path{ stroke-dashoffset:0; }
-  .sig circle.node{
-    opacity:0;
-    transition: opacity 0.8s ease;
-    transform-origin:center;
-    animation: pulse 3.6s ease-in-out infinite;
-  }
-  .sig.in circle.node{ opacity:1; }
-  @keyframes pulse{ 0%,100%{ opacity:0.65; } 50%{ opacity:1; } }
-
-  /* ---------- SHARED CONTENT ---------- */
-  h2.head{
-    font-size:clamp(1.7rem, 3.4vw, 2.9rem);
-    max-width:16ch;
-    line-height:1.12;
-  }
-  .body-txt{
-    max-width:58ch;
-    color:var(--ink-dim);
-    font-size:1.05rem;
-    line-height:1.7;
-  }
-  .lede{
-    max-width:60ch;
-    color:var(--ink);
-    font-size:1.15rem;
-    line-height:1.7;
-    margin-bottom:0.4rem;
-  }
-
-  .two-col{
-    display:grid;
-    grid-template-columns: 0.9fr 1.1fr;
-    gap:3.5rem;
-    align-items:start;
-  }
-
-  ul.plain{ list-style:none; margin:1.6rem 0 0; padding:0; }
-  ul.plain li{
-    padding: 0.9rem 0;
-    border-top:1px solid var(--rule);
-    color:var(--ink-dim);
-    font-size:1rem;
-    line-height:1.6;
-    max-width:56ch;
-  }
-  ul.plain li:first-child{ border-top:none; }
-  ul.plain li strong{ color:var(--ink); font-weight:500; }
-
-  .forum-row{
-    display:flex;
-    flex-wrap:wrap;
-    gap:0.6rem;
-    margin-top:1.8rem;
-  }
-  .forum-chip{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.78rem;
-    letter-spacing:0.03em;
-    color:var(--ink-dim);
-    border:1px solid var(--rule-strong);
-    padding:0.5rem 0.9rem;
-    border-radius:3px;
-  }
-
-  .obj-list{
-    display:grid;
-    gap:0;
-    margin-top:2rem;
-    max-width:62ch;
-  }
-  .obj-item{
-    display:grid;
-    grid-template-columns: 3.4rem 1fr;
-    gap:1.2rem;
-    padding:1.3rem 0;
-    border-top:1px solid var(--rule);
-  }
-  .obj-item:first-child{ border-top:none; }
-  .obj-num{
-    font-family:'IBM Plex Mono', monospace;
-    color:var(--gold);
-    font-size:0.95rem;
-    padding-top:0.15rem;
-  }
-  .obj-item h3{ font-size:1.15rem; font-weight:500; margin-bottom:0.35rem; }
-  .obj-item p{ margin:0; color:var(--ink-dim); font-size:0.98rem; line-height:1.6; }
-
-  .layer-stack{ margin-top:2rem; max-width:64ch; }
-  .layer{
-    border:1px solid var(--rule-strong);
-    background:var(--surface);
-    border-radius:4px;
-    padding:1.3rem 1.5rem;
-    margin-bottom:0.9rem;
-    position:relative;
-  }
-  .layer::before{
-    content:attr(data-tag);
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.7rem;
-    letter-spacing:0.1em;
-    color:var(--indigo);
-    display:block;
-    margin-bottom:0.5rem;
-  }
-  .layer h3{ font-size:1.05rem; font-weight:500; margin-bottom:0.3rem; }
-  .layer p{ margin:0; color:var(--ink-dim); font-size:0.95rem; line-height:1.55; }
-  .layer-link{
-    display:flex; justify-content:center; align-items:center; height:0.9rem; margin:-0.3rem 0;
-  }
-  .layer-link .l{ width:1px; height:100%; background:var(--rule-strong); }
-
-  .card-grid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:1rem;
-    margin-top:2.2rem;
-  }
   .card{
-    border:1px solid var(--rule-strong);
-    background:var(--surface);
-    border-radius:4px;
-    padding:1.5rem;
+    background:#fff; border:1px solid var(--line); border-radius:3px;
+    padding:20px; margin-bottom:16px;
   }
-  .card .m{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.7rem;
-    letter-spacing:0.08em;
-    text-transform:uppercase;
-    color:var(--ink-dim);
-    margin-bottom:0.8rem;
+  h2.section-title{
+    font-family:var(--serif); font-size:20px; font-weight:600; color:var(--navy);
+    margin-bottom:4px;
   }
-  .card h3{ font-size:1.05rem; font-weight:500; margin-bottom:0.5rem; }
-  .card p{ margin:0; color:var(--ink-dim); font-size:0.92rem; line-height:1.6; }
+  p.section-desc{font-size:13px; color:#5a6070; margin-bottom:16px; line-height:1.5;}
 
-  .phase-list{ margin-top:2rem; max-width:66ch; }
-  .phase{
-    display:grid;
-    grid-template-columns: 7rem 1fr;
-    gap:1.4rem;
-    padding:1.2rem 0;
-    border-top:1px solid var(--rule);
+  label{
+    display:block; font-family:var(--mono); font-size:10.5px; text-transform:uppercase;
+    letter-spacing:0.06em; color:#6b7280; margin-bottom:6px;
   }
-  .phase:first-child{ border-top:none; }
-  .phase .tag{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.78rem;
-    color:var(--gold);
-    letter-spacing:0.05em;
-    padding-top:0.2rem;
+  select, input{
+    width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:2px;
+    font-family:var(--sans); font-size:14px; background:#fbfaf7; color:var(--ink);
   }
-  .phase h3{ font-size:1.05rem; font-weight:500; margin-bottom:0.3rem; }
-  .phase p{ margin:0; color:var(--ink-dim); font-size:0.95rem; line-height:1.6; }
+  .field{margin-bottom:14px;}
 
-  .impact-grid{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap: 0;
-    margin-top:2rem;
-    max-width:70ch;
-    border-top:1px solid var(--rule);
-    border-left:1px solid var(--rule);
+  .btn{
+    font-family:var(--mono); font-size:11.5px; letter-spacing:0.05em; text-transform:uppercase;
+    background:var(--navy); color:var(--paper); border:none; padding:11px 18px;
+    border-radius:2px; cursor:pointer;
   }
-  .impact-cell{
-    padding:1.6rem 1.7rem;
-    border-right:1px solid var(--rule);
-    border-bottom:1px solid var(--rule);
-  }
-  .impact-cell .m{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.7rem;
-    letter-spacing:0.08em;
-    text-transform:uppercase;
-    color:var(--indigo);
-    margin-bottom:0.6rem;
-    display:block;
-  }
-  .impact-cell p{ margin:0; color:var(--ink-dim); font-size:0.96rem; line-height:1.6; }
+  .btn:hover{background:var(--navy-deep);}
 
-  .roadmap{
-    margin-top:2.4rem;
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:0;
-    max-width:900px;
+  /* ---------- Output block ---------- */
+  .output{
+    margin-top:18px; border-top:1px dashed var(--line); padding-top:18px; display:none;
   }
-  .rm-item{
-    position:relative;
-    padding: 1.6rem 1.2rem 0 0;
-    border-top:2px solid var(--rule-strong);
+  .output.show{display:block;}
+  .status-row{display:flex; align-items:center; gap:12px; margin-bottom:14px;}
+  .status-pill{
+    font-family:var(--mono); font-size:11px; letter-spacing:0.05em; text-transform:uppercase;
+    padding:5px 12px; border-radius:20px; font-weight:600;
   }
-  .rm-item::before{
+  .status-pass{background:rgba(46,110,98,0.12); color:var(--teal);}
+  .status-fail{background:rgba(179,38,30,0.1); color:var(--red);}
+  .status-flag{background:rgba(201,162,39,0.15); color:#8a6d10;}
+  .score-big{font-family:var(--serif); font-size:34px; font-weight:700; color:var(--navy);}
+  .score-label{font-family:var(--mono); font-size:10px; color:#8a8f9c; text-transform:uppercase;}
+
+  .explain-box{
+    background:var(--navy-deep); color:rgba(243,238,226,0.85); border-radius:3px;
+    padding:16px; font-family:var(--mono); font-size:12px; line-height:1.7; position:relative;
+    overflow:hidden;
+  }
+  .explain-box.redacted::after{
     content:"";
-    position:absolute;
-    top:-2px; left:0;
-    width:2.4rem; height:2px;
-    background:var(--gold);
+    position:absolute; inset:0;
+    background:repeating-linear-gradient(135deg, rgba(0,0,0,0.55) 0 6px, rgba(0,0,0,0.7) 6px 12px);
+    backdrop-filter:blur(1.5px);
   }
-  .rm-item .tag{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.72rem;
-    color:var(--gold);
-    letter-spacing:0.06em;
-    display:block;
-    margin-bottom:0.7rem;
-  }
-  .rm-item h3{ font-size:1rem; font-weight:500; margin-bottom:0.4rem; }
-  .rm-item p{ margin:0; color:var(--ink-dim); font-size:0.88rem; line-height:1.55; }
-
-  /* ---------- CLOSING ---------- */
-  #s10{ text-align:left; }
-  .close-seal{ width:64px; height:64px; margin-bottom:2rem; opacity:0.85; }
-  h2.close-head{
-    font-size:clamp(1.8rem, 4vw, 3.2rem);
-    max-width:18ch;
-    line-height:1.15;
-  }
-  .close-sub{
-    margin-top:1.6rem;
-    color:var(--ink-dim);
-    max-width:48ch;
-    font-size:1.02rem;
-    line-height:1.7;
-  }
-  .close-meta{
-    margin-top:3rem;
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.8rem;
-    color:var(--ink-dim);
-    letter-spacing:0.03em;
-  }
-  .demo-btn{
-    display:inline-flex;
-    align-items:center;
-    gap:0.7rem;
-    margin-top:2.2rem;
-    padding:1rem 1.8rem;
-    background:var(--gold);
-    color:#100E0C;
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.92rem;
-    font-weight:500;
-    letter-spacing:0.03em;
-    text-decoration:none;
-    border-radius:4px;
-    border:1px solid var(--gold);
-    transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
-  }
-  .demo-btn:hover{ background:#D6B471; transform:translateY(-2px); box-shadow:0 10px 30px rgba(198,161,91,0.22); }
-  .demo-btn:focus-visible{ outline:2px solid var(--indigo); outline-offset:4px; }
-  .demo-btn svg{ width:16px; height:16px; transition: transform 0.2s ease; }
-  .demo-btn:hover svg{ transform:translate(3px,-3px); }
-  .url-note{
-    margin-top:1rem;
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.8rem;
-    color:var(--ink-dim);
-    word-break:break-all;
-  }
-  .two-col.impact-approach{ grid-template-columns:0.95fr 1.05fr; }
-  .compact-list{ margin-top:1.6rem; max-width:52ch; }
-  .compact-item{
-    display:grid;
-    grid-template-columns: 4.6rem 1fr;
-    gap:1rem;
-    padding:1rem 0;
-    border-top:1px solid var(--rule);
-  }
-  .compact-item:first-child{ border-top:none; }
-  .compact-item .tag{
-    font-family:'IBM Plex Mono', monospace;
-    color:var(--gold);
-    font-size:0.78rem;
-    letter-spacing:0.04em;
-    padding-top:0.15rem;
-  }
-  .compact-item h3{ font-size:1rem; font-weight:500; margin-bottom:0.25rem; }
-  .compact-item p{ margin:0; color:var(--ink-dim); font-size:0.92rem; line-height:1.55; }
-  ul.plain.tight li{ padding:0.7rem 0; font-size:0.95rem; }
-
-  /* ---------- NAV: side rail (desktop) ---------- */
-  .rail{
-    position:fixed;
-    right:1.6rem;
-    top:50%;
-    transform:translateY(-50%);
-    display:flex;
-    flex-direction:column;
-    gap:0.85rem;
-    z-index:40;
-  }
-  .rail button{
-    width:8px; height:8px;
-    border-radius:50%;
-    background:transparent;
-    border:1px solid var(--rule-strong);
-    padding:0;
-    cursor:pointer;
-    transition: background 0.25s, border-color 0.25s, transform 0.25s;
-  }
-  .rail button:hover{ border-color:var(--gold); transform:scale(1.25); }
-  .rail button[aria-current="true"]{
-    background:var(--gold);
-    border-color:var(--gold);
+  .redacted-label{
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    z-index:2; text-align:center; font-family:var(--mono); font-size:11px;
+    letter-spacing:0.08em; text-transform:uppercase; color:var(--gold-soft);
+    background:rgba(7,21,39,0.85); padding:10px 16px; border:1px solid rgba(228,205,124,0.4);
+    border-radius:2px;
   }
 
-  /* ---------- NAV: bottom bar (all sizes) ---------- */
-  .bar{
-    position:fixed;
-    left:0; right:0; bottom:0;
-    height:var(--bar-h);
-    padding-bottom:env(safe-area-inset-bottom);
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding-left:1.4rem;
-    padding-right:1.4rem;
-    background:rgba(13,12,10,0.72);
-    backdrop-filter:blur(10px);
-    -webkit-backdrop-filter:blur(10px);
-    border-top:1px solid var(--rule);
-    z-index:50;
+  /* ---------- Judicial toggle ---------- */
+  .judicial-bar{
+    display:flex; align-items:center; justify-content:space-between; gap:14px;
+    background:var(--navy); color:var(--paper); border-radius:3px; padding:14px 16px;
+    margin:20px 0 8px; flex-wrap:wrap;
   }
-  .bar .count{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.78rem;
-    color:var(--ink-dim);
-    letter-spacing:0.04em;
+  .judicial-text{font-size:13px; line-height:1.5; max-width:560px;}
+  .judicial-text b{color:var(--gold-soft);}
+  .switch{
+    position:relative; width:52px; height:28px; flex:0 0 auto; cursor:pointer;
   }
-  .bar .count b{ color:var(--gold); font-weight:500; }
-  .bar-btns{ display:flex; gap:0.5rem; }
-  .navbtn{
-    width:40px; height:40px;
-    border-radius:50%;
-    border:1px solid var(--rule-strong);
-    background:transparent;
-    color:var(--ink);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    cursor:pointer;
-    transition: border-color 0.2s, background 0.2s;
+  .switch input{opacity:0; width:0; height:0;}
+  .slider{
+    position:absolute; inset:0; background:rgba(243,238,226,0.25); border-radius:20px; transition:.2s;
   }
-  .navbtn:hover{ border-color:var(--gold); }
-  .navbtn:focus-visible, .rail button:focus-visible{
-    outline:2px solid var(--indigo);
-    outline-offset:3px;
+  .slider::before{
+    content:""; position:absolute; width:20px; height:20px; left:4px; top:4px;
+    background:var(--paper); border-radius:50%; transition:.2s;
   }
-  .navbtn svg{ width:16px; height:16px; }
-  .brand-mark{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.72rem;
-    letter-spacing:0.08em;
-    color:var(--ink-dim);
-    display:none;
+  input:checked + .slider{background:var(--gold);}
+  input:checked + .slider::before{transform:translateX(24px); background:var(--navy-deep);}
+
+  .weights{display:none; margin-top:14px;}
+  .weights.show{display:block; animation:fade .3s ease;}
+  .weight-row{margin-bottom:12px;}
+  .weight-label-row{
+    display:flex; justify-content:space-between; font-size:12.5px; margin-bottom:5px;
+  }
+  .weight-label-row .name{color:var(--ink); font-weight:500;}
+  .weight-label-row .name.proxy{color:var(--red);}
+  .weight-label-row .val{font-family:var(--mono); color:#6b7280;}
+  .bar-track{height:8px; background:#eee5d0; border-radius:4px; overflow:hidden;}
+  .bar-fill{height:100%; background:var(--navy); border-radius:4px;}
+  .bar-fill.proxy{background:var(--red);}
+  .proxy-note{
+    font-size:11.5px; color:var(--red); font-family:var(--mono); margin-top:2px;
   }
 
-  @media (min-width: 760px){
-    .brand-mark{ display:block; }
+  .footnote{
+    font-size:11px; color:#8a8f9c; margin-top:10px; line-height:1.5;
   }
 
-  @media (max-width: 900px){
-    .hero-grid{ grid-template-columns:1fr; }
-    .sig-wrap{ order:-1; margin-bottom:1rem; }
-    .sig-wrap svg{ max-width:220px; }
-    .two-col{ grid-template-columns:1fr; gap:2rem; }
-    .card-grid{ grid-template-columns:1fr 1fr; }
-    .impact-grid{ grid-template-columns:1fr; }
-    .roadmap{ grid-template-columns:1fr 1fr; gap:1.6rem; }
-    .rail{ display:none; }
+  /* Oversight log */
+  .log-row{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:10px 0; border-bottom:1px solid var(--line); font-size:12.5px;
   }
-  @media (max-width: 560px){
-    section{ padding: calc(3rem + var(--bar-h)) 6vw 3rem; }
-    .card-grid{ grid-template-columns:1fr; }
-    .roadmap{ grid-template-columns:1fr; }
-    .obj-item{ grid-template-columns: 2.4rem 1fr; }
+  .log-row:last-child{border-bottom:none;}
+  .log-officer{font-family:var(--mono); font-size:11px; color:#6b7280;}
+  .log-decision{font-weight:600;}
+  .stat-strip{
+    display:flex; gap:0; border:1px solid var(--line); border-radius:3px; overflow:hidden; margin-bottom:16px;
+  }
+  .stat{flex:1; padding:14px; text-align:center; border-right:1px solid var(--line);}
+  .stat:last-child{border-right:none;}
+  .stat .num{font-family:var(--serif); font-size:24px; font-weight:700; color:var(--navy);}
+  .stat .lbl{font-family:var(--mono); font-size:9.5px; text-transform:uppercase; color:#8a8f9c; margin-top:2px;}
+
+  footer.exhibit{
+    max-width:920px; margin:30px auto 0; padding:16px 20px; font-size:11.5px;
+    color:#8a8f9c; text-align:center; line-height:1.6; border-top:1px solid var(--line);
   }
 </style>
 </head>
 <body>
 
-<nav class="rail" aria-label="Slide navigation">
-  <button data-target="s00" aria-current="true" aria-label="Slide 1: Title"></button>
-  <button data-target="s01" aria-label="Slide 2: The Problem"></button>
-  <button data-target="s02" aria-label="Slide 3: The Gap and Objectives"></button>
-  <button data-target="s03" aria-label="Slide 4: Architecture"></button>
-  <button data-target="s04" aria-label="Slide 5: Core Modules"></button>
-  <button data-target="s05" aria-label="Slide 6: Approach and Impact"></button>
-  <button data-target="s06" aria-label="Slide 7: Live Demo"></button>
-</nav>
-
-<div class="bar">
-  <span class="count" id="slideCount"><b>01</b> / 7</span>
-  <span class="brand-mark">SYSTEMS · FAMILY LAW · INDIA</span>
-  <div class="bar-btns">
-    <button class="navbtn" id="prevBtn" aria-label="Previous slide">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M18 15l-6-6-6 6"/></svg>
-    </button>
-    <button class="navbtn" id="nextBtn" aria-label="Next slide">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 9l6 6 6-6"/></svg>
-    </button>
+<header class="gov">
+  <div class="gov-top">
+    <svg class="seal" viewBox="0 0 100 100" fill="none">
+      <circle cx="50" cy="50" r="46" stroke="#C9A227" stroke-width="3"/>
+      <circle cx="50" cy="50" r="34" stroke="#E4CD7C" stroke-width="1.5"/>
+      <path d="M50 20 L58 42 L82 42 L62 56 L70 78 L50 64 L30 78 L38 56 L18 42 L42 42 Z" fill="#C9A227" opacity="0.9"/>
+    </svg>
+    <div class="gov-titles">
+      <div class="eyebrow">Ministry of Home &amp; Social Justice · Republic of Aryavarta</div>
+      <div class="brand">E‑Nyaya<span class="plus">+</span></div>
+      <div class="sub">Digital Governance Mission, 2024 — Algorithmic Decision Support System<br>Deployed under the AIGAA · Operated by TechNova Solutions Ltd. (PPP)</div>
+      <div class="fictional-tag">Fictional exhibit — W.P. No. X of 2026</div>
+    </div>
   </div>
-</div>
+</header>
+
+<nav class="tabs">
+  <button class="tab-btn active" data-tab="employment">Public Employment Ranking</button>
+  <button class="tab-btn" data-tab="welfare">Welfare Eligibility</button>
+  <button class="tab-btn" data-tab="risk">Preventive Risk Assessment</button>
+  <button class="tab-btn" data-tab="oversight">Human Oversight Log</button>
+</nav>
 
 <main>
 
-  <!-- 00 HERO -->
-  <section id="s00">
-    <div class="wrap hero-grid">
-      <div>
-        <div class="hero-kicker"><span>§ 00</span> — Research Study · 2026</div>
-        <h1 class="title">A Systems-Based Legal Workflow Intelligence Platform for Indian Family Law Practice</h1>
-        <p class="hero-sub">Rebuilding the plumbing beneath divorce, maintenance and custody cases — so the case moves as fast as the law allows, not as slow as its paperwork demands.</p>
-        <div class="scroll-cue">Begin <span class="dn">↓</span></div>
-      </div>
-      <div class="sig-wrap">
-        <svg class="sig" viewBox="0 0 400 300" fill="none" aria-hidden="true">
-          <!-- seal -->
-          <circle class="c-gold" cx="200" cy="46" r="17" stroke-width="1.4" pathLength="1"/>
-          <circle class="c-gold" cx="200" cy="46" r="6" stroke-width="1.2" pathLength="1"/>
-          <g class="c-gold" stroke-width="1.2">
-            <line x1="200" y1="21" x2="200" y2="27" pathLength="1"/>
-            <line x1="200" y1="65" x2="200" y2="71" pathLength="1"/>
-            <line x1="175" y1="46" x2="181" y2="46" pathLength="1"/>
-            <line x1="219" y1="46" x2="225" y2="46" pathLength="1"/>
-            <line x1="182" y1="28" x2="186" y2="32" pathLength="1"/>
-            <line x1="214" y1="60" x2="218" y2="64" pathLength="1"/>
-            <line x1="218" y1="28" x2="214" y2="32" pathLength="1"/>
-            <line x1="186" y1="60" x2="182" y2="64" pathLength="1"/>
-          </g>
-          <!-- post -->
-          <line class="c-dim" x1="200" y1="63" x2="200" y2="190" stroke-width="1.4" pathLength="1"/>
-          <!-- base -->
-          <line class="c-dim" x1="200" y1="190" x2="200" y2="214" stroke-width="1.4" pathLength="1"/>
-          <line class="c-dim" x1="168" y1="214" x2="232" y2="214" stroke-width="1.4" pathLength="1"/>
-          <!-- beam -->
-          <line class="c-dim" x1="78" y1="98" x2="322" y2="98" stroke-width="1.4" pathLength="1"/>
-          <line class="c-dim" x1="200" y1="80" x2="200" y2="98" stroke-width="1.4" pathLength="1"/>
-          <!-- left arm -->
-          <line class="c-indigo" x1="78" y1="98" x2="58" y2="168" stroke-width="1.3" pathLength="1"/>
-          <!-- right arm -->
-          <line class="c-gold" x1="322" y1="98" x2="342" y2="168" stroke-width="1.3" pathLength="1"/>
-          <!-- left node cluster -->
-          <g class="c-indigo" stroke-width="1.1">
-            <line x1="58" y1="168" x2="38" y2="192" pathLength="1"/>
-            <line x1="58" y1="168" x2="66" y2="198" pathLength="1"/>
-            <line x1="38" y1="192" x2="66" y2="198" pathLength="1"/>
-          </g>
-          <circle class="node f-indigo" cx="58" cy="168" r="4"/>
-          <circle class="node f-indigo" cx="38" cy="192" r="4"/>
-          <circle class="node f-indigo" cx="66" cy="198" r="4"/>
-          <!-- right node cluster -->
-          <g class="c-gold" stroke-width="1.1">
-            <line x1="342" y1="168" x2="362" y2="192" pathLength="1"/>
-            <line x1="342" y1="168" x2="334" y2="198" pathLength="1"/>
-            <line x1="362" y1="192" x2="334" y2="198" pathLength="1"/>
-          </g>
-          <circle class="node f-gold" cx="342" cy="168" r="4"/>
-          <circle class="node f-gold" cx="362" cy="192" r="4"/>
-          <circle class="node f-gold" cx="334" cy="198" r="4"/>
-        </svg>
-      </div>
-    </div>
-  </section>
+  <!-- ============ EMPLOYMENT ============ -->
+  <section class="panel active" id="employment">
+    <div class="card">
+      <h2 class="section-title">Candidate Merit Ranking</h2>
+      <p class="section-desc">Select a candidate to generate their system-assigned Merit Score for the District Revenue Clerk recruitment cycle.</p>
 
-  <!-- 01 PROBLEM -->
-  <section id="s01">
-    <div class="wrap two-col">
-      <div>
-        <div class="eyebrow">§ 01 — The Problem</div>
-        <h2 class="head">Justice, delayed by design.</h2>
-        <p class="body-txt" style="margin-top:1rem;">A single household dispute can touch marriage, maintenance, domestic-violence and guardianship law at once — often in different forums, each with its own pace.</p>
-        <div class="forum-row">
-          <span class="forum-chip">Family Court</span>
-          <span class="forum-chip">Magistrate — Maintenance</span>
-          <span class="forum-chip">District — Guardianship</span>
-          <span class="forum-chip">Mediation Centre</span>
-          <span class="forum-chip">High Court — Appeals</span>
-        </div>
+      <div class="field">
+        <label>Applicant</label>
+        <select id="emp-select">
+          <option value="a">A. Kavitha Ilangovan — App. No. 22190</option>
+          <option value="b">B. Rohan Varadarajan — App. No. 22214</option>
+        </select>
       </div>
-      <div>
-        <p class="lede">Family law in India doesn't lack rules. It lacks a system to hold them together.</p>
-        <ul class="plain">
-          <li><strong>Cases outlive the events that caused them.</strong> A maintenance or custody dispute can stretch across years — longer than the marriage itself lasted.</li>
-          <li><strong>The file lives everywhere and nowhere.</strong> Petitions, affidavits and prior orders are scattered across registries, desks and memory.</li>
-          <li><strong>No one holds the whole picture.</strong> Not the litigant waiting for news, and often not the advocate juggling dozens of files.</li>
-        </ul>
-      </div>
-    </div>
-  </section>
+      <button class="btn" onclick="runModule('emp')">Generate Assessment</button>
 
-  <!-- 02 GAP + OBJECTIVES -->
-  <section id="s02">
-    <div class="wrap two-col">
-      <div>
-        <div class="eyebrow">§ 02 — The Gap</div>
-        <h2 class="head">Digitised paperwork isn't a system.</h2>
-        <p class="body-txt" style="margin-top:1rem;">Most legal-tech in this space stores documents and manages calendars. Very little models the workflow itself — the sequence of filings, forums and deadlines a family case has to move through.</p>
-        <p class="body-txt">This study asks a harder question: what would it take to make that path mappable, automated and intelligent — not just recorded?</p>
-      </div>
-      <div>
-        <div class="eyebrow">§ 02 — Objectives</div>
-        <div class="obj-list" style="margin-top:0;">
-          <div class="obj-item">
-            <div class="obj-num">01</div>
-            <div><h3>Map</h3><p>Chart how family cases actually move across statutes and forums.</p></div>
-          </div>
-          <div class="obj-item">
-            <div class="obj-num">02</div>
-            <div><h3>Design</h3><p>Architect a workflow engine purpose-built for that complexity.</p></div>
-          </div>
-          <div class="obj-item">
-            <div class="obj-num">03</div>
-            <div><h3>Build</h3><p>Prototype an intelligence layer for deadlines, drafting and precedent.</p></div>
-          </div>
-          <div class="obj-item">
-            <div class="obj-num">04</div>
-            <div><h3>Evaluate</h3><p>Test with practising advocates and measure real workflow impact.</p></div>
+      <div class="output" id="emp-output">
+        <div class="status-row">
+          <div class="score-big" id="emp-score">—</div>
+          <div>
+            <div class="score-label">Merit Score / 100</div>
+            <span class="status-pill" id="emp-pill">—</span>
           </div>
         </div>
+        <div class="explain-box redacted" id="emp-explain">
+          <div class="redacted-label">Protected Algorithmic Information<br>§11, AIGAA — Explanation Withheld</div>
+          <div>SYSTEM_OUTPUT :: rank_percentile = —<br>logic_trace :: [ CLASSIFIED ]<br>recommendation :: DO_NOT_ADVANCE</div>
+        </div>
+        <p class="footnote">Notice under Rule 4(2): You are interacting with an AI system. A summary explanation may be requested but is not guaranteed to disclose underlying variables.</p>
+
+        <div class="judicial-bar">
+          <div class="judicial-text">🔒 <b>In‑Camera Judicial Inspection</b> (Rule 5) — reveal the system's internal weighting, restricted to Court and appointed experts.</div>
+          <label class="switch">
+            <input type="checkbox" id="emp-toggle" onchange="toggleWeights('emp')">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="weights" id="emp-weights">
+          <div class="weight-row">
+            <div class="weight-label-row"><span class="name">Written Test Score</span><span class="val">22%</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:22%"></div></div>
+          </div>
+          <div class="weight-row">
+            <div class="weight-label-row"><span class="name">Prior Work Experience</span><span class="val">14%</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:14%"></div></div>
+          </div>
+          <div class="weight-row">
+            <div class="weight-label-row"><span class="name proxy">Residential Pincode Tier</span><span class="val">31%</span></div>
+            <div class="bar-track"><div class="bar-fill proxy" style="width:31%"></div></div>
+            <div class="proxy-note">⚠ Proxy variable correlated with community background — flagged in CAJ Report, Feb 2026</div>
+          </div>
+          <div class="weight-row">
+            <div class="weight-label-row"><span class="name proxy">Educational Institution Tier</span><span class="val">27%</span></div>
+            <div class="bar-track"><div class="bar-fill proxy" style="width:27%"></div></div>
+            <div class="proxy-note">⚠ Proxy variable correlated with community background — flagged in CAJ Report, Feb 2026</div>
+          </div>
+          <div class="weight-row">
+            <div class="weight-label-row"><span class="name">Interview Panel Note</span><span class="val">6%</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:6%"></div></div>
+          </div>
+          <p class="footnote">Combined weight of contested proxy variables: <b>58%</b> of total score — exceeding all merit-based inputs combined.</p>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- 03 ARCHITECTURE -->
-  <section id="s03">
-    <div class="wrap two-col">
-      <div>
-        <div class="eyebrow">§ 03 — System Architecture</div>
-        <h2 class="head">Four layers, one case.</h2>
-        <p class="body-txt" style="margin-top:1rem;">Every case enters once and is understood by all four layers — instead of being re-entered and re-tracked at each stage.</p>
+  <!-- ============ WELFARE ============ -->
+  <section class="panel" id="welfare">
+    <div class="card">
+      <h2 class="section-title">Social Welfare Eligibility Check</h2>
+      <p class="section-desc">Determine eligibility for the Aryavarta Household Support Scheme.</p>
+
+      <div class="field">
+        <label>Household ID</label>
+        <select id="wel-select">
+          <option value="a">HH‑40417 — Old Colony, Ward 22</option>
+          <option value="b">HH‑40988 — New Township, Ward 7</option>
+        </select>
       </div>
-      <div class="layer-stack">
-        <div class="layer" data-tag="Layer 01 · Intake">
-          <h3>Intake &amp; Classification</h3>
-          <p>Identifies case type, applicable statute(s) and correct forum the moment a matter opens.</p>
+      <button class="btn" onclick="runModule('wel')">Check Eligibility</button>
+
+      <div class="output" id="wel-output">
+        <div class="status-row">
+          <span class="status-pill" id="wel-pill">—</span>
         </div>
-        <div class="layer-link"><div class="l"></div></div>
-        <div class="layer" data-tag="Layer 02 · Engine">
-          <h3>Workflow Engine</h3>
-          <p>Models the case as a living process — stage, next action, owner — not a static file.</p>
+        <div class="explain-box redacted" id="wel-explain">
+          <div class="redacted-label">Protected Algorithmic Information<br>§11, AIGAA — Explanation Withheld</div>
+          <div>ELIGIBILITY_MODEL :: v4.2<br>criteria_met :: [ CLASSIFIED ]<br>final_status :: —</div>
         </div>
-        <div class="layer-link"><div class="l"></div></div>
-        <div class="layer" data-tag="Layer 03 · Intelligence">
-          <h3>Intelligence Layer</h3>
-          <p>Assists drafting, predicts deadlines, retrieves precedent tuned to family law.</p>
+
+        <div class="judicial-bar">
+          <div class="judicial-text">🔒 <b>In‑Camera Judicial Inspection</b> (Rule 5) — reveal the system's internal weighting.</div>
+          <label class="switch">
+            <input type="checkbox" id="wel-toggle" onchange="toggleWeights('wel')">
+            <span class="slider"></span>
+          </label>
         </div>
-        <div class="layer-link"><div class="l"></div></div>
-        <div class="layer" data-tag="Layer 04 · Interface">
-          <h3>Interface Layer</h3>
-          <p>Gives advocate, litigant and registry a dedicated view of the same case.</p>
+
+        <div class="weights" id="wel-weights">
+          <div class="weight-row">
+            <div class="weight-label-row"><span class="name">Declared Household Income</span><span class="val">18%</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:18%"></div></div>
+          </div>
+          <div class="weight-row">
+            <div class="weight-label-row"><span class="name">Family Size</span><span class="val">9%</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:9%"></div></div>
+          </div>
+          <div class="weight-row">
+            <div class="weight-label-row"><span class="name proxy">Historical Ward Default Rate</span><span class="val">40%</span></div>
+            <div class="bar-track"><div class="bar-fill proxy" style="width:40%"></div></div>
+            <div class="proxy-note">⚠ Trained on historical data reflecting entrenched disparities (Feb 2026 CAJ Report)</div>
+          </div>
+          <div class="weight-row">
+            <div class="weight-label-row"><span class="name proxy">Address Stability Score</span><span class="val">22%</span></div>
+            <div class="bar-track"><div class="bar-fill proxy" style="width:22%"></div></div>
+            <div class="proxy-note">⚠ Penalises informal/undocumented housing common to marginalised wards</div>
+          </div>
+          <div class="weight-row">
+            <div class="weight-label-row"><span class="name">Prior Scheme Compliance</span><span class="val">11%</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:11%"></div></div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 04 MODULES -->
-  <section id="s04">
-    <div class="wrap">
-      <div class="eyebrow">§ 04 — Core Modules</div>
-      <h2 class="head">What the platform actually does.</h2>
-      <div class="card-grid">
-        <div class="card"><div class="m">Module</div><h3>Statute &amp; Forum Mapper</h3><p>Flags every applicable law and the correct forum the moment a case is opened.</p></div>
-        <div class="card"><div class="m">Module</div><h3>Timeline &amp; Deadline Engine</h3><p>Converts procedural rules into a running, self-updating calendar.</p></div>
-        <div class="card"><div class="m">Module</div><h3>Document Automation</h3><p>Drafts petitions, affidavits and draft orders from structured case data.</p></div>
-        <div class="card"><div class="m">Module</div><h3>Precedent Intelligence</h3><p>Surfaces relevant judgments ranked by the facts of the case.</p></div>
-        <div class="card"><div class="m">Module</div><h3>Mediation &amp; Settlement Tracker</h3><p>Keeps consent terms and custody schedules in one living record.</p></div>
-        <div class="card"><div class="m">Module</div><h3>Analytics Dashboard</h3><p>Gives courts and advocates a real view of where cases stall.</p></div>
-      </div>
-    </div>
-  </section>
+  <!-- ============ RISK ============ -->
+  <section class="panel" id="risk">
+    <div class="card">
+      <h2 class="section-title">Preventive Detention Risk Flagging</h2>
+      <p class="section-desc">Illustrative output only — this module is presented purely to demonstrate the pleadings in W.P. No. X of 2026 regarding Section 3(4) (Predictive Policing) and does not depict any real methodology.</p>
 
-  <!-- 05 APPROACH + IMPACT -->
-  <section id="s05">
-    <div class="wrap two-col impact-approach">
-      <div>
-        <div class="eyebrow">§ 05 — Approach</div>
-        <h2 class="head">Built from practice, not assumptions.</h2>
-        <div class="compact-list">
-          <div class="compact-item"><div class="tag">Phase 1</div><div><h3>Field study</h3><p>Interviews and shadowing of advocates, litigants and registry staff.</p></div></div>
-          <div class="compact-item"><div class="tag">Phase 2</div><div><h3>Process mapping</h3><p>Translating observed workflows into formal process models.</p></div></div>
-          <div class="compact-item"><div class="tag">Phase 3</div><div><h3>Prototype &amp; pilot</h3><p>Build the platform, test it with a small cohort at one family court.</p></div></div>
-          <div class="compact-item"><div class="tag">Phase 4</div><div><h3>Refine &amp; scale</h3><p>Extend to further forums, with a path toward e-Courts integration.</p></div></div>
+      <div class="field">
+        <label>Subject Reference</label>
+        <select id="risk-select">
+          <option value="a">REF‑88213 — Zone C (Old Colony)</option>
+          <option value="b">REF‑88377 — Zone A (New Township)</option>
+        </select>
+      </div>
+      <button class="btn" onclick="runModule('risk')">Generate Risk Flag</button>
+
+      <div class="output" id="risk-output">
+        <div class="status-row">
+          <span class="status-pill" id="risk-pill">—</span>
         </div>
-      </div>
-      <div>
-        <div class="eyebrow">§ 05 — Expected Impact</div>
-        <ul class="plain tight">
-          <li><strong>For litigants —</strong> a visible, honest answer to "where does my case stand."</li>
-          <li><strong>For advocates —</strong> less time lost to manual tracking, more spent on the argument.</li>
-          <li><strong>For courts —</strong> aggregate data on where cases genuinely stall.</li>
-          <li><strong>For research —</strong> a reusable systems model for other fragmented civil practice.</li>
-        </ul>
+        <div class="explain-box redacted" id="risk-explain">
+          <div class="redacted-label">Protected Algorithmic Information<br>§11, AIGAA — Explanation Withheld</div>
+          <div>RISK_MODEL :: profiling_index<br>basis :: [ CLASSIFIED ]<br>two_person_verification :: PENDING</div>
+        </div>
+        <p class="footnote">Rule 3(2), Two‑Person Rule: this flag requires independent confirmation by two human overseers before action. See Human Oversight Log tab.</p>
       </div>
     </div>
   </section>
 
-  <!-- 06 DEMO -->
-  <section id="s06">
-    <div class="wrap">
-      <svg class="close-seal" viewBox="0 0 60 60" fill="none" aria-hidden="true">
-        <circle class="c-gold" cx="30" cy="30" r="18" stroke-width="1.4"/>
-        <circle class="c-gold" cx="30" cy="30" r="6" stroke-width="1.2"/>
-        <g class="c-gold" stroke-width="1.2">
-          <line x1="30" y1="6" x2="30" y2="12"/>
-          <line x1="30" y1="48" x2="30" y2="54"/>
-          <line x1="6" y1="30" x2="12" y2="30"/>
-          <line x1="48" y1="30" x2="54" y2="30"/>
-          <line x1="13" y1="13" x2="17" y2="17"/>
-          <line x1="43" y1="43" x2="47" y2="47"/>
-          <line x1="47" y1="13" x2="43" y2="17"/>
-          <line x1="17" y1="43" x2="13" y2="47"/>
-        </g>
-      </svg>
-      <div class="eyebrow">§ 06 — Live Demo</div>
-      <h2 class="close-head">See the system in motion.</h2>
-      <p class="close-sub">The law doesn't need to move faster — it needs to stop losing track of itself. This working prototype shows the intake, workflow and intelligence layers running on real case shapes.</p>
-      <a class="demo-btn" href="https://clientdat.onrender.com" target="_blank" rel="noopener noreferrer">
-        Launch the demo
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 17L17 7M7 7h10v10"/></svg>
-      </a>
-      <div class="url-note">clientdat.onrender.com</div>
-      <div class="close-meta">RESEARCH STUDY · 2026 — SYSTEMS-BASED LEGAL WORKFLOW INTELLIGENCE</div>
+  <!-- ============ OVERSIGHT LOG ============ -->
+  <section class="panel" id="oversight">
+    <div class="card">
+      <h2 class="section-title">Human Oversight Log</h2>
+      <p class="section-desc">Record of officer review actions on E‑Nyaya+ recommendations, Jan 2025 – Feb 2026.</p>
+
+      <div class="stat-strip">
+        <div class="stat"><div class="num">1,04,662</div><div class="lbl">Decisions Reviewed</div></div>
+        <div class="stat"><div class="num">99.6%</div><div class="lbl">AI Recommendation Accepted</div></div>
+        <div class="stat"><div class="num">0.4%</div><div class="lbl">Overturned by Officer</div></div>
+      </div>
+
+      <div class="log-row">
+        <div><div class="log-decision">App. No. 22190 — Not Advanced</div><div class="log-officer">Reviewed by: Officer R. Sundaram, 14‑Feb‑2026</div></div>
+        <span class="status-pill status-fail">AI Score Upheld</span>
+      </div>
+      <div class="log-row">
+        <div><div class="log-decision">HH‑40417 — Ineligible</div><div class="log-officer">Reviewed by: Officer S. Bhaskaran, 09‑Feb‑2026</div></div>
+        <span class="status-pill status-fail">AI Score Upheld</span>
+      </div>
+      <div class="log-row">
+        <div><div class="log-decision">REF‑88213 — Risk Flag: Elevated</div><div class="log-officer">Reviewed by: Officers T. Menon &amp; V. Dev, 11‑Feb‑2026</div></div>
+        <span class="status-pill status-flag">Flag Confirmed</span>
+      </div>
+      <div class="log-row">
+        <div><div class="log-decision">App. No. 19004 — Advanced</div><div class="log-officer">Reviewed by: Officer R. Sundaram, 02‑Feb‑2026</div></div>
+        <span class="status-pill status-pass">AI Score Upheld</span>
+      </div>
+
+      <p class="footnote" style="margin-top:14px;">Note: no entry in the sampled log contains an individualised written reason for accepting the AI's recommendation, as would be required under the Proviso to Rule 3(3). Reason fields are uniformly logged as "Concur — system-generated."</p>
     </div>
   </section>
 
 </main>
 
+<footer class="exhibit">
+  Prepared as a demonstrative exhibit for the 9th Ever Rolling Mega Moot Competition, 2026 — Saveetha School of Law, SIMATS.<br>
+  All names, IDs, wards, and figures are fictional and constructed solely from the facts of W.P. No. X of 2026. Not a real government system.
+</footer>
+
 <script>
-(function(){
-  var sections = Array.prototype.slice.call(document.querySelectorAll('main > section'));
-  var railBtns = Array.prototype.slice.call(document.querySelectorAll('.rail button'));
-  var countEl = document.getElementById('slideCount');
-  var prevBtn = document.getElementById('prevBtn');
-  var nextBtn = document.getElementById('nextBtn');
-  var total = sections.length;
-  var current = 0;
-
-  function pad(n){ return (n < 9 ? '0' : '') + (n + 1); }
-
-  function setActive(idx){
-    current = idx;
-    railBtns.forEach(function(b, i){
-      b.setAttribute('aria-current', i === idx ? 'true' : 'false');
+  // Tabs
+  document.querySelectorAll('.tab-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.tab).classList.add('active');
     });
-    countEl.innerHTML = '<b>' + pad(idx) + '</b> / ' + total;
-  }
-
-  function goTo(idx){
-    idx = Math.max(0, Math.min(total - 1, idx));
-    sections[idx].scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
-
-  railBtns.forEach(function(btn, i){
-    btn.addEventListener('click', function(){ goTo(i); });
-  });
-  prevBtn.addEventListener('click', function(){ goTo(current - 1); });
-  nextBtn.addEventListener('click', function(){ goTo(current + 1); });
-
-  document.addEventListener('keydown', function(e){
-    if (['ArrowDown','PageDown'].indexOf(e.key) > -1){ e.preventDefault(); goTo(current + 1); }
-    else if (['ArrowUp','PageUp'].indexOf(e.key) > -1){ e.preventDefault(); goTo(current - 1); }
-    else if (e.key === 'Home'){ e.preventDefault(); goTo(0); }
-    else if (e.key === 'End'){ e.preventDefault(); goTo(total - 1); }
   });
 
-  var io = new IntersectionObserver(function(entries){
-    entries.forEach(function(entry){
-      if (entry.isIntersecting && entry.intersectionRatio > 0.5){
-        var idx = sections.indexOf(entry.target);
-        if (idx > -1) setActive(idx);
-      }
-    });
-  }, { threshold: [0.5] });
-  sections.forEach(function(s){ io.observe(s); });
+  const data = {
+    emp: {
+      a: {score:41, pill:'status-fail', pillText:'Not Advanced'},
+      b: {score:88, pill:'status-pass', pillText:'Advanced'}
+    },
+    wel: {
+      a: {pill:'status-fail', pillText:'Ineligible'},
+      b: {pill:'status-pass', pillText:'Eligible'}
+    },
+    risk: {
+      a: {pill:'status-flag', pillText:'Elevated Risk — Flagged'},
+      b: {pill:'status-pass', pillText:'Standard — No Flag'}
+    }
+  };
 
-  var sig = document.querySelector('.sig');
-  if (sig){
-    requestAnimationFrame(function(){
-      setTimeout(function(){ sig.classList.add('in'); }, 150);
-    });
+  function runModule(mod){
+    const select = document.getElementById(mod+'-select');
+    const val = select.value;
+    const out = document.getElementById(mod+'-output');
+    out.classList.add('show');
+
+    if(mod==='emp'){
+      const d = data.emp[val];
+      document.getElementById('emp-score').textContent = d.score;
+      const pill = document.getElementById('emp-pill');
+      pill.className = 'status-pill '+d.pill;
+      pill.textContent = d.pillText;
+    } else {
+      const d = data[mod][val];
+      const pill = document.getElementById(mod+'-pill');
+      pill.className = 'status-pill '+d.pill;
+      pill.textContent = d.pillText;
+    }
+    out.scrollIntoView({behavior:'smooth', block:'nearest'});
   }
-})();
+
+  function toggleWeights(mod){
+    const toggle = document.getElementById(mod+'-toggle');
+    const explain = document.getElementById(mod+'-explain');
+    const weights = document.getElementById(mod+'-weights');
+    if(toggle.checked){
+      explain.classList.remove('redacted');
+      weights.classList.add('show');
+    } else {
+      explain.classList.add('redacted');
+      weights.classList.remove('show');
+    }
+  }
 </script>
 
 </body>
