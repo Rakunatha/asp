@@ -3,493 +3,439 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>E-Nyaya+ | Digital Governance Mission</title>
+<title>Public Opinion Towards the Impact of School Education in Chennai — 7th STAR Summit 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --navy:#0B1E3D;
-    --navy-deep:#071527;
-    --paper:#F3EEE2;
-    --gold:#C9A227;
-    --gold-soft:#E4CD7C;
-    --teal:#2E6E62;
-    --red:#B3261E;
-    --ink:#20242B;
-    --line:rgba(11,30,61,0.14);
-    --mono: 'IBM Plex Mono', 'Courier New', monospace;
-    --serif: 'Spectral', Georgia, 'Times New Roman', serif;
-    --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --maroon:#6e1423;
+    --maroon-deep:#4a0d18;
+    --gold:#c9a227;
+    --gold-light:#e9d8a0;
+    --paper:#f7f3ea;
+    --paper-2:#efe8d8;
+    --ink:#241b14;
+    --ink-soft:#5b5044;
+    --rule:#c9a227;
+    --teal:#3a6b64;
+    --blue-bar:#3d5a80;
+    --amber-bar:#c98a3a;
+    --green-bar:#5a8a5a;
+    --radius:2px;
   }
-  @import url('https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
 
-  *{box-sizing:border-box; margin:0; padding:0;}
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
   body{
+    margin:0;
     background:var(--paper);
     color:var(--ink);
-    font-family:var(--sans);
+    font-family:'Source Serif 4', serif;
+    line-height:1.6;
     -webkit-font-smoothing:antialiased;
-    padding-bottom:60px;
   }
-  a{color:inherit;}
 
-  /* ---------- Header ---------- */
-  header.gov{
-    background:linear-gradient(180deg,var(--navy) 0%, var(--navy-deep) 100%);
-    color:var(--paper);
-    padding:22px 20px 18px;
-    border-bottom:4px solid var(--gold);
+  a{color:var(--maroon);}
+
+  .skip-link{
+    position:absolute; left:-999px; top:0; background:var(--gold); color:var(--ink);
+    padding:.6rem 1rem; z-index:100;
   }
-  .gov-top{
-    display:flex; align-items:center; gap:14px; max-width:920px; margin:0 auto;
+  .skip-link:focus{left:1rem; top:1rem;}
+
+  /* ===== MASTHEAD ===== */
+  .masthead{
+    background:
+      radial-gradient(1200px 300px at 15% -40%, rgba(233,216,160,0.25), transparent 60%),
+      linear-gradient(180deg, var(--maroon-deep), var(--maroon));
+    color:var(--paper);
+    padding:2.2rem 1.5rem 1.6rem;
+    position:relative;
+    border-bottom:6px solid var(--gold);
+  }
+  .masthead-inner{
+    max-width:1100px; margin:0 auto;
+    display:flex; align-items:center; justify-content:center; gap:1.6rem;
+    flex-wrap:wrap; text-align:center;
   }
   .seal{
-    width:46px; height:46px; flex:0 0 auto;
+    width:76px; height:76px; border-radius:50%;
+    border:2px solid var(--gold);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'IBM Plex Mono', monospace; font-size:.55rem; letter-spacing:.03em;
+    color:var(--gold-light); flex:0 0 auto;
+    background:rgba(0,0,0,0.15);
   }
-  .gov-titles{flex:1; min-width:0;}
+  .scales{
+    width:70px; height:70px; flex:0 0 auto; color:var(--gold-light);
+  }
+  .title-block h1{
+    font-family:'Playfair Display', serif;
+    font-weight:900;
+    font-size:clamp(2.2rem, 6vw, 3.4rem);
+    margin:0;
+    letter-spacing:.01em;
+    line-height:1;
+  }
+  .title-block h1 .ordinal{
+    font-size:.42em;
+    vertical-align:.55em;
+    color:var(--gold);
+    font-weight:700;
+  }
+  .title-block .sub{
+    font-family:'IBM Plex Mono', monospace;
+    letter-spacing:.28em;
+    text-transform:uppercase;
+    font-size:.68rem;
+    color:var(--gold-light);
+    margin-top:.35rem;
+  }
+
+  .ranks{
+    background:linear-gradient(90deg, var(--gold-light), var(--gold) 45%, var(--gold-light));
+    border-bottom:3px solid var(--maroon-deep);
+  }
+  .ranks-inner{
+    max-width:1100px; margin:0 auto;
+    display:flex; justify-content:center; gap:2.5rem; flex-wrap:wrap;
+    padding:.7rem 1.5rem;
+    font-family:'IBM Plex Mono', monospace;
+    color:var(--maroon-deep);
+  }
+  .ranks-inner .rank{ text-align:center; font-size:.7rem; letter-spacing:.05em; }
+  .ranks-inner .rank b{ display:block; font-size:1.15rem; font-family:'Playfair Display',serif; }
+
+  /* ===== PAPER TITLE ===== */
+  .paper-title{
+    max-width:1000px; margin:0 auto; padding:2.4rem 1.5rem .5rem;
+    text-align:center;
+  }
+  .paper-title h2{
+    font-family:'Playfair Display', serif;
+    font-weight:700;
+    font-size:clamp(1.3rem, 3vw, 1.9rem);
+    margin:0 0 .6rem;
+    color:var(--maroon-deep);
+  }
+  .rule{
+    width:120px; height:3px; margin:0 auto;
+    background:linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  /* ===== LAYOUT ===== */
+  main{max-width:1000px; margin:0 auto; padding:1.5rem 1.5rem 3rem;}
+
   .eyebrow{
-    font-family:var(--mono); font-size:10.5px; letter-spacing:0.14em; text-transform:uppercase;
-    color:var(--gold-soft); opacity:0.9;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.72rem; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--maroon); font-weight:600;
+    display:flex; align-items:center; gap:.6rem;
+    margin:2.6rem 0 .8rem;
   }
-  .brand{
-    font-family:var(--serif); font-weight:700; font-size:clamp(24px,6vw,32px);
-    letter-spacing:0.01em; margin-top:2px;
-  }
-  .brand .plus{color:var(--gold);}
-  .sub{
-    font-size:12.5px; color:rgba(243,238,226,0.72); margin-top:4px; line-height:1.5;
-  }
-  .fictional-tag{
-    display:inline-block; margin-top:10px; font-family:var(--mono); font-size:10px;
-    letter-spacing:0.06em; text-transform:uppercase; color:var(--navy-deep);
-    background:var(--gold-soft); padding:3px 8px; border-radius:2px;
+  .eyebrow::after{
+    content:""; flex:1; height:1px; background:var(--gold);
   }
 
-  /* ---------- Tabs ---------- */
-  nav.tabs{
-    max-width:920px; margin:18px auto 0; padding:0 20px;
-    display:flex; gap:6px; flex-wrap:wrap;
+  section p{ margin:0 0 1rem; color:var(--ink); }
+  section.intro{
+    columns: 1;
   }
-  .tab-btn{
-    font-family:var(--mono); font-size:11.5px; letter-spacing:0.04em; text-transform:uppercase;
-    background:transparent; border:1px solid var(--line); color:var(--navy);
-    padding:9px 14px; border-radius:2px; cursor:pointer; transition:all .15s ease;
-  }
-  .tab-btn:hover{border-color:var(--navy);}
-  .tab-btn.active{
-    background:var(--navy); color:var(--paper); border-color:var(--navy);
+  @media(min-width:760px){
+    section.intro{ columns:2; column-gap:2.4rem; }
+    section.intro p{ break-inside:avoid; }
   }
 
-  main{max-width:920px; margin:0 auto; padding:22px 20px 0;}
-  section.panel{display:none;}
-  section.panel.active{display:block; animation:fade .25s ease;}
-  @keyframes fade{from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);}}
-
-  .card{
-    background:#fff; border:1px solid var(--line); border-radius:3px;
-    padding:20px; margin-bottom:16px;
+  .two-col{
+    display:grid; grid-template-columns:1fr; gap:2rem;
   }
-  h2.section-title{
-    font-family:var(--serif); font-size:20px; font-weight:600; color:var(--navy);
-    margin-bottom:4px;
-  }
-  p.section-desc{font-size:13px; color:#5a6070; margin-bottom:16px; line-height:1.5;}
-
-  label{
-    display:block; font-family:var(--mono); font-size:10.5px; text-transform:uppercase;
-    letter-spacing:0.06em; color:#6b7280; margin-bottom:6px;
-  }
-  select, input{
-    width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:2px;
-    font-family:var(--sans); font-size:14px; background:#fbfaf7; color:var(--ink);
-  }
-  .field{margin-bottom:14px;}
-
-  .btn{
-    font-family:var(--mono); font-size:11.5px; letter-spacing:0.05em; text-transform:uppercase;
-    background:var(--navy); color:var(--paper); border:none; padding:11px 18px;
-    border-radius:2px; cursor:pointer;
-  }
-  .btn:hover{background:var(--navy-deep);}
-
-  /* ---------- Output block ---------- */
-  .output{
-    margin-top:18px; border-top:1px dashed var(--line); padding-top:18px; display:none;
-  }
-  .output.show{display:block;}
-  .status-row{display:flex; align-items:center; gap:12px; margin-bottom:14px;}
-  .status-pill{
-    font-family:var(--mono); font-size:11px; letter-spacing:0.05em; text-transform:uppercase;
-    padding:5px 12px; border-radius:20px; font-weight:600;
-  }
-  .status-pass{background:rgba(46,110,98,0.12); color:var(--teal);}
-  .status-fail{background:rgba(179,38,30,0.1); color:var(--red);}
-  .status-flag{background:rgba(201,162,39,0.15); color:#8a6d10;}
-  .score-big{font-family:var(--serif); font-size:34px; font-weight:700; color:var(--navy);}
-  .score-label{font-family:var(--mono); font-size:10px; color:#8a8f9c; text-transform:uppercase;}
-
-  .explain-box{
-    background:var(--navy-deep); color:rgba(243,238,226,0.85); border-radius:3px;
-    padding:16px; font-family:var(--mono); font-size:12px; line-height:1.7; position:relative;
-    overflow:hidden;
-  }
-  .explain-box.redacted::after{
-    content:"";
-    position:absolute; inset:0;
-    background:repeating-linear-gradient(135deg, rgba(0,0,0,0.55) 0 6px, rgba(0,0,0,0.7) 6px 12px);
-    backdrop-filter:blur(1.5px);
-  }
-  .redacted-label{
-    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-    z-index:2; text-align:center; font-family:var(--mono); font-size:11px;
-    letter-spacing:0.08em; text-transform:uppercase; color:var(--gold-soft);
-    background:rgba(7,21,39,0.85); padding:10px 16px; border:1px solid rgba(228,205,124,0.4);
-    border-radius:2px;
+  @media(min-width:760px){
+    .two-col{ grid-template-columns:1fr 1fr; }
   }
 
-  /* ---------- Judicial toggle ---------- */
-  .judicial-bar{
-    display:flex; align-items:center; justify-content:space-between; gap:14px;
-    background:var(--navy); color:var(--paper); border-radius:3px; padding:14px 16px;
-    margin:20px 0 8px; flex-wrap:wrap;
+  ol.objectives, ul.plain{
+    margin:0; padding-left:1.3rem;
   }
-  .judicial-text{font-size:13px; line-height:1.5; max-width:560px;}
-  .judicial-text b{color:var(--gold-soft);}
-  .switch{
-    position:relative; width:52px; height:28px; flex:0 0 auto; cursor:pointer;
-  }
-  .switch input{opacity:0; width:0; height:0;}
-  .slider{
-    position:absolute; inset:0; background:rgba(243,238,226,0.25); border-radius:20px; transition:.2s;
-  }
-  .slider::before{
-    content:""; position:absolute; width:20px; height:20px; left:4px; top:4px;
-    background:var(--paper); border-radius:50%; transition:.2s;
-  }
-  input:checked + .slider{background:var(--gold);}
-  input:checked + .slider::before{transform:translateX(24px); background:var(--navy-deep);}
+  ol.objectives li, ul.plain li{ margin-bottom:.6rem; }
 
-  .weights{display:none; margin-top:14px;}
-  .weights.show{display:block; animation:fade .3s ease;}
-  .weight-row{margin-bottom:12px;}
-  .weight-label-row{
-    display:flex; justify-content:space-between; font-size:12.5px; margin-bottom:5px;
+  .methodology-box{
+    background:var(--paper-2);
+    border-left:4px solid var(--gold);
+    padding:1.1rem 1.3rem;
+    font-size:.97rem;
   }
-  .weight-label-row .name{color:var(--ink); font-weight:500;}
-  .weight-label-row .name.proxy{color:var(--red);}
-  .weight-label-row .val{font-family:var(--mono); color:#6b7280;}
-  .bar-track{height:8px; background:#eee5d0; border-radius:4px; overflow:hidden;}
-  .bar-fill{height:100%; background:var(--navy); border-radius:4px;}
-  .bar-fill.proxy{background:var(--red);}
-  .proxy-note{
-    font-size:11.5px; color:var(--red); font-family:var(--mono); margin-top:2px;
-  }
+  .methodology-box ul{ margin:0; padding-left:1.1rem; }
+  .methodology-box li{ margin-bottom:.5rem; }
 
-  .footnote{
-    font-size:11px; color:#8a8f9c; margin-top:10px; line-height:1.5;
+  /* ===== FIGURES ===== */
+  .figures{
+    display:grid; grid-template-columns:1fr; gap:1.8rem;
+    margin-top:1rem;
   }
+  @media(min-width:860px){
+    .figures{ grid-template-columns:repeat(3, 1fr); }
+  }
+  .figure-card{
+    background:#fffdf7;
+    border:1px solid var(--paper-2);
+    box-shadow:0 1px 0 var(--gold-light);
+    padding:1rem 1rem 1.2rem;
+    display:flex; flex-direction:column;
+  }
+  .figure-card h3{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.72rem; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--ink-soft); margin:0 0 .8rem; text-align:center;
+  }
+  .chart{
+    display:flex; align-items:flex-end; justify-content:space-around;
+    height:160px; gap:6px; border-bottom:1px solid #ddd3b8; padding-bottom:2px;
+  }
+  .chart-group{
+    display:flex; align-items:flex-end; gap:2px; height:100%;
+  }
+  .bar{
+    width:9px; border-radius:1px 1px 0 0;
+    position:relative;
+  }
+  .bar.blue{ background:var(--blue-bar); }
+  .bar.amber{ background:var(--amber-bar); }
+  .bar.green{ background:var(--green-bar); }
+  .chart-labels{
+    display:flex; justify-content:space-around; margin-top:.4rem;
+    font-family:'IBM Plex Mono', monospace; font-size:.55rem; color:var(--ink-soft);
+    text-align:center;
+  }
+  .chart-labels span{ width:0; flex:1; }
+  .legend-dots{
+    display:flex; gap:.9rem; justify-content:center; margin-top:.7rem;
+    font-family:'IBM Plex Mono', monospace; font-size:.6rem; color:var(--ink-soft);
+  }
+  .legend-dots i{
+    display:inline-block; width:8px; height:8px; margin-right:4px; border-radius:50%;
+    vertical-align:middle;
+  }
+  .figure-caption{
+    font-size:.85rem; color:var(--ink-soft); margin-top:.9rem; padding-top:.8rem;
+    border-top:1px dashed var(--gold-light);
+  }
+  .figure-caption b{ color:var(--ink); }
 
-  /* Oversight log */
-  .log-row{
-    display:flex; justify-content:space-between; align-items:center;
-    padding:10px 0; border-bottom:1px solid var(--line); font-size:12.5px;
+  /* ===== DISCUSSION / CONCLUSION ===== */
+  .callout{
+    background:var(--maroon-deep); color:var(--paper);
+    padding:1.6rem 1.8rem; margin-top:1rem;
+    position:relative; border-left:5px solid var(--gold);
   }
-  .log-row:last-child{border-bottom:none;}
-  .log-officer{font-family:var(--mono); font-size:11px; color:#6b7280;}
-  .log-decision{font-weight:600;}
-  .stat-strip{
-    display:flex; gap:0; border:1px solid var(--line); border-radius:3px; overflow:hidden; margin-bottom:16px;
-  }
-  .stat{flex:1; padding:14px; text-align:center; border-right:1px solid var(--line);}
-  .stat:last-child{border-right:none;}
-  .stat .num{font-family:var(--serif); font-size:24px; font-weight:700; color:var(--navy);}
-  .stat .lbl{font-family:var(--mono); font-size:9.5px; text-transform:uppercase; color:#8a8f9c; margin-top:2px;}
+  .callout p{ color:var(--gold-light); }
+  .callout p:last-child{ margin-bottom:0; }
 
-  footer.exhibit{
-    max-width:920px; margin:30px auto 0; padding:16px 20px; font-size:11.5px;
-    color:#8a8f9c; text-align:center; line-height:1.6; border-top:1px solid var(--line);
+  /* ===== REFERENCES ===== */
+  .references ol{ padding-left:1.4rem; font-size:.92rem; color:var(--ink-soft); }
+  .references li{ margin-bottom:.7rem; }
+  .references a{ word-break:break-all; }
+
+  /* ===== FOOTER ===== */
+  footer{
+    background:var(--ink); color:var(--paper-2);
+    padding:1.6rem 1.5rem; margin-top:2rem;
+  }
+  .footer-inner{
+    max-width:1000px; margin:0 auto;
+    display:flex; justify-content:space-between; gap:1.5rem; flex-wrap:wrap;
+    font-family:'IBM Plex Mono', monospace; font-size:.78rem;
+  }
+  .footer-inner div{ flex:1; min-width:220px; }
+  .footer-inner .label{
+    letter-spacing:.14em; text-transform:uppercase; color:var(--gold); font-size:.66rem; margin-bottom:.3rem;
+  }
+  .footer-inner .name{ font-family:'Playfair Display', serif; font-size:1.05rem; color:#fff; }
+
+  ::selection{ background:var(--gold-light); }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
   }
 </style>
 </head>
 <body>
 
-<header class="gov">
-  <div class="gov-top">
-    <svg class="seal" viewBox="0 0 100 100" fill="none">
-      <circle cx="50" cy="50" r="46" stroke="#C9A227" stroke-width="3"/>
-      <circle cx="50" cy="50" r="34" stroke="#E4CD7C" stroke-width="1.5"/>
-      <path d="M50 20 L58 42 L82 42 L62 56 L70 78 L50 64 L30 78 L38 56 L18 42 L42 42 Z" fill="#C9A227" opacity="0.9"/>
-    </svg>
-    <div class="gov-titles">
-      <div class="eyebrow">Ministry of Home &amp; Social Justice · Republic of Aryavarta</div>
-      <div class="brand">E‑Nyaya<span class="plus">+</span></div>
-      <div class="sub">Digital Governance Mission, 2024 — Algorithmic Decision Support System<br>Deployed under the AIGAA · Operated by TechNova Solutions Ltd. (PPP)</div>
-      <div class="fictional-tag">Fictional exhibit — W.P. No. X of 2026</div>
+<a class="skip-link" href="#main-content">Skip to content</a>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <div class="seal">SAVEETHA<br>STAR<br>2026</div>
+    <div class="title-block">
+      <div class="sub">Saveetha Transdisciplinary Annual Research Summit</div>
+      <h1><span class="ordinal">7TH</span> STAR<br>SUMMIT 2026</h1>
     </div>
+    <svg class="scales" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M32 4V56M18 56H46M10 16H54M10 16L4 30H16L10 16ZM54 16L48 30H60L54 16Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M4 30C4 34 8 36 10 36C12 36 16 34 16 30" stroke="currentColor" stroke-width="2"/>
+      <path d="M48 30C48 34 52 36 54 36C56 36 60 34 60 30" stroke="currentColor" stroke-width="2"/>
+      <circle cx="32" cy="56" r="3" fill="currentColor"/>
+    </svg>
   </div>
 </header>
 
-<nav class="tabs">
-  <button class="tab-btn active" data-tab="employment">Public Employment Ranking</button>
-  <button class="tab-btn" data-tab="welfare">Welfare Eligibility</button>
-  <button class="tab-btn" data-tab="risk">Preventive Risk Assessment</button>
-  <button class="tab-btn" data-tab="oversight">Human Oversight Log</button>
-</nav>
+<div class="ranks">
+  <div class="ranks-inner">
+    <div class="rank">SIMATS UNIVERSITY<br><b>NIRF India Rank 13</b></div>
+    <div class="rank">LAW COLLEGE<br><b>NIRF India Rank 19</b></div>
+    <div class="rank">NAAC ACCREDITATION<br><b>Grade A++</b></div>
+  </div>
+</div>
 
-<main>
+<div class="paper-title">
+  <h2>Public Opinion Towards the Impact of School Education in Chennai</h2>
+  <div class="rule"></div>
+</div>
 
-  <!-- ============ EMPLOYMENT ============ -->
-  <section class="panel active" id="employment">
-    <div class="card">
-      <h2 class="section-title">Candidate Merit Ranking</h2>
-      <p class="section-desc">Select a candidate to generate their system-assigned Merit Score for the District Revenue Clerk recruitment cycle.</p>
+<main id="main-content">
 
-      <div class="field">
-        <label>Applicant</label>
-        <select id="emp-select">
-          <option value="a">A. Kavitha Ilangovan — App. No. 22190</option>
-          <option value="b">B. Rohan Varadarajan — App. No. 22214</option>
-        </select>
-      </div>
-      <button class="btn" onclick="runModule('emp')">Generate Assessment</button>
-
-      <div class="output" id="emp-output">
-        <div class="status-row">
-          <div class="score-big" id="emp-score">—</div>
-          <div>
-            <div class="score-label">Merit Score / 100</div>
-            <span class="status-pill" id="emp-pill">—</span>
-          </div>
-        </div>
-        <div class="explain-box redacted" id="emp-explain">
-          <div class="redacted-label">Protected Algorithmic Information<br>§11, AIGAA — Explanation Withheld</div>
-          <div>SYSTEM_OUTPUT :: rank_percentile = —<br>logic_trace :: [ CLASSIFIED ]<br>recommendation :: DO_NOT_ADVANCE</div>
-        </div>
-        <p class="footnote">Notice under Rule 4(2): You are interacting with an AI system. A summary explanation may be requested but is not guaranteed to disclose underlying variables.</p>
-
-        <div class="judicial-bar">
-          <div class="judicial-text">🔒 <b>In‑Camera Judicial Inspection</b> (Rule 5) — reveal the system's internal weighting, restricted to Court and appointed experts.</div>
-          <label class="switch">
-            <input type="checkbox" id="emp-toggle" onchange="toggleWeights('emp')">
-            <span class="slider"></span>
-          </label>
-        </div>
-
-        <div class="weights" id="emp-weights">
-          <div class="weight-row">
-            <div class="weight-label-row"><span class="name">Written Test Score</span><span class="val">22%</span></div>
-            <div class="bar-track"><div class="bar-fill" style="width:22%"></div></div>
-          </div>
-          <div class="weight-row">
-            <div class="weight-label-row"><span class="name">Prior Work Experience</span><span class="val">14%</span></div>
-            <div class="bar-track"><div class="bar-fill" style="width:14%"></div></div>
-          </div>
-          <div class="weight-row">
-            <div class="weight-label-row"><span class="name proxy">Residential Pincode Tier</span><span class="val">31%</span></div>
-            <div class="bar-track"><div class="bar-fill proxy" style="width:31%"></div></div>
-            <div class="proxy-note">⚠ Proxy variable correlated with community background — flagged in CAJ Report, Feb 2026</div>
-          </div>
-          <div class="weight-row">
-            <div class="weight-label-row"><span class="name proxy">Educational Institution Tier</span><span class="val">27%</span></div>
-            <div class="bar-track"><div class="bar-fill proxy" style="width:27%"></div></div>
-            <div class="proxy-note">⚠ Proxy variable correlated with community background — flagged in CAJ Report, Feb 2026</div>
-          </div>
-          <div class="weight-row">
-            <div class="weight-label-row"><span class="name">Interview Panel Note</span><span class="val">6%</span></div>
-            <div class="bar-track"><div class="bar-fill" style="width:6%"></div></div>
-          </div>
-          <p class="footnote">Combined weight of contested proxy variables: <b>58%</b> of total score — exceeding all merit-based inputs combined.</p>
-        </div>
-      </div>
-    </div>
+  <section class="intro">
+    <div class="eyebrow" style="margin-top:0">Introduction</div>
+    <p>Indian education is a diverse landscape that combines traditional wisdom with modern learning. It spans a wide spectrum, from ancient gurukuls to cutting-edge technology-driven institutions. Challenges like access and quality persist, but India's commitment to education remains strong, fostering a new generation poised to lead in a globalized world.</p>
+    <p>The aim of this research is to mitigate an improved learning experience. This research investigates public opinion regarding the effectiveness and impact of school education in Chennai, India. Data was collected through a comprehensive survey administered to a diverse sample of Chennai residents, comprising parents, students, educators, and community members.</p>
+    <p>Descriptive research was conducted. 215 samples were collected through a convenient sampling method. The sample frame includes individuals from city, town, and village. Age, gender, educational qualification, employment status, and marital status are the independent variables taken for analyses in SPSS.</p>
+    <p>The factors as to which act as a benefit of schooling and factors which act as a negative aspect of schooling are the dependent variables of the analyses. Complex charts and correlation analyses are used as statistical tools for the analyses. The study reveals a range of opinions, with a significant portion of respondents expressing concerns about the need to improve teacher–student ratio, more extracurricular activities, implement professionalism, and more opportunities based on student's skills should be in Chennai schools. The study concludes that level of educational qualification and marital status impacts perceptions of school education in Chennai.</p>
   </section>
 
-  <!-- ============ WELFARE ============ -->
-  <section class="panel" id="welfare">
-    <div class="card">
-      <h2 class="section-title">Social Welfare Eligibility Check</h2>
-      <p class="section-desc">Determine eligibility for the Aryavarta Household Support Scheme.</p>
+  <div class="two-col">
+    <section>
+      <div class="eyebrow">Objectives</div>
+      <ol class="objectives">
+        <li>To study the opinion of the impact of today's school education with relation to different age groups.</li>
+        <li>To examine the opinion of people with different educational qualification regarding the impact of today's school education.</li>
+      </ol>
+    </section>
 
-      <div class="field">
-        <label>Household ID</label>
-        <select id="wel-select">
-          <option value="a">HH‑40417 — Old Colony, Ward 22</option>
-          <option value="b">HH‑40988 — New Township, Ward 7</option>
-        </select>
+    <section>
+      <div class="eyebrow">Methodology</div>
+      <div class="methodology-box">
+        <ul>
+          <li><b>Research method:</b> Empirical method</li>
+          <li><b>Sampling method:</b> Convenient sampling. Sample size: 223</li>
+          <li><b>Sample frame:</b> Chennai</li>
+          <li><b>Statistical tool:</b> Bar graph</li>
+          <li><b>Dependent variables:</b> Age, educational qualifications, place of residence, gender, occupation</li>
+          <li><b>Independent variables:</b> Awareness on government initiatives, agreeability on the GST exemption</li>
+        </ul>
       </div>
-      <button class="btn" onclick="runModule('wel')">Check Eligibility</button>
+    </section>
+  </div>
 
-      <div class="output" id="wel-output">
-        <div class="status-row">
-          <span class="status-pill" id="wel-pill">—</span>
-        </div>
-        <div class="explain-box redacted" id="wel-explain">
-          <div class="redacted-label">Protected Algorithmic Information<br>§11, AIGAA — Explanation Withheld</div>
-          <div>ELIGIBILITY_MODEL :: v4.2<br>criteria_met :: [ CLASSIFIED ]<br>final_status :: —</div>
-        </div>
+  <div class="eyebrow">Findings — Figures 1&ndash;3</div>
+  <div class="figures">
 
-        <div class="judicial-bar">
-          <div class="judicial-text">🔒 <b>In‑Camera Judicial Inspection</b> (Rule 5) — reveal the system's internal weighting.</div>
-          <label class="switch">
-            <input type="checkbox" id="wel-toggle" onchange="toggleWeights('wel')">
-            <span class="slider"></span>
-          </label>
+    <div class="figure-card">
+      <h3>Fig. 1 — Impact of Today's School Education</h3>
+      <div class="chart" role="img" aria-label="Bar chart showing opinions on the impact of today's school education, grouped by age, with the above-30 group showing the strongest agreement.">
+        <div class="chart-group">
+          <div class="bar blue" style="height:34%"></div><div class="bar amber" style="height:22%"></div><div class="bar green" style="height:14%"></div>
         </div>
-
-        <div class="weights" id="wel-weights">
-          <div class="weight-row">
-            <div class="weight-label-row"><span class="name">Declared Household Income</span><span class="val">18%</span></div>
-            <div class="bar-track"><div class="bar-fill" style="width:18%"></div></div>
-          </div>
-          <div class="weight-row">
-            <div class="weight-label-row"><span class="name">Family Size</span><span class="val">9%</span></div>
-            <div class="bar-track"><div class="bar-fill" style="width:9%"></div></div>
-          </div>
-          <div class="weight-row">
-            <div class="weight-label-row"><span class="name proxy">Historical Ward Default Rate</span><span class="val">40%</span></div>
-            <div class="bar-track"><div class="bar-fill proxy" style="width:40%"></div></div>
-            <div class="proxy-note">⚠ Trained on historical data reflecting entrenched disparities (Feb 2026 CAJ Report)</div>
-          </div>
-          <div class="weight-row">
-            <div class="weight-label-row"><span class="name proxy">Address Stability Score</span><span class="val">22%</span></div>
-            <div class="bar-track"><div class="bar-fill proxy" style="width:22%"></div></div>
-            <div class="proxy-note">⚠ Penalises informal/undocumented housing common to marginalised wards</div>
-          </div>
-          <div class="weight-row">
-            <div class="weight-label-row"><span class="name">Prior Scheme Compliance</span><span class="val">11%</span></div>
-            <div class="bar-track"><div class="bar-fill" style="width:11%"></div></div>
-          </div>
+        <div class="chart-group">
+          <div class="bar blue" style="height:24%"></div><div class="bar amber" style="height:30%"></div><div class="bar green" style="height:20%"></div>
+        </div>
+        <div class="chart-group">
+          <div class="bar blue" style="height:18%"></div><div class="bar amber" style="height:26%"></div><div class="bar green" style="height:16%"></div>
+        </div>
+        <div class="chart-group">
+          <div class="bar blue" style="height:16%"></div><div class="bar amber" style="height:38%"></div><div class="bar green" style="height:78%"></div>
         </div>
       </div>
+      <div class="chart-labels"><span>Strongly disagree</span><span>Neutral</span><span>Agree</span><span>Strongly agree</span></div>
+      <div class="legend-dots"><span><i style="background:var(--blue-bar)"></i>Below 20 yrs</span><span><i style="background:var(--amber-bar)"></i>20–30 yrs</span><span><i style="background:var(--green-bar)"></i>Above 30 yrs</span></div>
+      <p class="figure-caption"><b>Legend:</b> Figure 1 shows the impact of today's school education based on the age of the respondents.</p>
     </div>
-  </section>
 
-  <!-- ============ RISK ============ -->
-  <section class="panel" id="risk">
-    <div class="card">
-      <h2 class="section-title">Preventive Detention Risk Flagging</h2>
-      <p class="section-desc">Illustrative output only — this module is presented purely to demonstrate the pleadings in W.P. No. X of 2026 regarding Section 3(4) (Predictive Policing) and does not depict any real methodology.</p>
-
-      <div class="field">
-        <label>Subject Reference</label>
-        <select id="risk-select">
-          <option value="a">REF‑88213 — Zone C (Old Colony)</option>
-          <option value="b">REF‑88377 — Zone A (New Township)</option>
-        </select>
-      </div>
-      <button class="btn" onclick="runModule('risk')">Generate Risk Flag</button>
-
-      <div class="output" id="risk-output">
-        <div class="status-row">
-          <span class="status-pill" id="risk-pill">—</span>
+    <div class="figure-card">
+      <h3>Fig. 2 — Improve Teacher–Student Ratio</h3>
+      <div class="chart" role="img" aria-label="Bar chart showing agreement on improving teacher-student ratio, grouped by age, with strong agreement across groups.">
+        <div class="chart-group">
+          <div class="bar blue" style="height:14%"></div><div class="bar amber" style="height:20%"></div><div class="bar green" style="height:10%"></div>
         </div>
-        <div class="explain-box redacted" id="risk-explain">
-          <div class="redacted-label">Protected Algorithmic Information<br>§11, AIGAA — Explanation Withheld</div>
-          <div>RISK_MODEL :: profiling_index<br>basis :: [ CLASSIFIED ]<br>two_person_verification :: PENDING</div>
+        <div class="chart-group">
+          <div class="bar blue" style="height:22%"></div><div class="bar amber" style="height:16%"></div><div class="bar green" style="height:12%"></div>
         </div>
-        <p class="footnote">Rule 3(2), Two‑Person Rule: this flag requires independent confirmation by two human overseers before action. See Human Oversight Log tab.</p>
+        <div class="chart-group">
+          <div class="bar blue" style="height:64%"></div><div class="bar amber" style="height:40%"></div><div class="bar green" style="height:20%"></div>
+        </div>
+        <div class="chart-group">
+          <div class="bar blue" style="height:30%"></div><div class="bar amber" style="height:70%"></div><div class="bar green" style="height:36%"></div>
+        </div>
       </div>
+      <div class="chart-labels"><span>Disagree</span><span>Neutral</span><span>Agree</span><span>Strongly agree</span></div>
+      <div class="legend-dots"><span><i style="background:var(--blue-bar)"></i>Below 20 yrs</span><span><i style="background:var(--amber-bar)"></i>20–30 yrs</span><span><i style="background:var(--green-bar)"></i>Above 30 yrs</span></div>
+      <p class="figure-caption"><b>Legend:</b> Figure 2 shows the impact of today's school education based on the need for improvement of teacher–student ratio.</p>
     </div>
-  </section>
 
-  <!-- ============ OVERSIGHT LOG ============ -->
-  <section class="panel" id="oversight">
-    <div class="card">
-      <h2 class="section-title">Human Oversight Log</h2>
-      <p class="section-desc">Record of officer review actions on E‑Nyaya+ recommendations, Jan 2025 – Feb 2026.</p>
-
-      <div class="stat-strip">
-        <div class="stat"><div class="num">1,04,662</div><div class="lbl">Decisions Reviewed</div></div>
-        <div class="stat"><div class="num">99.6%</div><div class="lbl">AI Recommendation Accepted</div></div>
-        <div class="stat"><div class="num">0.4%</div><div class="lbl">Overturned by Officer</div></div>
+    <div class="figure-card">
+      <h3>Fig. 3 — More Extracurricular Activities</h3>
+      <div class="chart" role="img" aria-label="Bar chart showing agreement on the need for more extracurricular activities, grouped by age, with strong agreement concentrated in the under-20 group.">
+        <div class="chart-group">
+          <div class="bar blue" style="height:12%"></div><div class="bar amber" style="height:20%"></div><div class="bar green" style="height:14%"></div>
+        </div>
+        <div class="chart-group">
+          <div class="bar blue" style="height:16%"></div><div class="bar amber" style="height:24%"></div><div class="bar green" style="height:18%"></div>
+        </div>
+        <div class="chart-group">
+          <div class="bar blue" style="height:22%"></div><div class="bar amber" style="height:30%"></div><div class="bar green" style="height:20%"></div>
+        </div>
+        <div class="chart-group">
+          <div class="bar blue" style="height:80%"></div><div class="bar amber" style="height:44%"></div><div class="bar green" style="height:26%"></div>
+        </div>
       </div>
-
-      <div class="log-row">
-        <div><div class="log-decision">App. No. 22190 — Not Advanced</div><div class="log-officer">Reviewed by: Officer R. Sundaram, 14‑Feb‑2026</div></div>
-        <span class="status-pill status-fail">AI Score Upheld</span>
-      </div>
-      <div class="log-row">
-        <div><div class="log-decision">HH‑40417 — Ineligible</div><div class="log-officer">Reviewed by: Officer S. Bhaskaran, 09‑Feb‑2026</div></div>
-        <span class="status-pill status-fail">AI Score Upheld</span>
-      </div>
-      <div class="log-row">
-        <div><div class="log-decision">REF‑88213 — Risk Flag: Elevated</div><div class="log-officer">Reviewed by: Officers T. Menon &amp; V. Dev, 11‑Feb‑2026</div></div>
-        <span class="status-pill status-flag">Flag Confirmed</span>
-      </div>
-      <div class="log-row">
-        <div><div class="log-decision">App. No. 19004 — Advanced</div><div class="log-officer">Reviewed by: Officer R. Sundaram, 02‑Feb‑2026</div></div>
-        <span class="status-pill status-pass">AI Score Upheld</span>
-      </div>
-
-      <p class="footnote" style="margin-top:14px;">Note: no entry in the sampled log contains an individualised written reason for accepting the AI's recommendation, as would be required under the Proviso to Rule 3(3). Reason fields are uniformly logged as "Concur — system-generated."</p>
+      <div class="chart-labels"><span>Disagree</span><span>Neutral</span><span>Agree</span><span>Strongly agree</span></div>
+      <div class="legend-dots"><span><i style="background:var(--blue-bar)"></i>Below 20 yrs</span><span><i style="background:var(--amber-bar)"></i>20–30 yrs</span><span><i style="background:var(--green-bar)"></i>Above 30 yrs</span></div>
+      <p class="figure-caption"><b>Legend:</b> Figure 3 shows the impact of today's school education based on the need for more extracurricular activities.</p>
     </div>
+
+  </div>
+  <p style="font-size:.78rem; color:var(--ink-soft); margin-top:.6rem;"><em>Note: charts above are stylized recreations illustrating the reported trends from the original poster; refer to the source figures for exact values.</em></p>
+
+  <div class="two-col" style="margin-top:2rem;">
+    <section>
+      <div class="eyebrow">Discussion</div>
+      <ul class="plain">
+        <li>People in the 20–30 age group believe that teacher harassment is a consequence of modern school education, while those under 20 years old think that effective communication is also a result of contemporary school education (Fig. 1).</li>
+        <li>Individuals under the age of 20 are in favor of enhancing the teacher–student ratio, while those aged 20 to 30 are highly supportive of such improvement (Fig. 2).</li>
+        <li>Individuals under 20 years of age strongly concur that extracurricular activities in school influence students, while those between 20 and 30 years old hold a general agreement on the impact of extracurricular activities on students (Fig. 3).</li>
+      </ul>
+    </section>
+
+    <section>
+      <div class="eyebrow">Conclusion</div>
+      <div class="callout">
+        <p>It is deduced from the study that individuals' age groups influence their opinions on the quality and effectiveness of school education. There is a gender-based difference in public opinion regarding school education. The level of educational qualification influences respondents' views on the education system, and marital status also impacts perceptions of school education in Chennai.</p>
+        <p>Professionals or better-educated respondents appear more aware of the pros and cons of present-day schooling and its impact on a child's life than those with less knowledge and awareness. There also exists a positive correlation between the factors that act as benefits of schooling and negative aspects of the same.</p>
+        <p>It is worth noting that the Right to Education (RTE) Act plays a pivotal role in India's educational landscape, providing a legal framework for the realization of every child's right to quality education — covering aspects from teacher deployment to curriculum development, with the aim of fostering equitable and inclusive education. The RTE Act stands as a testament to India's commitment to accessible, high-quality education for its youth, reflecting a vision of a brighter future for all. To bridge the existing gap, measures should be taken to educate and raise awareness about proper schooling, and policies should be framed to encourage a holistic approach in school.</p>
+      </div>
+    </section>
+  </div>
+
+  <section class="references" style="margin-top:2rem;">
+    <div class="eyebrow">References</div>
+    <ol>
+      <li>Yang, Y. (n.d.). The impact of positive school experiences and school SES on depressive symptoms in Chinese children: A multilevel investigation. <a href="https://journals.uvic.ca/index.php/ijcyfs/article/view/17758" target="_blank" rel="noopener">journals.uvic.ca/index.php/ijcyfs/article/view/17758</a></li>
+      <li>International Journal of Child, Youth and Family Studies, 8(2), 37–58. <a href="https://doi.org/10.18357/ijcyfs8220171758" target="_blank" rel="noopener">doi.org/10.18357/ijcyfs8220171758</a></li>
+    </ol>
   </section>
 
 </main>
 
-<footer class="exhibit">
-  Prepared as a demonstrative exhibit for the 9th Ever Rolling Mega Moot Competition, 2026 — Saveetha School of Law, SIMATS.<br>
-  All names, IDs, wards, and figures are fictional and constructed solely from the facts of W.P. No. X of 2026. Not a real government system.
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="label">Author</div>
+      <div class="name">Rakunatha Khrishanth Manathra</div>
+    </div>
+    <div>
+      <div class="label">Co-Author</div>
+      <div class="name">Dr. N. Ramamani</div>
+    </div>
+  </div>
 </footer>
-
-<script>
-  // Tabs
-  document.querySelectorAll('.tab-btn').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-      document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById(btn.dataset.tab).classList.add('active');
-    });
-  });
-
-  const data = {
-    emp: {
-      a: {score:41, pill:'status-fail', pillText:'Not Advanced'},
-      b: {score:88, pill:'status-pass', pillText:'Advanced'}
-    },
-    wel: {
-      a: {pill:'status-fail', pillText:'Ineligible'},
-      b: {pill:'status-pass', pillText:'Eligible'}
-    },
-    risk: {
-      a: {pill:'status-flag', pillText:'Elevated Risk — Flagged'},
-      b: {pill:'status-pass', pillText:'Standard — No Flag'}
-    }
-  };
-
-  function runModule(mod){
-    const select = document.getElementById(mod+'-select');
-    const val = select.value;
-    const out = document.getElementById(mod+'-output');
-    out.classList.add('show');
-
-    if(mod==='emp'){
-      const d = data.emp[val];
-      document.getElementById('emp-score').textContent = d.score;
-      const pill = document.getElementById('emp-pill');
-      pill.className = 'status-pill '+d.pill;
-      pill.textContent = d.pillText;
-    } else {
-      const d = data[mod][val];
-      const pill = document.getElementById(mod+'-pill');
-      pill.className = 'status-pill '+d.pill;
-      pill.textContent = d.pillText;
-    }
-    out.scrollIntoView({behavior:'smooth', block:'nearest'});
-  }
-
-  function toggleWeights(mod){
-    const toggle = document.getElementById(mod+'-toggle');
-    const explain = document.getElementById(mod+'-explain');
-    const weights = document.getElementById(mod+'-weights');
-    if(toggle.checked){
-      explain.classList.remove('redacted');
-      weights.classList.add('show');
-    } else {
-      explain.classList.add('redacted');
-      weights.classList.remove('show');
-    }
-  }
-</script>
 
 </body>
 </html>
