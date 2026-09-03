@@ -2,648 +2,581 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Interactive Lawyers // Legal Intelligence Interface</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Tracking Creation in the Age of AI</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <style>
-/* ============ TOKENS ============ */
-:root{
-  --bg:#03060a;
-  --panel:#070d14;
-  --panel2:#0b1420;
-  --line: rgba(76,214,255,0.18);
-  --line-strong: rgba(76,214,255,0.45);
-  --cyan:#4cd6ff;
-  --cyan-soft:#8ee9ff;
-  --cyan-dim:#1a3f4d;
-  --amber:#ffb648;
-  --red:#ff5c5c;
-  --green:#5dffb0;
-  --text:#dbe9f0;
-  --text-dim:#7d97a3;
-  --text-faint:#4a6068;
-  --disp: 'Orbitron', sans-serif;
-  --mono: 'Share Tech Mono', monospace;
-  --body: 'Rajdhani', sans-serif;
-}
-*{box-sizing:border-box; margin:0; padding:0;}
-html,body{height:100%;}
-body{
-  background:var(--bg);
-  color:var(--text);
-  font-family:var(--body);
-  overflow:hidden;
-  position:relative;
-  -webkit-font-smoothing:antialiased;
-}
-@media (prefers-reduced-motion: reduce){
-  *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
-}
+  :root{
+    --midnight:#0d1b3e;
+    --twilight:#173663;
+    --deepteal:#0f4c62;
+    --swirl:#3a6ea5;
+    --cypress:#16324f;
+    --wheat:#e8ac1f;
+    --sunflower:#ffd447;
+    --cream:#f4ecd8;
+    --rust:#c2542c;
+    --ink:#0a1530;
+    --card-bg: rgba(244,236,216,0.06);
+    --card-border: rgba(232,172,31,0.35);
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0; padding:0; height:100%;
+    background:var(--midnight);
+    font-family:'Lora', serif;
+    color:var(--cream);
+    overflow:hidden;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
+  }
 
-/* ============ BACKDROP ============ */
-#backdrop{
-  position:fixed; inset:0; z-index:0; pointer-events:none;
-  background:
-    radial-gradient(ellipse at 18% 12%, rgba(76,214,255,0.07), transparent 45%),
-    radial-gradient(ellipse at 85% 88%, rgba(255,182,72,0.05), transparent 40%),
-    var(--bg);
-}
-#backdrop::before{
-  content:"";
-  position:absolute; inset:0;
-  background-image:
-    linear-gradient(var(--line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--line) 1px, transparent 1px);
-  background-size:64px 64px;
-  opacity:0.12;
-}
-#backdrop::after{
-  content:"";
-  position:absolute; inset:0;
-  background:repeating-linear-gradient(0deg, rgba(76,214,255,0.025) 0px, rgba(76,214,255,0.025) 1px, transparent 1px, transparent 3px);
-  animation:scan 9s linear infinite;
-}
-@keyframes scan{ 0%{transform:translateY(0);} 100%{transform:translateY(64px);} }
+  /* ---------- Starry swirl background ---------- */
+  .sky{
+    position:fixed; inset:0; z-index:0; overflow:hidden;
+    background:
+      radial-gradient(ellipse at 20% 15%, #1f3f70 0%, transparent 55%),
+      radial-gradient(ellipse at 80% 10%, #123252 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 100%, #0a1a38 0%, transparent 60%),
+      linear-gradient(180deg, var(--midnight) 0%, var(--ink) 100%);
+  }
+  .swirl{
+    position:absolute; border-radius:50%;
+    background: conic-gradient(from 90deg, transparent, rgba(58,110,165,0.35), transparent 60%);
+    filter: blur(2px);
+    animation: spin 90s linear infinite;
+    opacity:0.7;
+  }
+  .swirl.a{ width:70vmax; height:70vmax; top:-25vmax; left:-20vmax; animation-duration:120s;}
+  .swirl.b{ width:55vmax; height:55vmax; bottom:-25vmax; right:-15vmax; animation-duration:150s; animation-direction:reverse;}
+  .swirl.c{ width:40vmax; height:40vmax; top:30%; right:10%; animation-duration:100s; opacity:0.4;}
+  @keyframes spin{ to{ transform: rotate(360deg);} }
 
-.corner-ring{position:fixed; z-index:0; pointer-events:none; opacity:0.35;}
-.corner-ring svg{width:340px; height:340px;}
-.cr-tl{top:-140px; left:-140px;}
-.cr-br{bottom:-160px; right:-160px;}
+  .star{
+    position:absolute; border-radius:50%;
+    background:var(--sunflower);
+    box-shadow:0 0 8px 2px rgba(255,212,71,0.55);
+    animation: twinkle 4s ease-in-out infinite;
+  }
+  @keyframes twinkle{ 0%,100%{opacity:0.35;} 50%{opacity:1;} }
 
-/* ============ BOOT OVERLAY ============ */
-#boot{
-  position:fixed; inset:0; z-index:100; background:#020406;
-  display:flex; align-items:center; justify-content:center; flex-direction:column;
-  transition:opacity 0.8s ease;
-}
-#boot.hide{opacity:0; pointer-events:none;}
-.boot-ring{width:140px; height:140px; position:relative; margin-bottom:28px;}
-.boot-ring svg{width:100%; height:100%;}
-.boot-ring circle.track{fill:none; stroke:rgba(76,214,255,0.12); stroke-width:2;}
-.boot-ring circle.sweep{fill:none; stroke:var(--cyan); stroke-width:2; stroke-linecap:round;
-  stroke-dasharray:377; stroke-dashoffset:377; animation:sweep 1.6s ease-in-out forwards;}
-@keyframes sweep{ to{stroke-dashoffset:40;} }
-.boot-core{position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
-  font-family:var(--disp); font-size:11px; letter-spacing:2px; color:var(--cyan);}
-#boot-log{font-family:var(--mono); font-size:12px; color:var(--text-dim); letter-spacing:1px; min-height:20px;}
-#boot-title{font-family:var(--disp); font-size:15px; letter-spacing:5px; color:var(--cyan-soft); margin-bottom:4px;}
-#boot-subtitle{font-family:var(--mono); font-size:9px; letter-spacing:3px; color:var(--text-faint); margin-bottom:22px;}
+  /* ---------- Deck structure ---------- */
+  .deck{
+    position:relative; z-index:1;
+    height:100vh; height:100dvh; width:100vw;
+    display:flex; align-items:stretch;
+  }
+  .slide{
+    position:absolute; inset:0;
+    display:none;
+    flex-direction:column;
+    padding: clamp(20px,5vw,64px) clamp(20px,7vw,96px);
+    padding-bottom: clamp(70px, 12vh, 96px);
+    overflow-y:auto;
+  }
+  .slide.active{ display:flex; }
 
-/* ============ SHELL LAYOUT ============ */
-#shell{position:relative; z-index:1; height:100vh; display:grid; grid-template-columns:76px 1fr; grid-template-rows:64px 1fr 52px;}
+  .eyebrow{
+    font-family:'Lora', serif;
+    font-style:italic;
+    color:var(--wheat);
+    font-size:clamp(0.75rem,1.4vw,0.95rem);
+    letter-spacing:0.02em;
+    margin:0 0 8px 0;
+    opacity:0.9;
+  }
+  h1,h2{
+    font-family:'Playfair Display', serif;
+    color:var(--cream);
+    margin:0 0 0.4em 0;
+    line-height:1.12;
+    text-shadow: 0 2px 18px rgba(0,0,0,0.35);
+  }
+  h1{ font-size:clamp(1.9rem, 4.6vw, 3.4rem); font-weight:800;}
+  h2{ font-size:clamp(1.5rem, 3.4vw, 2.3rem); font-weight:700;
+      border-bottom:3px solid transparent;
+      border-image: linear-gradient(90deg, var(--sunflower), transparent) 1;
+      padding-bottom:0.35em; margin-bottom:0.6em;
+      max-width:fit-content;
+  }
+  p{ font-size:clamp(0.98rem,1.6vw,1.18rem); line-height:1.65; max-width:74ch; color:#e9e2cf;}
+  p.note{ font-size:clamp(0.82rem,1.3vw,0.95rem); opacity:0.85; }
+  .content{ flex:1; display:flex; flex-direction:column; justify-content:center; gap:1rem; min-height:0;}
 
-/* header */
-#topbar{
-  grid-column:1/3; grid-row:1;
-  display:flex; align-items:center; justify-content:space-between;
-  padding:0 26px 0 18px;
-  border-bottom:1px solid var(--line);
-  background:linear-gradient(180deg, rgba(11,20,32,0.7), rgba(11,20,32,0.2));
-  backdrop-filter:blur(6px);
-}
-.brand{display:flex; align-items:center; gap:12px;}
-.brand-mark{width:30px; height:30px; position:relative;}
-.brand-mark svg{width:100%; height:100%;}
-.brand-text{font-family:var(--disp); font-size:12px; letter-spacing:2px; color:var(--cyan-soft); white-space:nowrap;}
-.brand-sub{font-family:var(--mono); font-size:10px; color:var(--text-faint); letter-spacing:1px; margin-top:1px;}
-.topbar-right{display:flex; align-items:center; gap:22px;}
-.clock{font-family:var(--mono); font-size:12px; color:var(--text-dim); letter-spacing:1px;}
-.charge{display:flex; align-items:center; gap:10px;}
-.charge-ring{width:34px; height:34px; position:relative;}
-.charge-ring svg{width:100%; height:100%; transform:rotate(-90deg);}
-.charge-ring .track{fill:none; stroke:rgba(76,214,255,0.15); stroke-width:3;}
-.charge-ring .fill{fill:none; stroke:var(--cyan); stroke-width:3; stroke-linecap:round; transition:stroke-dashoffset 0.5s ease;}
-.charge-label{font-family:var(--mono); font-size:10px; color:var(--text-dim);}
+  /* generic card */
+  .card{
+    background:var(--card-bg);
+    border:1px solid var(--card-border);
+    border-radius:6px;
+    padding:1rem 1.3rem;
+    backdrop-filter: blur(3px);
+  }
 
-/* left rail */
-#rail{
-  grid-column:1; grid-row:2/4;
-  border-right:1px solid var(--line);
-  display:flex; flex-direction:column; align-items:center;
-  padding:20px 0; gap:6px; overflow-y:auto;
-  background:rgba(7,13,20,0.4);
-}
-.rail-group-label{font-family:var(--mono); font-size:8px; color:var(--text-faint); letter-spacing:2px; writing-mode:vertical-rl; margin:8px 0;}
-.rail-dot{
-  width:38px; height:38px; border-radius:50%; border:1px solid var(--line);
-  display:flex; align-items:center; justify-content:center;
-  font-family:var(--mono); font-size:10px; color:var(--text-faint);
-  cursor:pointer; transition:all 0.25s ease; flex-shrink:0; position:relative; background:rgba(11,20,32,0.5);
-}
-.rail-dot:hover{border-color:var(--line-strong); color:var(--cyan-soft);}
-.rail-dot.active{border-color:var(--cyan); color:var(--cyan); box-shadow:0 0 14px rgba(76,214,255,0.4); background:rgba(76,214,255,0.08);}
-.rail-dot.done::after{content:""; position:absolute; bottom:-1px; right:-1px; width:8px; height:8px; border-radius:50%; background:var(--green); box-shadow:0 0 6px var(--green);}
-.rail-sep{width:26px; height:1px; background:var(--line); margin:4px 0;}
+  .grid{
+    display:grid; gap:1rem;
+  }
+  .grid.two{ grid-template-columns:repeat(2,1fr); }
+  .grid.three{ grid-template-columns:repeat(3,1fr); }
+  @media (max-width:760px){
+    .grid.two, .grid.three{ grid-template-columns:1fr; }
+  }
 
-/* stage */
-#stage{grid-column:2; grid-row:2; position:relative; overflow:hidden;}
-.slide{
-  position:absolute; inset:0; padding:38px 56px 30px 56px;
-  opacity:0; transform:translateX(24px) scale(0.99); pointer-events:none;
-  transition:opacity 0.5s cubic-bezier(.2,.8,.2,1), transform 0.5s cubic-bezier(.2,.8,.2,1);
-  overflow-y:auto;
-}
-.slide.active{opacity:1; transform:translateX(0) scale(1); pointer-events:auto;}
-.slide::-webkit-scrollbar{width:6px;}
-.slide::-webkit-scrollbar-thumb{background:var(--cyan-dim); border-radius:3px;}
+  .stat{
+    text-align:left;
+  }
+  .stat .num{
+    font-family:'Playfair Display', serif;
+    font-weight:800;
+    font-size:clamp(2rem,5vw,3.1rem);
+    color:var(--sunflower);
+    line-height:1;
+  }
+  .stat .label{
+    font-size:clamp(0.82rem,1.4vw,0.98rem);
+    color:#d8cfae;
+    margin-top:6px;
+  }
 
-.frame-corner{position:absolute; width:22px; height:22px; border:2px solid var(--line-strong); opacity:0.6; pointer-events:none;}
-.fc-tl{top:14px; left:20px; border-right:none; border-bottom:none;}
-.fc-tr{top:14px; right:20px; border-left:none; border-bottom:none;}
-.fc-bl{bottom:8px; left:20px; border-right:none; border-top:none;}
-.fc-br{bottom:8px; right:20px; border-left:none; border-top:none;}
+  ul.brush{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:0.7rem;}
+  ul.brush li{
+    position:relative; padding-left:1.4em; font-size:clamp(0.95rem,1.5vw,1.1rem); color:#e9e2cf; line-height:1.5;
+  }
+  ul.brush li::before{
+    content:"";
+    position:absolute; left:0; top:0.5em;
+    width:9px; height:9px; border-radius:50%;
+    background:var(--rust);
+    box-shadow:0 0 6px rgba(194,84,44,0.8);
+  }
 
-.eyebrow{font-family:var(--mono); font-size:11px; color:var(--amber); letter-spacing:3px; display:flex; align-items:center; gap:10px; margin-bottom:10px;}
-.eyebrow::before{content:""; width:20px; height:1px; background:var(--amber);}
-h1.slide-title{font-family:var(--disp); font-weight:700; font-size:clamp(24px,3.2vw,42px); color:#f2f9fc; letter-spacing:1px; line-height:1.15; max-width:920px;}
-h1.slide-title .accent{color:var(--cyan);}
-.slide-kicker{font-family:var(--mono); font-size:12px; color:var(--text-dim); margin-top:10px; max-width:760px; line-height:1.6;}
+  table.data{
+    width:100%; border-collapse:collapse; font-size:clamp(0.78rem,1.3vw,0.95rem);
+    table-layout:fixed;
+  }
+  table.data col.c-test{ width:16%; }
+  table.data col.c-var{ width:38%; }
+  table.data col.c-p{ width:16%; }
+  table.data col.c-result{ width:30%; }
+  table.data th, table.data td{
+    text-align:left; padding:0.5em 0.9em 0.5em 0; border-bottom:1px solid rgba(232,172,31,0.25);
+    vertical-align:top;
+  }
+  table.data th{ color:var(--sunflower); font-family:'Playfair Display',serif; font-weight:700;}
+  table.data td.sig{ color:#9fd3a8; }
+  table.data td.nonsig{ color:#d8cfae; }
+  @media (max-width:640px){
+    table.data col.c-test{ width:22%; }
+    table.data col.c-var{ width:34%; }
+    table.data col.c-p{ width:18%; }
+    table.data col.c-result{ width:26%; }
+  }
 
-.panel{
-  background:linear-gradient(155deg, rgba(15,23,32,0.85), rgba(9,15,22,0.85));
-  border:1px solid var(--line); border-radius:2px; padding:20px 22px; position:relative;
-}
-.panel::before{content:""; position:absolute; top:0; left:0; width:3px; height:100%; background:var(--cyan-dim);}
-.panel.warn::before{background:var(--red);}
-.panel.gold::before{background:var(--amber);}
-.panel-label{font-family:var(--mono); font-size:10px; letter-spacing:2px; color:var(--cyan-soft); margin-bottom:10px; display:flex; align-items:center; gap:8px;}
-.panel-label .dot{width:6px; height:6px; border-radius:50%; background:var(--cyan); box-shadow:0 0 6px var(--cyan);}
-.panel p, .panel li{font-family:var(--body); font-size:16px; line-height:1.55; color:var(--text);}
-.panel li{margin-bottom:8px;}
-.panel ul{padding-left:18px;}
+  .authorline{ color:#c8bd9a; font-size:clamp(0.85rem,1.4vw,1rem); margin-top:1.2rem;}
 
-.grid2{display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:22px;}
-.grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:22px;}
-@media (max-width:1000px){.grid2,.grid3{grid-template-columns:1fr;}}
+  /* ---------- Navigation chrome ---------- */
+  .progress-track{
+    position:fixed; top:0; left:0; height:4px; width:100%;
+    background:rgba(255,255,255,0.08); z-index:5;
+  }
+  .progress-fill{
+    height:100%; background:linear-gradient(90deg, var(--rust), var(--sunflower));
+    transition:width 0.35s ease;
+  }
+  .nav-bar{
+    position:fixed; bottom:0; left:0; width:100%;
+    display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between;
+    padding: 10px clamp(14px,4vw,40px);
+    background:linear-gradient(180deg, transparent, rgba(10,18,45,0.85) 40%);
+    z-index:5;
+    gap:10px;
+    row-gap:8px;
+  }
+  .nav-btn{
+    background:rgba(232,172,31,0.14);
+    border:1.5px solid var(--wheat);
+    color:var(--sunflower);
+    font-family:'Playfair Display', serif;
+    font-weight:700;
+    font-size:clamp(0.8rem,1.6vw,1rem);
+    padding:0.55em 1.1em;
+    border-radius:30px;
+    cursor:pointer;
+    display:flex; align-items:center; gap:0.4em;
+    white-space:nowrap;
+    flex:0 0 auto;
+    transition: background 0.2s ease, transform 0.15s ease;
+    touch-action:manipulation;
+  }
+  .nav-btn:hover{ background:rgba(232,172,31,0.3); }
+  .nav-btn:active{ transform:scale(0.96); }
+  .nav-btn:disabled{ opacity:0.3; cursor:default; }
+  .nav-btn:focus-visible{ outline:2px solid var(--sunflower); outline-offset:2px; }
 
-.tag{display:inline-block; font-family:var(--mono); font-size:10px; letter-spacing:1.5px; color:var(--cyan-soft); border:1px solid var(--cyan-dim); padding:3px 9px; border-radius:20px; margin:0 6px 6px 0;}
-.case-cite{font-family:var(--mono); font-size:13px; color:var(--amber); border-left:2px solid var(--amber); padding-left:10px; margin:8px 0;}
+  .dots{
+    display:flex; gap:2px; flex-wrap:wrap; justify-content:center;
+  }
+  .dot{
+    width:28px; height:28px; min-width:28px;
+    border-radius:50%;
+    background:transparent;
+    border:none; padding:0; cursor:pointer;
+    position:relative;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .dot::before{
+    content:"";
+    width:9px; height:9px; border-radius:50%;
+    background:rgba(244,236,216,0.3);
+    transition: background 0.2s ease, box-shadow 0.2s ease;
+  }
+  .dot.active::before{ background:var(--sunflower); box-shadow:0 0 6px rgba(255,212,71,0.7); }
+  .dot:focus-visible{ outline:2px solid var(--sunflower); outline-offset:2px; }
 
-/* Ratio / Obiter twin panels */
-.rd-panel{border:1px solid var(--cyan); background:rgba(76,214,255,0.05); position:relative;}
-.rd-panel::before{background:var(--cyan);}
-.rd-panel .panel-label{color:var(--cyan);}
-.ob-panel{border:1px dashed var(--text-faint); background:rgba(255,255,255,0.015);}
-.ob-panel::before{background:transparent; border-left:3px dashed var(--text-faint);}
-.ob-panel .panel-label{color:var(--text-dim);}
+  .counter{
+    font-family:'Lora', serif; font-style:italic; color:#d8cfae;
+    font-size:clamp(0.78rem,1.4vw,0.92rem);
+    min-width:52px; text-align:center;
+  }
 
-/* verdict */
-.verdict-strip{margin-top:20px; padding:16px 20px; border:1px solid var(--line-strong); background:rgba(76,214,255,0.06); display:flex; gap:16px; align-items:flex-start; border-radius:2px;}
-.verdict-strip .vlabel{font-family:var(--disp); font-size:11px; letter-spacing:2px; color:var(--cyan); flex-shrink:0; padding-top:2px;}
+  @media (max-width:560px){
+    .nav-bar{ padding:8px 12px; justify-content:space-between; }
+    .dots{ order:-1; width:100%; margin-bottom:2px; }
+    .nav-btn{ font-size:0.78rem; padding:0.5em 0.85em; }
+    .counter{ order:1; min-width:auto; }
+    #prevBtn{ order:0; }
+    #nextBtn{ order:2; }
+  }
 
-/* progress footer */
-#footer{grid-column:2; grid-row:3; border-top:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; padding:0 30px; background:rgba(7,13,20,0.5);}
-.nav-btn{font-family:var(--mono); font-size:11px; letter-spacing:1.5px; color:var(--text-dim); background:transparent; border:1px solid var(--line); padding:8px 16px; cursor:pointer; transition:all 0.2s; border-radius:2px;}
-.nav-btn:hover:not(:disabled){color:var(--cyan); border-color:var(--cyan);}
-.nav-btn:disabled{opacity:0.25; cursor:default;}
-.counter{font-family:var(--mono); font-size:11px; color:var(--text-dim); letter-spacing:2px;}
-.counter b{color:var(--cyan-soft);}
-#progress-track{flex:1; height:2px; background:rgba(76,214,255,0.12); margin:0 24px; position:relative; overflow:hidden;}
-#progress-fill{height:100%; background:var(--cyan); box-shadow:0 0 8px var(--cyan); transition:width 0.4s ease;}
+  /* ---------- Large displays: smart boards, TVs, big monitors ---------- */
+  @media (min-width:1600px){
+    .slide{ padding: clamp(48px,4vw,130px) clamp(64px,7vw,180px); padding-bottom: clamp(96px,10vh,150px); }
+    .eyebrow{ font-size:1.15rem; margin-bottom:14px; }
+    h1{ font-size:clamp(3.2rem,4.6vw,7rem); }
+    h2{ font-size:clamp(2.3rem,3.4vw,4.6rem); margin-bottom:0.8em; }
+    p{ font-size:clamp(1.25rem,1.7vw,1.9rem); max-width:78ch; }
+    p.note{ font-size:clamp(0.95rem,1.2vw,1.25rem); }
+    .content{ gap:1.6rem; }
+    .card{ padding:1.6rem 2rem; border-radius:8px; }
+    .stat .num{ font-size:clamp(3.4rem,5.2vw,6rem); }
+    .stat .label{ font-size:clamp(1.05rem,1.5vw,1.5rem); }
+    ul.brush{ gap:1rem; }
+    ul.brush li{ font-size:clamp(1.15rem,1.6vw,1.7rem); padding-left:1.6em; }
+    ul.brush li::before{ width:12px; height:12px; top:0.55em; }
+    table.data{ font-size:clamp(1.05rem,1.4vw,1.6rem); }
+    table.data th, table.data td{ padding:0.7em 1em 0.7em 0; }
+    .authorline{ font-size:1.2rem; }
+    .nav-btn{ font-size:1.2rem; padding:0.75em 1.5em; }
+    .dot{ width:34px; height:34px; }
+    .dot::before{ width:13px; height:13px; }
+    .counter{ font-size:1.1rem; min-width:80px; }
+    .progress-track{ height:6px; }
+  }
+  @media (min-width:2400px){
+    h1{ font-size:clamp(4rem,4.4vw,8.6rem); }
+    h2{ font-size:clamp(2.8rem,3vw,5.6rem); }
+    p{ font-size:clamp(1.5rem,1.5vw,2.2rem); max-width:82ch; }
+    p.note{ font-size:clamp(1.1rem,1.1vw,1.5rem); }
+    .stat .num{ font-size:clamp(4rem,4.8vw,7.4rem); }
+    ul.brush li{ font-size:clamp(1.35rem,1.5vw,2rem); }
+    table.data{ font-size:clamp(1.2rem,1.3vw,1.85rem); }
+    .nav-btn{ font-size:1.4rem; padding:0.85em 1.7em; }
+    .dot{ width:38px; height:38px; }
+    .dot::before{ width:16px; height:16px; }
+  }
+  /* ---------- True 4K smart boards ---------- */
+  @media (min-width:3200px){
+    .slide{ padding: clamp(60px,4vw,180px) clamp(80px,7vw,220px); padding-bottom: clamp(120px,10vh,190px); }
+    .eyebrow{ font-size:1.6rem; }
+    h1{ font-size:clamp(6rem,4.6vw,10.5rem); }
+    h2{ font-size:clamp(4rem,3.2vw,6.8rem); }
+    p{ font-size:clamp(1.9rem,1.6vw,2.7rem); }
+    p.note{ font-size:clamp(1.4rem,1.3vw,1.9rem); }
+    .stat .num{ font-size:clamp(5.5rem,4.8vw,8.8rem); }
+    .stat .label{ font-size:clamp(1.5rem,1.4vw,1.9rem); }
+    ul.brush li{ font-size:clamp(1.8rem,1.6vw,2.4rem); }
+    ul.brush li::before{ width:16px; height:16px; }
+    table.data{ font-size:clamp(1.6rem,1.4vw,2.2rem); }
+    .authorline{ font-size:1.6rem; }
+    .nav-btn{ font-size:1.8rem; padding:1em 2em; }
+    .dot{ width:46px; height:46px; }
+    .dot::before{ width:20px; height:20px; }
+    .counter{ font-size:1.5rem; }
+    .progress-track{ height:8px; }
+  }
 
-/* reference list */
-.ref-block{margin-bottom:18px;}
-.ref-block h3{font-family:var(--disp); font-size:13px; letter-spacing:2px; color:var(--amber); margin-bottom:10px;}
-.ref-item{font-family:var(--mono); font-size:12.5px; color:var(--text-dim); line-height:1.9; border-bottom:1px solid rgba(76,214,255,0.08); padding:6px 0;}
-.ref-item b{color:var(--text);}
+  .hero-wrap{ display:flex; flex-direction:column; align-items:flex-start; justify-content:center; height:100%; gap:1.4rem;}
+  .frame-line{ width:70px; height:3px; background:var(--rust); margin:0.4rem 0 0.9rem 0; }
 
-/* hint */
-#hint{position:fixed; bottom:64px; left:50%; transform:translateX(-50%); font-family:var(--mono); font-size:10px; color:var(--text-faint); letter-spacing:1px; z-index:5; opacity:0; transition:opacity 0.4s; pointer-events:none;}
-#hint.show{opacity:0.8;}
-
-@media (max-width:900px){
-  #shell{grid-template-columns:56px 1fr;}
-  #rail{padding:14px 0;}
-  .rail-dot{width:30px; height:30px; font-size:9px;}
-  .slide{padding:70px 20px 20px 20px;}
-  h1.slide-title{font-size:22px;}
-}
+  .sr-only{
+    position:absolute; width:1px;height:1px; padding:0; margin:-1px;
+    overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
+  }
 </style>
 </head>
 <body>
 
-<div id="backdrop"></div>
-<div class="corner-ring cr-tl"><svg viewBox="0 0 340 340"><circle cx="170" cy="170" r="160" fill="none" stroke="#4cd6ff" stroke-width="1" stroke-dasharray="4 10"/><circle cx="170" cy="170" r="120" fill="none" stroke="#4cd6ff" stroke-width="1"/></svg></div>
-<div class="corner-ring cr-br"><svg viewBox="0 0 340 340"><circle cx="170" cy="170" r="160" fill="none" stroke="#ffb648" stroke-width="1" stroke-dasharray="2 8"/><circle cx="170" cy="170" r="110" fill="none" stroke="#ffb648" stroke-width="1"/></svg></div>
-
-<!-- BOOT SEQUENCE -->
-<div id="boot">
-  <div id="boot-title">INTERACTIVE LAWYERS</div>
-  <div id="boot-subtitle">LEGAL INTELLIGENCE INTERFACE</div>
-  <div class="boot-ring">
-    <svg viewBox="0 0 130 130">
-      <circle class="track" cx="65" cy="65" r="60"/>
-      <circle class="sweep" cx="65" cy="65" r="60" transform="rotate(-90 65 65)"/>
-    </svg>
-    <div class="boot-core">I.L</div>
-  </div>
-  <div id="boot-log">initializing case files…</div>
+<div class="sky" aria-hidden="true">
+  <div class="swirl a"></div>
+  <div class="swirl b"></div>
+  <div class="swirl c"></div>
 </div>
 
-<!-- SHELL -->
-<div id="shell">
-  <div id="topbar">
-    <div class="brand">
-      <div class="brand-mark"><svg viewBox="0 0 30 30"><circle cx="15" cy="15" r="13" fill="none" stroke="#4cd6ff" stroke-width="1.4"/><circle cx="15" cy="15" r="7" fill="none" stroke="#4cd6ff" stroke-width="1.4"/><circle cx="15" cy="15" r="2.4" fill="#4cd6ff"/></svg></div>
-      <div>
-        <div class="brand-text">INTERACTIVE LAWYERS</div>
-        <div class="brand-sub">CONSTITUTIONAL ANALYSIS INTERFACE · IN</div>
+<div class="progress-track" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
+
+<main class="deck" id="deck">
+
+  <!-- SLIDE 1: TITLE -->
+  <section class="slide active" data-index="0" aria-label="Title slide">
+    <div class="hero-wrap">
+      <p class="eyebrow">Research Paper</p>
+      <h1>Tracking Creation in the Age of AI</h1>
+      <div class="frame-line"></div>
+      <h2 style="border:none;font-family:'Lora',serif;font-style:italic;font-weight:500;font-size:clamp(1.1rem,2.4vw,1.5rem);color:#e9e2cf;">
+        A Provenance-Based Framework for Authorship Attribution and Copyright Protection
+      </h2>
+      <div class="authorline">
+        <strong style="color:var(--cream);font-family:'Playfair Display',serif;">Rakunatha Khrishanth Manathra</strong><br>
+        B.A., LL.B. (Hons.) &middot; Saveetha School of Law<br>
+        Saveetha Institute of Medical and Technical Sciences, Chennai
       </div>
     </div>
-    <div class="topbar-right">
-      <div class="clock" id="clock">--:--:--</div>
-      <div class="charge">
-        <div class="charge-ring">
-          <svg viewBox="0 0 36 36">
-            <circle class="track" cx="18" cy="18" r="15"/>
-            <circle class="fill" id="charge-fill" cx="18" cy="18" r="15" stroke-dasharray="94.2" stroke-dashoffset="94.2"/>
-          </svg>
+  </section>
+
+  <!-- SLIDE 2: ABSTRACT -->
+  <section class="slide" data-index="1" aria-label="Abstract">
+    <p class="eyebrow">Slide 2</p>
+    <h2>Abstract</h2>
+    <div class="content">
+      <div class="grid three">
+        <div class="card stat"><div class="num">68%</div><div class="label">saw the framework as improving attribution accuracy</div></div>
+        <div class="card stat"><div class="num">74%</div><div class="label">felt more confident asserting copyright claims</div></div>
+        <div class="card stat"><div class="num">59%</div><div class="label">were willing to adopt it in professional workflows</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 3: INTRODUCTION -->
+  <section class="slide" data-index="2" aria-label="Introduction">
+    <p class="eyebrow">Slide 3</p>
+    <h2>Introduction &amp; Background</h2>
+    <div class="content">
+      <ul class="brush">
+        <li>Provenance — a concept borrowed from art history and archival science — is now central to AI authorship debates.</li>
+        <li>Policy is moving fast: the EU AI Act, US Copyright Office guidance, and India's 2022 Amendment all now address AI-generated works.</li>
+        <li>Cases like <em>Zhou v. OpenAI</em> (2025) and <em>Raman v. Infosys</em> (2026) are shaping judicial expectations for authorship evidence.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- SLIDE 4: OBJECTIVES -->
+  <section class="slide" data-index="3" aria-label="Objectives of the study">
+    <p class="eyebrow">Slide 4</p>
+    <h2>Objectives of the Study</h2>
+    <div class="content">
+      <div class="grid three">
+        <div class="card"><strong style="color:var(--sunflower);">01</strong><p style="margin-top:0.5em;">Design a provenance schema recording prompts, model parameters, and outputs.</p></div>
+        <div class="card"><strong style="color:var(--sunflower);">02</strong><p style="margin-top:0.5em;">Build a working prototype and test it across multiple generative media types.</p></div>
+        <div class="card"><strong style="color:var(--sunflower);">03</strong><p style="margin-top:0.5em;">Measure impact on attribution accuracy and copyright confidence, and shape policy recommendations.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 5: LITERATURE REVIEW -->
+  <section class="slide" data-index="4" aria-label="Review of literature">
+    <p class="eyebrow">Slide 5</p>
+    <h2>Review of Literature</h2>
+    <div class="content">
+      <ul class="brush">
+        <li>Ownership models range from hybrid developer-user rights (<strong style="color:var(--cream);">Wangmo</strong>) to prompt-based ownership (<strong style="color:var(--cream);">Shafiq</strong>).</li>
+        <li>Technical approaches embed traceable metadata directly during generation (<strong style="color:var(--cream);">Khan et al.</strong>), reducing disputes in co-created work (<strong style="color:var(--cream);">Lauk-Dubitskiy</strong>).</li>
+        <li>Scholars increasingly call for a codified "machine-assisted author" category (<strong style="color:var(--cream);">Oliveira</strong>) with contribution-based thresholds (<strong style="color:var(--cream);">Ramos-Zaga</strong>).</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- SLIDE 6: METHODOLOGY -->
+  <section class="slide" data-index="5" aria-label="Methodology">
+    <p class="eyebrow">Slide 6</p>
+    <h2>Methodology</h2>
+    <div class="content">
+      <div class="grid three">
+        <div class="card">
+          <strong style="color:var(--sunflower);">Design &amp; Sample</strong>
+          <p style="margin-top:0.5em;">Empirical, descriptive study; five-point Likert questionnaire; 210 participants via convenience sampling.</p>
         </div>
-        <div class="charge-label">DECK<br><span id="charge-pct">0%</span></div>
+        <div class="card">
+          <strong style="color:var(--sunflower);">Analysis</strong>
+          <p style="margin-top:0.5em;">SPSS v21 — chi-square tests, one-way ANOVA, and Pearson correlation.</p>
+        </div>
+        <div class="card">
+          <strong style="color:var(--sunflower);">Variables</strong>
+          <p style="margin-top:0.5em;">Independent: age, gender, education, area, occupation. Dependent: awareness and support.</p>
+        </div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <div id="rail"></div>
+  <!-- SLIDE 7: KEY FINDINGS -->
+  <section class="slide" data-index="6" aria-label="Key findings">
+    <p class="eyebrow">Slide 7</p>
+    <h2>Key Findings</h2>
+    <div class="content">
+      <div class="grid three">
+        <div class="card stat"><div class="num">71%</div><div class="label">of creative professionals endorse provenance tracking</div></div>
+        <div class="card stat"><div class="num">66%</div><div class="label">of urban residents support regulatory oversight</div></div>
+        <div class="card stat"><div class="num">12%</div><div class="label">expressed concern about data privacy</div></div>
+      </div>
+    </div>
+  </section>
 
-  <div id="stage"></div>
+  <!-- SLIDE 8: HYPOTHESIS TESTING -->
+  <section class="slide" data-index="7" aria-label="Hypothesis testing results">
+    <p class="eyebrow">Slide 8</p>
+    <h2>Hypothesis Testing</h2>
+    <div class="content">
+      <ul class="brush">
+        <li>All 5 chi-square tests (age, gender, education, employment, area) returned p&nbsp;&gt;&nbsp;0.05.</li>
+        <li>All 3 ANOVA tests (age group, education, occupation) also returned p&nbsp;&gt;&nbsp;0.05.</li>
+        <li>No demographic variable showed a statistically significant association at the 5% level (n&nbsp;=&nbsp;210).</li>
+      </ul>
+    </div>
+  </section>
 
-  <div id="footer">
-    <button class="nav-btn" id="prevBtn">◄ PREV</button>
-    <div id="progress-track"><div id="progress-fill" style="width:0%"></div></div>
-    <div class="counter"><b id="curNum">01</b> / <span id="totNum">18</span></div>
-    <button class="nav-btn" id="nextBtn" style="margin-left:20px;">NEXT ►</button>
-  </div>
-</div>
+  <!-- SLIDE 9: DISCUSSION & LIMITATIONS -->
+  <section class="slide" data-index="8" aria-label="Discussion and limitations">
+    <p class="eyebrow">Slide 9</p>
+    <h2>Discussion &amp; Limitations</h2>
+    <div class="content">
+      <ul class="brush">
+        <li>Older, more educated, and urban respondents were consistently more sceptical of AI-tracking claims and current oversight.</li>
+        <li>Convenience sampling and self-reported measures may limit generalisability and introduce response bias.</li>
+        <li>A cross-sectional design means the findings can't establish causal change in attitudes over time.</li>
+      </ul>
+    </div>
+  </section>
 
-<div id="hint">◄ ► ARROW KEYS  ·  SPACE  ·  CLICK RAIL TO JUMP</div>
+  <!-- SLIDE 10: CONCLUSION -->
+  <section class="slide" data-index="9" aria-label="Conclusion and recommendations">
+    <p class="eyebrow">Slide 10</p>
+    <h2>Conclusion &amp; Recommendations</h2>
+    <div class="content">
+      <ul class="brush">
+        <li>Provenance tracking is feasible and welcomed by a majority of the creators surveyed.</li>
+        <li>Harmonise international standards and build lightweight, interoperable provenance modules into AI platforms.</li>
+        <li>Run co-design workshops with creators and fund open-source provenance infrastructure with ongoing monitoring.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- SLIDE 11: PROTOTYPE -->
+  <section class="slide" data-index="10" aria-label="Prototype">
+    <p class="eyebrow">Slide 11</p>
+    <h2>See the Prototype</h2>
+    <div class="content">
+      <ul class="brush">
+        <li>The provenance-tracking prototype described in this study is live.</li>
+        <li>It logs prompts, model versions, and generated outputs in real time.</li>
+        <li>Explore it directly at the link below.</li>
+      </ul>
+      <div class="card" style="max-width:fit-content;">
+        <strong style="color:var(--sunflower);display:block;margin-bottom:0.5em;">Live Prototype</strong>
+        <a href="https://manatune.onrender.com" target="_blank" rel="noopener noreferrer"
+           style="font-family:'Playfair Display',serif;font-size:clamp(1.1rem,2.6vw,1.6rem);font-weight:700;color:var(--cream);text-decoration:none;border-bottom:2px solid var(--rust);padding-bottom:2px;">
+          manatune.onrender.com &#8599;
+        </a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<nav class="nav-bar" aria-label="Slide navigation">
+  <button class="nav-btn" id="prevBtn" aria-label="Previous slide">&#8592; Prev</button>
+  <div class="dots" id="dots" role="tablist" aria-label="Go to slide"></div>
+  <span class="counter" id="counter">1 / 11</span>
+  <button class="nav-btn" id="nextBtn" aria-label="Next slide">Next &#8594;</button>
+</nav>
 
 <script>
-/* =========================================================
-   SLIDE DATA
-   ========================================================= */
-const slides = [
+(function(){
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var total = slides.length;
+  var current = 0;
 
-// ---------- 0: TITLE ----------
-{
-  section:"INTRO", railLabel:"00",
-  render:()=>`
-    <div class="frame-corner fc-tl"></div><div class="frame-corner fc-tr"></div><div class="frame-corner fc-bl"></div><div class="frame-corner fc-br"></div>
-    <div style="height:100%; display:flex; flex-direction:column; justify-content:center; max-width:980px;">
-      <div class="eyebrow">CASE FILE INDEX · INDIAN CONSTITUTIONAL &amp; LABOUR LAW</div>
-      <h1 class="slide-title" style="font-size:clamp(30px,4.4vw,58px);">Right, Duty &amp; the <span class="accent">Digital Age</span><br>— Three Case Analyses</h1>
-      <p class="slide-kicker" style="font-size:14px; margin-top:18px; max-width:680px;">A structured ratio decidendi / obiter dicta analysis of three contemporary Indian legal scenarios — privacy &amp; biometrics, environmental clearance, and the right to disconnect — built on Supreme Court precedent and current legislation.</p>
-      <div style="display:flex; gap:14px; margin-top:34px; flex-wrap:wrap;">
-        <div class="tag">ARTICLE 21</div><div class="tag">PUTTASWAMY (2017)</div><div class="tag">VELLORE CITIZENS (1996)</div><div class="tag">SAMATHA (1997)</div><div class="tag">RIGHT TO DISCONNECT BILL 2025</div>
-      </div>
-      <div style="margin-top:40px; font-family:var(--mono); font-size:11px; color:var(--text-faint); letter-spacing:1px;">PRESS ► OR CLICK "NEXT" TO BEGIN BRIEFING</div>
-      <div style="margin-top:54px; font-family:var(--mono); font-size:10px; color:var(--text-faint); letter-spacing:2px;">A PRODUCTION OF <span style="color:var(--cyan-soft);">INTERACTIVE LAWYERS</span></div>
-    </div>`
-},
+  var prevBtn = document.getElementById('prevBtn');
+  var nextBtn = document.getElementById('nextBtn');
+  var counter = document.getElementById('counter');
+  var progressFill = document.getElementById('progressFill');
+  var dotsWrap = document.getElementById('dots');
 
-// ---------- CASE 1 : FACTS ----------
-{
-  section:"CASE 01 · PRIVACY", railLabel:"1.1",
-  render:()=>`
-    <div class="frame-corner fc-tl"></div><div class="frame-corner fc-tr"></div>
-    <div class="eyebrow">CASE 01 · RIGHT TO PRIVACY v. PUBLIC WELFARE ADMINISTRATION</div>
-    <h1 class="slide-title">Compulsory Biometric Enrolment for Welfare Schemes</h1>
-    <div class="grid2">
-      <div class="panel">
-        <div class="panel-label"><span class="dot"></span>FACT PATTERN</div>
-        <p>A State Government mandates facial-recognition scans and fingerprints as a condition for accessing government welfare schemes, citing the need to prevent fraud and eliminate duplicate beneficiaries. A civil society organisation challenges the rule, arguing that <b>compulsory collection</b> and <b>indefinite storage</b> of biometric data violates the fundamental right to privacy.</p>
-      </div>
-      <div class="panel warn">
-        <div class="panel-label" style="color:var(--red);"><span class="dot" style="background:var(--red); box-shadow:0 0 6px var(--red);"></span>CONTESTED ISSUES</div>
-        <ul>
-          <li>Is the right to privacy a free-standing fundamental right capable of being asserted against welfare-linked data collection?</li>
-          <li>Does mandatory biometric capture satisfy the constitutional tests for restricting privacy?</li>
-          <li>Is <i>indefinite</i> retention of biometric data constitutionally permissible?</li>
-        </ul>
-      </div>
-    </div>
-    <div class="grid3">
-      <div class="panel"><div class="panel-label">STATE'S POSITION</div><p style="font-size:14.5px;">Legitimate state interest in preventing leakage of subsidies; biometric de-duplication rationally connected to accurate targeting of welfare (Art. 41, 39(b) DPSP).</p></div>
-      <div class="panel"><div class="panel-label">PETITIONER'S POSITION</div><p style="font-size:14.5px;">Biometric data is uniquely sensitive and immutable; indefinite storage without a sunset clause fails the proportionality standard and invites function creep / surveillance risk.</p></div>
-      <div class="panel"><div class="panel-label">GOVERNING PROVISIONS</div><p style="font-size:14.5px;">Constitution: Arts. 14, 19, 21, 39(b), 41 · Aadhaar Act, 2016 · Digital Personal Data Protection Act, 2023</p></div>
-    </div>`
-},
+  slides.forEach(function(_, i){
+    var d = document.createElement('button');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.setAttribute('aria-label', 'Slide ' + (i+1));
+    d.addEventListener('click', function(){ goTo(i); });
+    dotsWrap.appendChild(d);
+  });
+  var dots = Array.prototype.slice.call(dotsWrap.children);
 
-// ---------- CASE 1 : PRECEDENT / RATIO / OBITER ----------
-{
-  section:"CASE 01 · PRIVACY", railLabel:"1.2",
-  render:()=>`
-    <div class="frame-corner fc-tl"></div><div class="frame-corner fc-tr"></div>
-    <div class="eyebrow">GOVERNING PRECEDENT</div>
-    <h1 class="slide-title">K.S. Puttaswamy v. Union of India</h1>
-    <div class="case-cite">(2017) 10 SCC 1 — 9-Judge Bench, Supreme Court of India · &amp; Puttaswamy (Aadhaar-5J), (2019) 1 SCC 1</div>
-    <div class="grid2">
-      <div class="panel rd-panel">
-        <div class="panel-label">RATIO DECIDENDI</div>
-        <ul>
-          <li>Privacy is intrinsic to <b>Article 21</b>, and flows also from Arts. 14 &amp; 19 — overruling <i>M.P. Sharma</i> and <i>Kharak Singh</i>.</li>
-          <li>Any restriction on privacy must clear a <b>three-fold test</b>: (i) existence of law, (ii) a legitimate state aim, (iii) proportionality — a rational nexus and the least intrusive means available.</li>
-          <li>In the Aadhaar judgment, welfare-linked biometric authentication was upheld (4:1) as serving a legitimate distributive-justice aim, <b>but</b> the Court struck Section 57 (private use) and read down indefinite retention — holding that data kept beyond what authentication requires is disproportionate.</li>
-        </ul>
-      </div>
-      <div class="panel ob-panel">
-        <div class="panel-label">OBITER DICTA</div>
-        <ul>
-          <li>Chandrachud J. described privacy as inseparable from human dignity and "informational self-determination" — control over one's own data footprint.</li>
-          <li>Kaul J.'s concurrence urged Parliament to enact a comprehensive data-protection statute — an observation that anticipated the later Digital Personal Data Protection Act, 2023.</li>
-          <li>Passing remarks recognised a nascent "right to be forgotten" as a facet of informational privacy, though not conclusively adjudicated.</li>
-        </ul>
-      </div>
-    </div>
-    <div class="verdict-strip">
-      <div class="vlabel">APPLIED<br>OUTCOME</div>
-      <p>Collection of biometric data for welfare de-duplication is likely to survive the "legitimate aim" and "rational nexus" limbs. The rule's vulnerability lies squarely in the word <b>"indefinite"</b> — absent a defined retention period, purpose limitation, and security safeguards under the DPDP Act, 2023, the storage clause fails proportionality and would likely be read down or struck, while the collection mechanism itself is upheld subject to conditions.</p>
-    </div>`
-},
+  function render(){
+    slides.forEach(function(s, i){ s.classList.toggle('active', i === current); });
+    dots.forEach(function(d, i){ d.classList.toggle('active', i === current); });
+    counter.textContent = (current + 1) + ' / ' + total;
+    progressFill.style.width = ((current + 1) / total * 100) + '%';
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === total - 1;
+  }
 
-// ---------- CASE 2 : FACTS ----------
-{
-  section:"CASE 02 · ENVIRONMENT", railLabel:"2.1",
-  render:()=>`
-    <div class="frame-corner fc-tl"></div><div class="frame-corner fc-tr"></div>
-    <div class="eyebrow">CASE 02 · ENVIRONMENTAL CLEARANCE v. DEVELOPMENTAL IMPERATIVE</div>
-    <h1 class="slide-title">Mining Clearance Near Forest &amp; Tribal Land</h1>
-    <div class="grid2">
-      <div class="panel">
-        <div class="panel-label"><span class="dot"></span>FACT PATTERN</div>
-        <p>A State Government clears a large mining project bordering forest land. The company secures environmental clearance, but local residents allege the Environmental Impact Assessment (EIA) inadequately studied effects on <b>groundwater</b>, <b>wildlife</b>, and <b>tribal communities</b>. The company counters that the project generates employment and significant state revenue.</p>
-      </div>
-      <div class="panel warn">
-        <div class="panel-label" style="color:var(--red);"><span class="dot" style="background:var(--red); box-shadow:0 0 6px var(--red);"></span>CONTESTED ISSUES</div>
-        <ul>
-          <li>Was the EIA a substantive assessment or a procedural formality?</li>
-          <li>Does the precautionary principle require re-assessment before clearance stands?</li>
-          <li>Were tribal / Gram Sabha consent requirements under the Fifth Schedule and forest law observed?</li>
-          <li>How is "sustainable development" balanced against economic development claims?</li>
-        </ul>
-      </div>
-    </div>
-    <div class="grid3">
-      <div class="panel"><div class="panel-label">RESIDENTS' POSITION</div><p style="font-size:14.5px;">EIA is deficient — cumulative groundwater drawdown, wildlife corridor disruption and tribal livelihood impact were not modelled; clearance is thus vitiated.</p></div>
-      <div class="panel"><div class="panel-label">COMPANY'S POSITION</div><p style="font-size:14.5px;">Statutory clearance was validly obtained; employment generation and revenue contribution serve the larger public/economic interest.</p></div>
-      <div class="panel"><div class="panel-label">GOVERNING PROVISIONS</div><p style="font-size:14.5px;">Environment (Protection) Act, 1986 · EIA Notification, 2006 · Forest Rights Act, 2006 · PESA, 1996 · Constitution, Fifth Schedule &amp; Art. 21</p></div>
-    </div>`
-},
+  function goTo(i){
+    current = Math.max(0, Math.min(total - 1, i));
+    render();
+  }
 
-// ---------- CASE 2 : PRECEDENT / RATIO / OBITER ----------
-{
-  section:"CASE 02 · ENVIRONMENT", railLabel:"2.2",
-  render:()=>`
-    <div class="frame-corner fc-tl"></div><div class="frame-corner fc-tr"></div>
-    <div class="eyebrow">GOVERNING PRECEDENT</div>
-    <h1 class="slide-title">Vellore Citizens Welfare Forum &amp; Samatha</h1>
-    <div class="case-cite">Vellore Citizens Welfare Forum v. Union of India, (1996) 5 SCC 647 · Samatha v. State of A.P., (1997) 8 SCC 191 · Orissa Mining Corp. v. MoEF (Niyamgiri), (2013) 6 SCC 476</div>
-    <div class="grid2">
-      <div class="panel rd-panel">
-        <div class="panel-label">RATIO DECIDENDI</div>
-        <ul>
-          <li><b>Vellore Citizens:</b> The Precautionary Principle and Polluter Pays Principle are essential, binding features of "sustainable development" under Indian environmental law; the burden lies on the industry to prove its activity is environmentally benign, not on the objector to prove harm.</li>
-          <li><b>Samatha:</b> Transfer of tribal land in Fifth Schedule Scheduled Areas to non-tribal/private lessees for mining is void; tribal resource rights and ecological preservation take precedence over private mining interests in such areas.</li>
-          <li><b>Niyamgiri (Orissa Mining Corp.):</b> Gram Sabhas hold statutory authority under the Forest Rights Act to independently decide on diversion of forest land affecting their cultural and religious claims — consent cannot be presumed from state-level clearance alone.</li>
-        </ul>
-      </div>
-      <div class="panel ob-panel">
-        <div class="panel-label">OBITER DICTA</div>
-        <ul>
-          <li><i>Vellore Citizens</i>: development and ecology are not inherently opposed — economic growth pursued in disregard of ecological limits is not "development" in the constitutional sense.</li>
-          <li><i>Samatha</i>: where two public purposes compete (industrial revenue vs. tribal welfare), the constitutional priority set by the Fifth Schedule ordinarily prevails over an ordinary policy preference for private exploitation.</li>
-          <li>Later Godavarman-line orders (continuing mandamus) stress that "forest" must be understood in its dictionary sense, widening scrutiny beyond notified reserve forests.</li>
-        </ul>
-      </div>
-    </div>
-    <div class="verdict-strip">
-      <div class="vlabel">APPLIED<br>OUTCOME</div>
-      <p>Employment and revenue arguments are legally relevant but not dispositive — they cannot cure a substantively deficient EIA. The clearance is vulnerable to being quashed or remanded for a fresh, cumulative assessment covering groundwater and wildlife impact, and is additionally contingent on Gram Sabha consent under the FRA/PESA framework given the project's proximity to tribal land.</p>
-    </div>`
-},
+  prevBtn.addEventListener('click', function(){ goTo(current - 1); });
+  nextBtn.addEventListener('click', function(){ goTo(current + 1); });
 
-// ---------- CASE 3 : FACTS ----------
-{
-  section:"CASE 03 · LABOUR", railLabel:"3.1",
-  render:()=>`
-    <div class="frame-corner fc-tl"></div><div class="frame-corner fc-tr"></div>
-    <div class="eyebrow">CASE 03 · RIGHT TO DISCONNECT · EMERGING JURISPRUDENCE</div>
-    <h1 class="slide-title">After-Hours Work Contact &amp; Employer Sanction</h1>
-    <div class="grid2">
-      <div class="panel">
-        <div class="panel-label"><span class="dot"></span>FACT PATTERN</div>
-        <p>An employee at a multinational company receives official emails and WhatsApp messages from her manager late at night and on weekends. Her employment contract contains <b>no express clause</b> requiring after-hours availability. After she stops responding outside working hours, she receives a written warning for "lack of commitment."</p>
-      </div>
-      <div class="panel warn">
-        <div class="panel-label" style="color:var(--red);"><span class="dot" style="background:var(--red); box-shadow:0 0 6px var(--red);"></span>CONTESTED ISSUES</div>
-        <ul>
-          <li>Does Indian law recognise an employee's right to disconnect from work communication?</li>
-          <li>Is a warning issued for non-response outside contractual hours legally sustainable?</li>
-          <li>Can Article 21 (dignity, health) and labour-welfare provisions be read to imply such a right absent express legislation?</li>
-        </ul>
-      </div>
-    </div>
-    <div class="grid3">
-      <div class="panel"><div class="panel-label">EMPLOYER'S POSITION</div><p style="font-size:14.5px;">No contractual or statutory bar on after-hours contact; responsiveness is a legitimate performance expectation absent an express "disconnect" clause.</p></div>
-      <div class="panel"><div class="panel-label">EMPLOYEE'S POSITION</div><p style="font-size:14.5px;">Persistent after-hours contact intrudes on rest, health and family life; sanctioning silence outside contracted hours is punitive and disproportionate.</p></div>
-      <div class="panel"><div class="panel-label">GOVERNING PROVISIONS</div><p style="font-size:14.5px;">Constitution Arts. 21 &amp; 42 · Industrial Employment (Standing Orders) Act, 1946 · OSH Code, 2020 · Right to Disconnect Bill, 2025 (pending)</p></div>
-    </div>`
-},
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'ArrowRight' || e.key === 'PageDown') { goTo(current + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { goTo(current - 1); }
+    else if (e.key === 'Home') { goTo(0); }
+    else if (e.key === 'End') { goTo(total - 1); }
+  });
 
-// ---------- CASE 3 : PRECEDENT / RATIO / OBITER ----------
-{
-  section:"CASE 03 · LABOUR", railLabel:"3.2",
-  render:()=>`
-    <div class="frame-corner fc-tl"></div><div class="frame-corner fc-tr"></div>
-    <div class="eyebrow">EMERGING &amp; PERSUASIVE AUTHORITY</div>
-    <h1 class="slide-title">No Binding Ratio Yet — A Doctrine in Formation</h1>
-    <div class="case-cite">No Indian Supreme Court ruling has yet adjudicated a "right to disconnect" claim directly — the analysis proceeds by analogy and comparative reference.</div>
-    <div class="grid2">
-      <div class="panel rd-panel">
-        <div class="panel-label">ANALOGOUS DOCTRINAL BASIS</div>
-        <ul>
-          <li><b>Article 21</b> has been progressively read to include the right to health, leisure and a dignified private/family life — the same dignity-centred reasoning that underlies <i>Puttaswamy's</i> privacy holding extends naturally to freedom from compelled availability.</li>
-          <li><b>Article 42</b> (DPSP) directs the State to secure "just and humane conditions of work" — a constitutional value courts routinely use to interpret labour statutes.</li>
-          <li>A warning issued solely for non-response outside contracted hours, where the contract is silent, arguably lacks a valid contractual or statutory foundation and may constitute an unfair or coercive labour practice.</li>
-        </ul>
-      </div>
-      <div class="panel ob-panel">
-        <div class="panel-label">OBITER / COMPARATIVE PERSUASION</div>
-        <ul>
-          <li>France's <i>El Khomri Law</i> (2017), Portugal's Labour Code amendment (2021), Spain's Royal Decree 28/2020, and Australia's 2024 right-to-disconnect law all formalise what Indian courts would presently treat only as persuasive comparative material.</li>
-          <li>India's Right to Disconnect Bill, 2025 (private member's bill, Lok Sabha) proposes an Employees' Welfare Authority, compensable after-hours work, and an internal-committee grievance model akin to the POSH Act — signalling legislative direction, though not yet law.</li>
-          <li>A Kerala state-level bill mirrors this proposal, reflecting an emerging but still uncodified national consensus.</li>
-        </ul>
-      </div>
-    </div>
-    <div class="verdict-strip">
-      <div class="vlabel">APPLIED<br>OUTCOME</div>
-      <p>Absent an express contractual duty, the employer's warning is legally precarious — it penalises the exercise of an implied boundary rather than breach of a defined obligation. Pending statutory codification, the employee's strongest route is a claim of unfair labour practice / breach of the implied duty of trust and confidence, reinforced by Article 21 dignity jurisprudence, rather than a direct fundamental-right cause of action.</p>
-    </div>`
-},
-
-// ---------- SYNTHESIS ----------
-{
-  section:"SYNTHESIS", railLabel:"S",
-  render:()=>`
-    <div class="frame-corner fc-tl"></div><div class="frame-corner fc-tr"></div>
-    <div class="eyebrow">COMPARATIVE SYNTHESIS</div>
-    <h1 class="slide-title">One Constitutional Thread: Proportionality &amp; Dignity</h1>
-    <div class="grid3">
-      <div class="panel">
-        <div class="panel-label">CASE 01</div>
-        <p style="font-size:14.5px;">Privacy yields to a legitimate state aim only when the means are proportionate — collection may stand, indefinite storage falls.</p>
-      </div>
-      <div class="panel">
-        <div class="panel-label">CASE 02</div>
-        <p style="font-size:14.5px;">Development is not opposed to ecology, but it must be sustainable — the burden of proving environmental safety sits with the developer, not the community.</p>
-      </div>
-      <div class="panel">
-        <div class="panel-label">CASE 03</div>
-        <p style="font-size:14.5px;">Where statute is silent, courts extend Article 21's dignity core to fill the gap — until Parliament legislates a clear rule.</p>
-      </div>
-    </div>
-    <div class="panel" style="margin-top:22px;">
-      <div class="panel-label">COMMON THREAD</div>
-      <p>Across all three fact patterns, Indian constitutional method resists a binary "right wins" or "state wins" outcome. Each dispute is resolved through a <b>structured proportionality inquiry</b> — a legitimate aim, a rational means, and the least restrictive alternative — anchored in Article 21's evolving conception of dignity. Where legislation has not yet caught up with technology or workplace practice (Case 3), courts and policy fill the interstitial space with constitutional principle pending codification.</p>
-    </div>`
-},
-
-// ---------- REFERENCES ----------
-{
-  section:"REFERENCES", railLabel:"R",
-  render:()=>`
-    <div class="frame-corner fc-tl"></div><div class="frame-corner fc-tr"></div>
-    <div class="eyebrow">SOURCE REGISTER</div>
-    <h1 class="slide-title">Case Law, Statutes &amp; Further Reading</h1>
-    <div class="grid2" style="margin-top:24px;">
-      <div>
-        <div class="ref-block">
-          <h3>CASE LAW</h3>
-          <div class="ref-item"><b>Justice K.S. Puttaswamy (Retd.) v. Union of India</b>, (2017) 10 SCC 1 — 9-Judge Bench, right to privacy</div>
-          <div class="ref-item"><b>Justice K.S. Puttaswamy (Retd.) v. Union of India (Aadhaar-5J)</b>, (2019) 1 SCC 1</div>
-          <div class="ref-item"><b>Vellore Citizens Welfare Forum v. Union of India</b>, (1996) 5 SCC 647</div>
-          <div class="ref-item"><b>Samatha v. State of Andhra Pradesh</b>, (1997) 8 SCC 191</div>
-          <div class="ref-item"><b>Orissa Mining Corp. Ltd. v. Ministry of Environment &amp; Forest</b> (Niyamgiri), (2013) 6 SCC 476</div>
-          <div class="ref-item"><b>T.N. Godavarman Thirumulpad v. Union of India</b>, (1997) 2 SCC 267 &amp; continuing orders</div>
-          <div class="ref-item"><b>M.C. Mehta v. Union of India</b> — Article 21 &amp; environmental jurisprudence (series)</div>
-          <div class="ref-item"><b>Navtej Singh Johar v. Union of India</b>, (2018) 10 SCC 1 — applying Puttaswamy's dignity principle</div>
-        </div>
-      </div>
-      <div>
-        <div class="ref-block">
-          <h3>STATUTES &amp; INSTRUMENTS</h3>
-          <div class="ref-item">Constitution of India — Arts. 14, 19, 21, 39(b), 41, 42; Fifth Schedule</div>
-          <div class="ref-item">Aadhaar (Targeted Delivery of Financial and Other Subsidies, Benefits and Services) Act, 2016</div>
-          <div class="ref-item">Digital Personal Data Protection Act, 2023</div>
-          <div class="ref-item">Environment (Protection) Act, 1986 &amp; EIA Notification, 2006</div>
-          <div class="ref-item">Scheduled Tribes and Other Traditional Forest Dwellers (Recognition of Forest Rights) Act, 2006</div>
-          <div class="ref-item">Panchayats (Extension to Scheduled Areas) Act, 1996 (PESA)</div>
-          <div class="ref-item">Occupational Safety, Health and Working Conditions Code, 2020</div>
-          <div class="ref-item">Right to Disconnect Bill, 2025 (Lok Sabha, private member's bill)</div>
-        </div>
-      </div>
-    </div>
-    <div class="ref-block" style="margin-top:6px;">
-      <h3>SECONDARY LITERATURE &amp; REPORTS</h3>
-      <div class="ref-item">Supreme Court Observer — "Puttaswamy: Judgment of the Court in Plain English"</div>
-      <div class="ref-item">Vidhi Centre for Legal Policy — "Right to Disconnect in India" (2025)</div>
-      <div class="ref-item">NITI Aayog &amp; International Labour Organisation — "India's Future of Work"</div>
-      <div class="ref-item">Parliamentary Standing Committee on Labour, 2022–23 Report — digital labour rights &amp; work-life balance</div>
-      <div class="ref-item">Comparative statutes: France, Code du Travail Art. L2242-17 (2017) · Portugal, Labour Code Art. 199-A (2021) · Spain, Royal Decree-Law 28/2020 · Australia, Fair Work Amendment 2024</div>
-    </div>
-    <p style="font-family:var(--mono); font-size:10.5px; color:var(--text-faint); margin-top:16px;">Prepared by <span style="color:var(--cyan-soft);">Interactive Lawyers</span> for academic / educational discussion. Case facts in Cases 01–03 are hypothetical illustrations set against real Indian precedent; this is not legal advice.</p>`
-},
-];
-
-/* =========================================================
-   ENGINE
-   ========================================================= */
-const stage = document.getElementById('stage');
-const rail = document.getElementById('rail');
-let current = 0;
-
-function buildRail(){
-  let lastSection = null;
-  slides.forEach((s,i)=>{
-    if(s.section !== lastSection){
-      const lab = document.createElement('div');
-      lab.className='rail-group-label';
-      lab.textContent = s.section;
-      rail.appendChild(lab);
-      lastSection = s.section;
+  // touch swipe
+  var touchStartX = null, touchStartY = null;
+  document.addEventListener('touchstart', function(e){
+    touchStartX = e.changedTouches[0].clientX;
+    touchStartY = e.changedTouches[0].clientY;
+  }, {passive:true});
+  document.addEventListener('touchend', function(e){
+    if (touchStartX === null) return;
+    var dx = e.changedTouches[0].clientX - touchStartX;
+    var dy = e.changedTouches[0].clientY - touchStartY;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+      if (dx < 0) goTo(current + 1); else goTo(current - 1);
     }
-    const d = document.createElement('div');
-    d.className='rail-dot';
-    d.textContent = s.railLabel;
-    d.dataset.index = i;
-    d.addEventListener('click', ()=>goTo(i));
-    rail.appendChild(d);
-  });
-}
+    touchStartX = null; touchStartY = null;
+  }, {passive:true});
 
-function renderSlides(){
-  stage.innerHTML = slides.map((s,i)=>`<div class="slide" data-i="${i}">${s.render()}</div>`).join('');
-}
+  // scatter a few stars into the sky
+  var sky = document.querySelector('.sky');
+  for (var i = 0; i < 40; i++){
+    var star = document.createElement('div');
+    star.className = 'star';
+    var size = Math.random() * 2.5 + 1;
+    star.style.width = size + 'px';
+    star.style.height = size + 'px';
+    star.style.top = (Math.random() * 100) + '%';
+    star.style.left = (Math.random() * 100) + '%';
+    star.style.animationDelay = (Math.random() * 4) + 's';
+    sky.appendChild(star);
+  }
 
-function goTo(i){
-  if(i<0 || i>=slides.length) return;
-  current = i;
-  document.querySelectorAll('.slide').forEach(el=>{
-    el.classList.toggle('active', +el.dataset.i === i);
-    if(+el.dataset.i === i) el.scrollTop = 0;
-  });
-  document.querySelectorAll('.rail-dot').forEach(el=>{
-    const idx = +el.dataset.index;
-    el.classList.toggle('active', idx===i);
-    if(idx < i) el.classList.add('done'); else if(idx>i) el.classList.remove('done');
-  });
-  document.getElementById('curNum').textContent = String(i+1).padStart(2,'0');
-  const pct = Math.round(((i+1)/slides.length)*100);
-  document.getElementById('progress-fill').style.width = pct+'%';
-  const circ = 94.2;
-  document.getElementById('charge-fill').style.strokeDashoffset = circ - (circ*pct/100);
-  document.getElementById('charge-pct').textContent = pct+'%';
-  document.getElementById('prevBtn').disabled = i===0;
-  document.getElementById('nextBtn').disabled = i===slides.length-1;
-}
-
-document.getElementById('prevBtn').addEventListener('click', ()=>goTo(current-1));
-document.getElementById('nextBtn').addEventListener('click', ()=>goTo(current+1));
-document.addEventListener('keydown', (e)=>{
-  if(e.key==='ArrowRight' || e.key===' '){ e.preventDefault(); goTo(current+1); }
-  if(e.key==='ArrowLeft'){ goTo(current-1); }
-});
-
-document.getElementById('totNum').textContent = String(slides.length).padStart(2,'0');
-buildRail();
-renderSlides();
-goTo(0);
-
-// hint fade
-setTimeout(()=>document.getElementById('hint').classList.add('show'), 2600);
-setTimeout(()=>document.getElementById('hint').classList.remove('show'), 7500);
-
-// clock
-function tick(){
-  const d = new Date();
-  document.getElementById('clock').textContent = d.toTimeString().split(' ')[0];
-}
-tick(); setInterval(tick,1000);
-
-// boot sequence
-const bootLogs = ["initializing case files…","loading constitutional index…","cross-referencing precedent…","rendering interface…","ready."];
-let bl = 0;
-const blEl = document.getElementById('boot-log');
-const blInt = setInterval(()=>{
-  bl++;
-  if(bl < bootLogs.length){ blEl.textContent = bootLogs[bl]; }
-}, 340);
-setTimeout(()=>{
-  clearInterval(blInt);
-  document.getElementById('boot').classList.add('hide');
-}, 1900);
+  render();
+})();
 </script>
+
 </body>
 </html>
