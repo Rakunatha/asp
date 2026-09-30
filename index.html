@@ -29,12 +29,12 @@ h1,h2{font-family:'Playfair Display',Georgia,serif;color:var(--cream);margin:0 0
 h1{font-size:clamp(1.9rem,4.6vw,3.4rem);font-weight:800}
 h2{font-size:clamp(1.5rem,3.4vw,2.3rem);font-weight:700;border-bottom:3px solid transparent;border-image:linear-gradient(90deg,var(--sunflower),transparent) 1;padding-bottom:.35em;margin-bottom:.6em;max-width:fit-content}
 p{font-size:clamp(.98rem,1.6vw,1.18rem);line-height:1.65;max-width:74ch;color:#e9e2cf;margin:0}
-.content{flex:1;display:flex;flex-direction:column;justify-content:center;gap:1rem;min-height:0}
+.content{flex:1 0 auto;display:flex;flex-direction:column;justify-content:center;gap:1rem}
 .card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:6px;padding:1rem 1.3rem}
 .card strong{color:var(--sunflower);font-family:'Playfair Display',Georgia,serif}
 .card p{margin-top:.5em;font-size:clamp(.92rem,1.4vw,1.05rem)}
-.grid{display:grid;gap:1rem}.grid.three{grid-template-columns:repeat(3,1fr)}
-@media (max-width:760px){.grid.three{grid-template-columns:1fr}}
+.grid{display:grid;gap:1rem}.grid.three{grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr))}
+
 .big{font-family:'Playfair Display',Georgia,serif;font-size:clamp(1.3rem,3vw,2rem);font-weight:700;color:var(--sunflower);line-height:1.3;max-width:30ch}
 ul.brush{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.7rem}
 ul.brush li{position:relative;padding-left:1.4em;font-size:clamp(.95rem,1.5vw,1.1rem);color:#e9e2cf;line-height:1.5}
@@ -59,6 +59,9 @@ ul.brush li::before{content:"";position:absolute;left:0;top:.5em;width:9px;heigh
 @media (min-width:3200px){html{font-size:225%}}
 
 /* ===== Accessibility & device polish ===== */
+.card h3{font-family:'Playfair Display',Georgia,serif;font-size:clamp(1.05rem,1.8vw,1.3rem);line-height:1.25;color:var(--sunflower);margin:0}
+.card p{hyphens:none;max-width:none}
+.card{min-width:0}
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 body{-webkit-tap-highlight-color:transparent}
 .skip{position:fixed;left:8px;top:-60px;z-index:10;background:var(--sunflower);color:var(--ink);padding:.6em 1em;border-radius:6px;font-weight:700;text-decoration:none;transition:top .2s}
@@ -85,10 +88,33 @@ h1,h2,p,li{overflow-wrap:break-word;hyphens:auto}
   .sky,.nav-bar,.progress-track,.skip,noscript{display:none!important}
   .deck{position:static;height:auto;width:auto}
   .slide{display:flex!important;position:relative;inset:auto;overflow:visible;padding:24px;page-break-after:always;break-after:page;min-height:90vh}
-  h1,h2,p,li,.card strong,.eyebrow,.big,.authorline,.authorline strong{color:#000!important;text-shadow:none}
+  h1,h2,h3,p,li,.card strong,.eyebrow,.big,.authorline,.authorline strong{color:#000!important;text-shadow:none}
   .card{background:none;border:1px solid #444}a{color:#000!important}
 }
 
+/* ===== Titles: never split words, wrap only between words ===== */
+h1,h2,h3,.big,.eyebrow,.hero-wrap>p{hyphens:none;-webkit-hyphens:none;overflow-wrap:normal;word-break:normal;text-wrap:balance}
+h2{max-width:fit-content}
+p,li{text-wrap:pretty}
+@media (max-width:400px){h1{font-size:clamp(1.5rem,8.2vw,1.9rem)}h2{font-size:clamp(1.3rem,6.6vw,1.6rem)}.big{font-size:clamp(1.15rem,6vw,1.4rem)}}
+/* ===== Nav never covers content ===== */
+:root{--nav-h:84px}
+@media (max-width:560px){:root{--nav-h:120px}}
+@media (max-height:480px) and (orientation:landscape){:root{--nav-h:70px}}
+.slide{padding-bottom:calc(var(--nav-h) + env(safe-area-inset-bottom,0px))}
+.nav-bar{background:linear-gradient(180deg,rgba(10,21,48,0),rgba(10,21,48,.97) 30%)}
+/* ===== Slide 2 polish ===== */
+.nw{white-space:nowrap}
+.law{align-items:stretch}
+.law .card{display:flex;flex-direction:column;gap:.35rem}
+.law .card p{margin:0}
+.takeaway{max-width:none;margin-top:.4rem;padding-left:.9rem;border-left:3px solid var(--rust)}
+@media (min-width:900px){.law .card p{font-size:clamp(1rem,1.5vw,1.2rem)}}
+@media (max-height:480px) and (orientation:landscape){
+  .grid.three.law{grid-template-columns:repeat(3,1fr);gap:.6rem}
+  .law .card{padding:.6rem .7rem}.law .card p{font-size:.74rem;line-height:1.35}.law .card h3{font-size:.9rem}
+  .takeaway{font-size:.95rem;margin-top:.2rem}
+}
 </style>
 </head>
 <body>
@@ -111,11 +137,12 @@ h1,h2,p,li{overflow-wrap:break-word;hyphens:auto}
   <p class="eyebrow">Slide 2</p>
   <h2>The Law Is Asking for a Human</h2>
   <div class="content">
-    <div class="grid three">
-      <div class="card"><strong>United States</strong><p><em>Thaler v. Perlmutter</em> (D.C. Cir., 2025): only humans can be authors. AI-assisted work is protected only for its human-authored contribution.</p></div>
-      <div class="card"><strong>India</strong><p>Section 2(d)(vi) names the person who "causes" a computer-generated work as author. Courts still look for human skill and judgment.</p></div>
-      <div class="card"><strong>EU &amp; UK</strong><p>EU AI Act Art. 50 requires machine-readable marking of synthetic content. UK CDPA s.9(3) gives computer-generated works to the person making the arrangements.</p></div>
+    <div class="grid three law">
+      <article class="card"><h3>United States</h3><p><em>Thaler v. Perlmutter</em> (D.C. Cir., 2025): only humans can be authors. <span class="nw">AI-assisted</span> work is protected only for its <span class="nw">human-authored</span> contribution.</p></article>
+      <article class="card"><h3>India</h3><p>Section 2(d)(vi) names the person who "causes" a <span class="nw">computer-generated</span> work as author. Courts still look for human skill and judgment.</p></article>
+      <article class="card"><h3>EU &amp; UK</h3><p>EU AI Act Art. 50 requires <span class="nw">machine-readable</span> marking of synthetic content. UK CDPA s.9(3) gives <span class="nw">computer-generated</span> works to the person making the arrangements.</p></article>
     </div>
+    <p class="big takeaway">The common test: did a human make the creative choices?</p>
   </div>
 </section>
 
@@ -150,9 +177,9 @@ h1,h2,p,li{overflow-wrap:break-word;hyphens:auto}
   <h2>The Study &amp; Its Limits</h2>
   <div class="content">
     <div class="grid three">
-      <div class="card"><strong>Design</strong><p>Empirical, descriptive survey. Five-point Likert questionnaire, 210 respondents, convenience sample.</p></div>
-      <div class="card"><strong>Analysis</strong><p>SPSS v21: chi-square tests and one-way ANOVA across age, gender, education, area and occupation.</p></div>
-      <div class="card"><strong>Limits</strong><p>Convenience sampling, self-report bias, cross-sectional design. Attitudes are measured, not causal effects.</p></div>
+      <article class="card"><h3>Design</h3><p>Empirical, descriptive survey. Five-point Likert questionnaire, 210 respondents, convenience sample.</p></article>
+      <article class="card"><h3>Analysis</h3><p>SPSS v21: chi-square tests and one-way ANOVA across age, gender, education, area and occupation.</p></article>
+      <article class="card"><h3>Limits</h3><p>Convenience sampling, self-report bias, cross-sectional design. Attitudes are measured, not causal effects.</p></article>
     </div>
   </div>
 </section>
@@ -236,12 +263,13 @@ h1,h2,p,li{overflow-wrap:break-word;hyphens:auto}
   function go(i, moveFocus, fromHash) {
     cur = Math.max(0, Math.min(total - 1, i));
     render();
-    if (!fromHash && history.replaceState) history.replaceState(null, '', '#' + (cur + 1));
+    if (!fromHash) { try { history.replaceState(null, '', '#' + (cur + 1)); } catch (err) { /* sandboxed preview: skip deep-link update */ } }
     if (moveFocus) { var h = slides[cur].querySelector('h1,h2') || slides[cur]; h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); }
   }
 
   function fromHash() {
-    var n = parseInt(location.hash.replace('#', ''), 10);
+    var n = NaN;
+    try { n = parseInt(location.hash.replace('#', ''), 10); } catch (err) {}
     return isNaN(n) ? 0 : n - 1;
   }
 
