@@ -2,581 +2,287 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="description" content="Research presentation: a provenance-based framework for authorship attribution and copyright protection in the age of AI.">
+<meta name="theme-color" content="#0d1b3e">
+<meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Tracking Creation in the Age of AI</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --midnight:#0d1b3e;
-    --twilight:#173663;
-    --deepteal:#0f4c62;
-    --swirl:#3a6ea5;
-    --cypress:#16324f;
-    --wheat:#e8ac1f;
-    --sunflower:#ffd447;
-    --cream:#f4ecd8;
-    --rust:#c2542c;
-    --ink:#0a1530;
-    --card-bg: rgba(244,236,216,0.06);
-    --card-border: rgba(232,172,31,0.35);
-  }
-  *{box-sizing:border-box;}
-  html,body{
-    margin:0; padding:0; height:100%;
-    background:var(--midnight);
-    font-family:'Lora', serif;
-    color:var(--cream);
-    overflow:hidden;
-  }
-  @media (prefers-reduced-motion: reduce){
-    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
-  }
+:root{--midnight:#0d1b3e;--wheat:#e8ac1f;--sunflower:#ffd447;--cream:#f4ecd8;--rust:#c2542c;--ink:#0a1530;--card-bg:rgba(244,236,216,.06);--card-border:rgba(232,172,31,.35)}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;height:100%;background:var(--midnight);font-family:'Lora',Georgia,serif;color:var(--cream);overflow:hidden}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}}
+.sky{position:fixed;inset:0;z-index:0;overflow:hidden;background:radial-gradient(ellipse at 20% 15%,#1f3f70 0%,transparent 55%),radial-gradient(ellipse at 80% 10%,#123252 0%,transparent 50%),radial-gradient(ellipse at 50% 100%,#0a1a38 0%,transparent 60%),linear-gradient(180deg,var(--midnight),var(--ink))}
+.swirl{position:absolute;border-radius:50%;background:conic-gradient(from 90deg,transparent,rgba(58,110,165,.35),transparent 60%);filter:blur(2px);animation:spin 90s linear infinite;opacity:.7}
+.swirl.a{width:70vmax;height:70vmax;top:-25vmax;left:-20vmax;animation-duration:120s}
+.swirl.b{width:55vmax;height:55vmax;bottom:-25vmax;right:-15vmax;animation-duration:150s;animation-direction:reverse}
+@keyframes spin{to{transform:rotate(360deg)}}
+.star{position:absolute;border-radius:50%;background:var(--sunflower);box-shadow:0 0 8px 2px rgba(255,212,71,.55);animation:twinkle 4s ease-in-out infinite}
+@keyframes twinkle{0%,100%{opacity:.35}50%{opacity:1}}
+.deck{position:relative;z-index:1;height:100vh;height:100dvh;width:100vw}
+.slide{position:absolute;inset:0;display:none;flex-direction:column;padding:clamp(20px,5vw,64px) clamp(20px,7vw,96px);padding-top:calc(clamp(20px,5vw,64px) + env(safe-area-inset-top,0px));padding-bottom:calc(clamp(70px,12vh,96px) + env(safe-area-inset-bottom,0px));overflow-y:auto}
+.slide.active{display:flex}
+.eyebrow{font-style:italic;color:var(--wheat);font-size:clamp(.75rem,1.4vw,.95rem);margin:0 0 8px;opacity:.9}
+h1,h2{font-family:'Playfair Display',Georgia,serif;color:var(--cream);margin:0 0 .4em;line-height:1.12;text-shadow:0 2px 18px rgba(0,0,0,.35)}
+h1{font-size:clamp(1.9rem,4.6vw,3.4rem);font-weight:800}
+h2{font-size:clamp(1.5rem,3.4vw,2.3rem);font-weight:700;border-bottom:3px solid transparent;border-image:linear-gradient(90deg,var(--sunflower),transparent) 1;padding-bottom:.35em;margin-bottom:.6em;max-width:fit-content}
+p{font-size:clamp(.98rem,1.6vw,1.18rem);line-height:1.65;max-width:74ch;color:#e9e2cf;margin:0}
+.content{flex:1;display:flex;flex-direction:column;justify-content:center;gap:1rem;min-height:0}
+.card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:6px;padding:1rem 1.3rem}
+.card strong{color:var(--sunflower);font-family:'Playfair Display',Georgia,serif}
+.card p{margin-top:.5em;font-size:clamp(.92rem,1.4vw,1.05rem)}
+.grid{display:grid;gap:1rem}.grid.three{grid-template-columns:repeat(3,1fr)}
+@media (max-width:760px){.grid.three{grid-template-columns:1fr}}
+.big{font-family:'Playfair Display',Georgia,serif;font-size:clamp(1.3rem,3vw,2rem);font-weight:700;color:var(--sunflower);line-height:1.3;max-width:30ch}
+ul.brush{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.7rem}
+ul.brush li{position:relative;padding-left:1.4em;font-size:clamp(.95rem,1.5vw,1.1rem);color:#e9e2cf;line-height:1.5}
+ul.brush li::before{content:"";position:absolute;left:0;top:.5em;width:9px;height:9px;border-radius:50%;background:var(--rust);box-shadow:0 0 6px rgba(194,84,44,.8)}
+.authorline{color:#c8bd9a;font-size:clamp(.85rem,1.4vw,1rem);margin-top:1.2rem}
+.hero-wrap{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;height:100%;gap:1.4rem}
+.frame-line{width:70px;height:3px;background:var(--rust);margin:.4rem 0 .9rem}
+.progress-track{position:fixed;top:0;left:0;height:4px;width:100%;background:rgba(255,255,255,.08);z-index:5}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--rust),var(--sunflower));transition:width .35s ease}
+.nav-bar{position:fixed;bottom:0;left:0;width:100%;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;padding:10px clamp(14px,4vw,40px);padding-bottom:calc(10px + env(safe-area-inset-bottom,0px));background:linear-gradient(180deg,transparent,rgba(10,18,45,.85) 40%);z-index:5;gap:10px}
+.nav-btn{background:rgba(232,172,31,.14);border:1.5px solid var(--wheat);color:var(--sunflower);font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:clamp(.8rem,1.6vw,1rem);padding:.55em 1.1em;border-radius:30px;cursor:pointer;white-space:nowrap;touch-action:manipulation}
+.nav-btn:hover{background:rgba(232,172,31,.3)}.nav-btn:disabled{opacity:.3;cursor:default}
+.nav-btn:focus-visible,.dot:focus-visible{outline:2px solid var(--sunflower);outline-offset:2px}
+.dots{display:flex;gap:2px;flex-wrap:wrap;justify-content:center}
+.dot{width:28px;height:28px;border:none;padding:0;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.dot::before{content:"";width:9px;height:9px;border-radius:50%;background:rgba(244,236,216,.3);transition:.2s}
+.dot.active::before{background:var(--sunflower);box-shadow:0 0 6px rgba(255,212,71,.7)}
+.counter{font-style:italic;color:#d8cfae;font-size:clamp(.78rem,1.4vw,.92rem);min-width:52px;text-align:center}
+@media (max-width:560px){.dots{order:-1;width:100%}.nav-btn{font-size:.78rem;padding:.5em .85em}.counter{order:1}#nextBtn{order:2}}
+@media (min-width:1600px){html{font-size:125%}}
+@media (min-width:2400px){html{font-size:165%}}
+@media (min-width:3200px){html{font-size:225%}}
 
-  /* ---------- Starry swirl background ---------- */
-  .sky{
-    position:fixed; inset:0; z-index:0; overflow:hidden;
-    background:
-      radial-gradient(ellipse at 20% 15%, #1f3f70 0%, transparent 55%),
-      radial-gradient(ellipse at 80% 10%, #123252 0%, transparent 50%),
-      radial-gradient(ellipse at 50% 100%, #0a1a38 0%, transparent 60%),
-      linear-gradient(180deg, var(--midnight) 0%, var(--ink) 100%);
-  }
-  .swirl{
-    position:absolute; border-radius:50%;
-    background: conic-gradient(from 90deg, transparent, rgba(58,110,165,0.35), transparent 60%);
-    filter: blur(2px);
-    animation: spin 90s linear infinite;
-    opacity:0.7;
-  }
-  .swirl.a{ width:70vmax; height:70vmax; top:-25vmax; left:-20vmax; animation-duration:120s;}
-  .swirl.b{ width:55vmax; height:55vmax; bottom:-25vmax; right:-15vmax; animation-duration:150s; animation-direction:reverse;}
-  .swirl.c{ width:40vmax; height:40vmax; top:30%; right:10%; animation-duration:100s; opacity:0.4;}
-  @keyframes spin{ to{ transform: rotate(360deg);} }
+/* ===== Accessibility & device polish ===== */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{-webkit-tap-highlight-color:transparent}
+.skip{position:fixed;left:8px;top:-60px;z-index:10;background:var(--sunflower);color:var(--ink);padding:.6em 1em;border-radius:6px;font-weight:700;text-decoration:none;transition:top .2s}
+.skip:focus{top:calc(8px + env(safe-area-inset-top,0px))}
+.slide{overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.slide:focus{outline:none}
+.slide h2:focus-visible,.slide h1:focus-visible{outline:2px dashed var(--sunflower);outline-offset:4px}
+a:focus-visible{outline:2px solid var(--sunflower);outline-offset:3px}
+.nav-btn{min-height:44px;min-width:44px}
+.dot{min-width:32px;min-height:32px}
+h1,h2,p,li{overflow-wrap:break-word;hyphens:auto}
+@media (hover:hover){.nav-btn:hover{background:rgba(232,172,31,.3)}}
+@media (max-width:360px){h1{font-size:1.65rem}.slide{padding-left:16px;padding-right:16px}}
+@media (max-height:480px) and (orientation:landscape){
+  .slide{padding-top:calc(14px + env(safe-area-inset-top,0px));padding-bottom:calc(64px + env(safe-area-inset-bottom,0px));padding-left:calc(24px + env(safe-area-inset-left,0px));padding-right:calc(24px + env(safe-area-inset-right,0px))}
+  h1{font-size:1.6rem}h2{font-size:1.25rem;margin-bottom:.3em}p,ul.brush li{font-size:.9rem;line-height:1.4}
+  .content{gap:.6rem;justify-content:flex-start}.hero-wrap{gap:.6rem}
+  .dots{display:none}.nav-bar{padding-top:6px}
+}
+@media (prefers-contrast:more){:root{--card-border:#ffd447}p,ul.brush li{color:#fff}}
+@media (forced-colors:active){.card{border:1px solid CanvasText}.progress-fill{background:Highlight}.dot.active::before{background:Highlight}}
+@media print{
+  html,body{height:auto;overflow:visible;background:#fff;color:#000}
+  .sky,.nav-bar,.progress-track,.skip,noscript{display:none!important}
+  .deck{position:static;height:auto;width:auto}
+  .slide{display:flex!important;position:relative;inset:auto;overflow:visible;padding:24px;page-break-after:always;break-after:page;min-height:90vh}
+  h1,h2,p,li,.card strong,.eyebrow,.big,.authorline,.authorline strong{color:#000!important;text-shadow:none}
+  .card{background:none;border:1px solid #444}a{color:#000!important}
+}
 
-  .star{
-    position:absolute; border-radius:50%;
-    background:var(--sunflower);
-    box-shadow:0 0 8px 2px rgba(255,212,71,0.55);
-    animation: twinkle 4s ease-in-out infinite;
-  }
-  @keyframes twinkle{ 0%,100%{opacity:0.35;} 50%{opacity:1;} }
-
-  /* ---------- Deck structure ---------- */
-  .deck{
-    position:relative; z-index:1;
-    height:100vh; height:100dvh; width:100vw;
-    display:flex; align-items:stretch;
-  }
-  .slide{
-    position:absolute; inset:0;
-    display:none;
-    flex-direction:column;
-    padding: clamp(20px,5vw,64px) clamp(20px,7vw,96px);
-    padding-bottom: clamp(70px, 12vh, 96px);
-    overflow-y:auto;
-  }
-  .slide.active{ display:flex; }
-
-  .eyebrow{
-    font-family:'Lora', serif;
-    font-style:italic;
-    color:var(--wheat);
-    font-size:clamp(0.75rem,1.4vw,0.95rem);
-    letter-spacing:0.02em;
-    margin:0 0 8px 0;
-    opacity:0.9;
-  }
-  h1,h2{
-    font-family:'Playfair Display', serif;
-    color:var(--cream);
-    margin:0 0 0.4em 0;
-    line-height:1.12;
-    text-shadow: 0 2px 18px rgba(0,0,0,0.35);
-  }
-  h1{ font-size:clamp(1.9rem, 4.6vw, 3.4rem); font-weight:800;}
-  h2{ font-size:clamp(1.5rem, 3.4vw, 2.3rem); font-weight:700;
-      border-bottom:3px solid transparent;
-      border-image: linear-gradient(90deg, var(--sunflower), transparent) 1;
-      padding-bottom:0.35em; margin-bottom:0.6em;
-      max-width:fit-content;
-  }
-  p{ font-size:clamp(0.98rem,1.6vw,1.18rem); line-height:1.65; max-width:74ch; color:#e9e2cf;}
-  p.note{ font-size:clamp(0.82rem,1.3vw,0.95rem); opacity:0.85; }
-  .content{ flex:1; display:flex; flex-direction:column; justify-content:center; gap:1rem; min-height:0;}
-
-  /* generic card */
-  .card{
-    background:var(--card-bg);
-    border:1px solid var(--card-border);
-    border-radius:6px;
-    padding:1rem 1.3rem;
-    backdrop-filter: blur(3px);
-  }
-
-  .grid{
-    display:grid; gap:1rem;
-  }
-  .grid.two{ grid-template-columns:repeat(2,1fr); }
-  .grid.three{ grid-template-columns:repeat(3,1fr); }
-  @media (max-width:760px){
-    .grid.two, .grid.three{ grid-template-columns:1fr; }
-  }
-
-  .stat{
-    text-align:left;
-  }
-  .stat .num{
-    font-family:'Playfair Display', serif;
-    font-weight:800;
-    font-size:clamp(2rem,5vw,3.1rem);
-    color:var(--sunflower);
-    line-height:1;
-  }
-  .stat .label{
-    font-size:clamp(0.82rem,1.4vw,0.98rem);
-    color:#d8cfae;
-    margin-top:6px;
-  }
-
-  ul.brush{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:0.7rem;}
-  ul.brush li{
-    position:relative; padding-left:1.4em; font-size:clamp(0.95rem,1.5vw,1.1rem); color:#e9e2cf; line-height:1.5;
-  }
-  ul.brush li::before{
-    content:"";
-    position:absolute; left:0; top:0.5em;
-    width:9px; height:9px; border-radius:50%;
-    background:var(--rust);
-    box-shadow:0 0 6px rgba(194,84,44,0.8);
-  }
-
-  table.data{
-    width:100%; border-collapse:collapse; font-size:clamp(0.78rem,1.3vw,0.95rem);
-    table-layout:fixed;
-  }
-  table.data col.c-test{ width:16%; }
-  table.data col.c-var{ width:38%; }
-  table.data col.c-p{ width:16%; }
-  table.data col.c-result{ width:30%; }
-  table.data th, table.data td{
-    text-align:left; padding:0.5em 0.9em 0.5em 0; border-bottom:1px solid rgba(232,172,31,0.25);
-    vertical-align:top;
-  }
-  table.data th{ color:var(--sunflower); font-family:'Playfair Display',serif; font-weight:700;}
-  table.data td.sig{ color:#9fd3a8; }
-  table.data td.nonsig{ color:#d8cfae; }
-  @media (max-width:640px){
-    table.data col.c-test{ width:22%; }
-    table.data col.c-var{ width:34%; }
-    table.data col.c-p{ width:18%; }
-    table.data col.c-result{ width:26%; }
-  }
-
-  .authorline{ color:#c8bd9a; font-size:clamp(0.85rem,1.4vw,1rem); margin-top:1.2rem;}
-
-  /* ---------- Navigation chrome ---------- */
-  .progress-track{
-    position:fixed; top:0; left:0; height:4px; width:100%;
-    background:rgba(255,255,255,0.08); z-index:5;
-  }
-  .progress-fill{
-    height:100%; background:linear-gradient(90deg, var(--rust), var(--sunflower));
-    transition:width 0.35s ease;
-  }
-  .nav-bar{
-    position:fixed; bottom:0; left:0; width:100%;
-    display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between;
-    padding: 10px clamp(14px,4vw,40px);
-    background:linear-gradient(180deg, transparent, rgba(10,18,45,0.85) 40%);
-    z-index:5;
-    gap:10px;
-    row-gap:8px;
-  }
-  .nav-btn{
-    background:rgba(232,172,31,0.14);
-    border:1.5px solid var(--wheat);
-    color:var(--sunflower);
-    font-family:'Playfair Display', serif;
-    font-weight:700;
-    font-size:clamp(0.8rem,1.6vw,1rem);
-    padding:0.55em 1.1em;
-    border-radius:30px;
-    cursor:pointer;
-    display:flex; align-items:center; gap:0.4em;
-    white-space:nowrap;
-    flex:0 0 auto;
-    transition: background 0.2s ease, transform 0.15s ease;
-    touch-action:manipulation;
-  }
-  .nav-btn:hover{ background:rgba(232,172,31,0.3); }
-  .nav-btn:active{ transform:scale(0.96); }
-  .nav-btn:disabled{ opacity:0.3; cursor:default; }
-  .nav-btn:focus-visible{ outline:2px solid var(--sunflower); outline-offset:2px; }
-
-  .dots{
-    display:flex; gap:2px; flex-wrap:wrap; justify-content:center;
-  }
-  .dot{
-    width:28px; height:28px; min-width:28px;
-    border-radius:50%;
-    background:transparent;
-    border:none; padding:0; cursor:pointer;
-    position:relative;
-    display:flex; align-items:center; justify-content:center;
-  }
-  .dot::before{
-    content:"";
-    width:9px; height:9px; border-radius:50%;
-    background:rgba(244,236,216,0.3);
-    transition: background 0.2s ease, box-shadow 0.2s ease;
-  }
-  .dot.active::before{ background:var(--sunflower); box-shadow:0 0 6px rgba(255,212,71,0.7); }
-  .dot:focus-visible{ outline:2px solid var(--sunflower); outline-offset:2px; }
-
-  .counter{
-    font-family:'Lora', serif; font-style:italic; color:#d8cfae;
-    font-size:clamp(0.78rem,1.4vw,0.92rem);
-    min-width:52px; text-align:center;
-  }
-
-  @media (max-width:560px){
-    .nav-bar{ padding:8px 12px; justify-content:space-between; }
-    .dots{ order:-1; width:100%; margin-bottom:2px; }
-    .nav-btn{ font-size:0.78rem; padding:0.5em 0.85em; }
-    .counter{ order:1; min-width:auto; }
-    #prevBtn{ order:0; }
-    #nextBtn{ order:2; }
-  }
-
-  /* ---------- Large displays: smart boards, TVs, big monitors ---------- */
-  @media (min-width:1600px){
-    .slide{ padding: clamp(48px,4vw,130px) clamp(64px,7vw,180px); padding-bottom: clamp(96px,10vh,150px); }
-    .eyebrow{ font-size:1.15rem; margin-bottom:14px; }
-    h1{ font-size:clamp(3.2rem,4.6vw,7rem); }
-    h2{ font-size:clamp(2.3rem,3.4vw,4.6rem); margin-bottom:0.8em; }
-    p{ font-size:clamp(1.25rem,1.7vw,1.9rem); max-width:78ch; }
-    p.note{ font-size:clamp(0.95rem,1.2vw,1.25rem); }
-    .content{ gap:1.6rem; }
-    .card{ padding:1.6rem 2rem; border-radius:8px; }
-    .stat .num{ font-size:clamp(3.4rem,5.2vw,6rem); }
-    .stat .label{ font-size:clamp(1.05rem,1.5vw,1.5rem); }
-    ul.brush{ gap:1rem; }
-    ul.brush li{ font-size:clamp(1.15rem,1.6vw,1.7rem); padding-left:1.6em; }
-    ul.brush li::before{ width:12px; height:12px; top:0.55em; }
-    table.data{ font-size:clamp(1.05rem,1.4vw,1.6rem); }
-    table.data th, table.data td{ padding:0.7em 1em 0.7em 0; }
-    .authorline{ font-size:1.2rem; }
-    .nav-btn{ font-size:1.2rem; padding:0.75em 1.5em; }
-    .dot{ width:34px; height:34px; }
-    .dot::before{ width:13px; height:13px; }
-    .counter{ font-size:1.1rem; min-width:80px; }
-    .progress-track{ height:6px; }
-  }
-  @media (min-width:2400px){
-    h1{ font-size:clamp(4rem,4.4vw,8.6rem); }
-    h2{ font-size:clamp(2.8rem,3vw,5.6rem); }
-    p{ font-size:clamp(1.5rem,1.5vw,2.2rem); max-width:82ch; }
-    p.note{ font-size:clamp(1.1rem,1.1vw,1.5rem); }
-    .stat .num{ font-size:clamp(4rem,4.8vw,7.4rem); }
-    ul.brush li{ font-size:clamp(1.35rem,1.5vw,2rem); }
-    table.data{ font-size:clamp(1.2rem,1.3vw,1.85rem); }
-    .nav-btn{ font-size:1.4rem; padding:0.85em 1.7em; }
-    .dot{ width:38px; height:38px; }
-    .dot::before{ width:16px; height:16px; }
-  }
-  /* ---------- True 4K smart boards ---------- */
-  @media (min-width:3200px){
-    .slide{ padding: clamp(60px,4vw,180px) clamp(80px,7vw,220px); padding-bottom: clamp(120px,10vh,190px); }
-    .eyebrow{ font-size:1.6rem; }
-    h1{ font-size:clamp(6rem,4.6vw,10.5rem); }
-    h2{ font-size:clamp(4rem,3.2vw,6.8rem); }
-    p{ font-size:clamp(1.9rem,1.6vw,2.7rem); }
-    p.note{ font-size:clamp(1.4rem,1.3vw,1.9rem); }
-    .stat .num{ font-size:clamp(5.5rem,4.8vw,8.8rem); }
-    .stat .label{ font-size:clamp(1.5rem,1.4vw,1.9rem); }
-    ul.brush li{ font-size:clamp(1.8rem,1.6vw,2.4rem); }
-    ul.brush li::before{ width:16px; height:16px; }
-    table.data{ font-size:clamp(1.6rem,1.4vw,2.2rem); }
-    .authorline{ font-size:1.6rem; }
-    .nav-btn{ font-size:1.8rem; padding:1em 2em; }
-    .dot{ width:46px; height:46px; }
-    .dot::before{ width:20px; height:20px; }
-    .counter{ font-size:1.5rem; }
-    .progress-track{ height:8px; }
-  }
-
-  .hero-wrap{ display:flex; flex-direction:column; align-items:flex-start; justify-content:center; height:100%; gap:1.4rem;}
-  .frame-line{ width:70px; height:3px; background:var(--rust); margin:0.4rem 0 0.9rem 0; }
-
-  .sr-only{
-    position:absolute; width:1px;height:1px; padding:0; margin:-1px;
-    overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
-  }
 </style>
 </head>
 <body>
-
-<div class="sky" aria-hidden="true">
-  <div class="swirl a"></div>
-  <div class="swirl b"></div>
-  <div class="swirl c"></div>
-</div>
-
+<a class="skip" href="#main">Skip to slides</a>
+<div class="sky" aria-hidden="true"><div class="swirl a"></div><div class="swirl b"></div></div>
 <div class="progress-track" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
+<main class="deck" id="main">
 
-<main class="deck" id="deck">
+<section class="slide active" aria-label="Title">
+  <div class="hero-wrap">
+    <p class="eyebrow">Research Paper</p>
+    <h1>Tracking Creation in the Age of AI</h1>
+    <div class="frame-line"></div>
+    <p style="font-style:italic;font-size:clamp(1.1rem,2.4vw,1.5rem)">A Provenance-Based Framework for Authorship Attribution and Copyright Protection</p>
+    <div class="authorline"><strong style="color:var(--cream);font-family:'Playfair Display',Georgia,serif">Rakunatha Khrishanth Manathra</strong><br>B.A., LL.B. (Hons.) &middot; Saveetha School of Law<br>Saveetha Institute of Medical and Technical Sciences, Chennai</div>
+  </div>
+</section>
 
-  <!-- SLIDE 1: TITLE -->
-  <section class="slide active" data-index="0" aria-label="Title slide">
-    <div class="hero-wrap">
-      <p class="eyebrow">Research Paper</p>
-      <h1>Tracking Creation in the Age of AI</h1>
-      <div class="frame-line"></div>
-      <h2 style="border:none;font-family:'Lora',serif;font-style:italic;font-weight:500;font-size:clamp(1.1rem,2.4vw,1.5rem);color:#e9e2cf;">
-        A Provenance-Based Framework for Authorship Attribution and Copyright Protection
-      </h2>
-      <div class="authorline">
-        <strong style="color:var(--cream);font-family:'Playfair Display',serif;">Rakunatha Khrishanth Manathra</strong><br>
-        B.A., LL.B. (Hons.) &middot; Saveetha School of Law<br>
-        Saveetha Institute of Medical and Technical Sciences, Chennai
-      </div>
+<section class="slide" aria-label="Legal landscape">
+  <p class="eyebrow">Slide 2</p>
+  <h2>The Law Is Asking for a Human</h2>
+  <div class="content">
+    <div class="grid three">
+      <div class="card"><strong>United States</strong><p><em>Thaler v. Perlmutter</em> (D.C. Cir., 2025): only humans can be authors. AI-assisted work is protected only for its human-authored contribution.</p></div>
+      <div class="card"><strong>India</strong><p>Section 2(d)(vi) names the person who "causes" a computer-generated work as author. Courts still look for human skill and judgment.</p></div>
+      <div class="card"><strong>EU &amp; UK</strong><p>EU AI Act Art. 50 requires machine-readable marking of synthetic content. UK CDPA s.9(3) gives computer-generated works to the person making the arrangements.</p></div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- SLIDE 2: ABSTRACT -->
-  <section class="slide" data-index="1" aria-label="Abstract">
-    <p class="eyebrow">Slide 2</p>
-    <h2>Abstract</h2>
-    <div class="content">
-      <div class="grid three">
-        <div class="card stat"><div class="num">68%</div><div class="label">saw the framework as improving attribution accuracy</div></div>
-        <div class="card stat"><div class="num">74%</div><div class="label">felt more confident asserting copyright claims</div></div>
-        <div class="card stat"><div class="num">59%</div><div class="label">were willing to adopt it in professional workflows</div></div>
-      </div>
-    </div>
-  </section>
+<section class="slide" aria-label="Core argument">
+  <p class="eyebrow">Slide 3</p>
+  <h2>Why Provenance Matters</h2>
+  <div class="content">
+    <p class="big">Provenance proves process. Copyright asks about creativity.</p>
+    <ul class="brush">
+      <li>Logs show who prompted what, with which model, and when.</li>
+      <li>Courts ask whether a human made creative choices: selecting, arranging, editing.</li>
+      <li>So provenance is evidence of human contribution, not a substitute for it.</li>
+      <li>Its real value: settling ownership disputes, supporting licensing, and enabling disclosure.</li>
+    </ul>
+  </div>
+</section>
 
-  <!-- SLIDE 3: INTRODUCTION -->
-  <section class="slide" data-index="2" aria-label="Introduction">
-    <p class="eyebrow">Slide 3</p>
-    <h2>Introduction &amp; Background</h2>
-    <div class="content">
-      <ul class="brush">
-        <li>Provenance — a concept borrowed from art history and archival science — is now central to AI authorship debates.</li>
-        <li>Policy is moving fast: the EU AI Act, US Copyright Office guidance, and India's 2022 Amendment all now address AI-generated works.</li>
-        <li>Cases like <em>Zhou v. OpenAI</em> (2025) and <em>Raman v. Infosys</em> (2026) are shaping judicial expectations for authorship evidence.</li>
-      </ul>
-    </div>
-  </section>
+<section class="slide" aria-label="Review of literature">
+  <p class="eyebrow">Slide 4</p>
+  <h2>Review of Literature</h2>
+  <div class="content">
+    <ul class="brush">
+      <li>Ownership models range from hybrid developer-user rights (<strong style="color:var(--cream)">Wangmo</strong>) to prompt-based ownership (<strong style="color:var(--cream)">Shafiq</strong>).</li>
+      <li>Technical approaches embed traceable metadata during generation (<strong style="color:var(--cream)">Khan et al.</strong>), reducing disputes in co-created work (<strong style="color:var(--cream)">Lauk-Dubitskiy</strong>).</li>
+      <li>Scholars call for a codified "machine-assisted author" category (<strong style="color:var(--cream)">Oliveira</strong>) with contribution-based thresholds (<strong style="color:var(--cream)">Ramos-Zaga</strong>).</li>
+    </ul>
+  </div>
+</section>
 
-  <!-- SLIDE 4: OBJECTIVES -->
-  <section class="slide" data-index="3" aria-label="Objectives of the study">
-    <p class="eyebrow">Slide 4</p>
-    <h2>Objectives of the Study</h2>
-    <div class="content">
-      <div class="grid three">
-        <div class="card"><strong style="color:var(--sunflower);">01</strong><p style="margin-top:0.5em;">Design a provenance schema recording prompts, model parameters, and outputs.</p></div>
-        <div class="card"><strong style="color:var(--sunflower);">02</strong><p style="margin-top:0.5em;">Build a working prototype and test it across multiple generative media types.</p></div>
-        <div class="card"><strong style="color:var(--sunflower);">03</strong><p style="margin-top:0.5em;">Measure impact on attribution accuracy and copyright confidence, and shape policy recommendations.</p></div>
-      </div>
+<section class="slide" aria-label="Study design and limits">
+  <p class="eyebrow">Slide 5</p>
+  <h2>The Study &amp; Its Limits</h2>
+  <div class="content">
+    <div class="grid three">
+      <div class="card"><strong>Design</strong><p>Empirical, descriptive survey. Five-point Likert questionnaire, 210 respondents, convenience sample.</p></div>
+      <div class="card"><strong>Analysis</strong><p>SPSS v21: chi-square tests and one-way ANOVA across age, gender, education, area and occupation.</p></div>
+      <div class="card"><strong>Limits</strong><p>Convenience sampling, self-report bias, cross-sectional design. Attitudes are measured, not causal effects.</p></div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- SLIDE 5: LITERATURE REVIEW -->
-  <section class="slide" data-index="4" aria-label="Review of literature">
-    <p class="eyebrow">Slide 5</p>
-    <h2>Review of Literature</h2>
-    <div class="content">
-      <ul class="brush">
-        <li>Ownership models range from hybrid developer-user rights (<strong style="color:var(--cream);">Wangmo</strong>) to prompt-based ownership (<strong style="color:var(--cream);">Shafiq</strong>).</li>
-        <li>Technical approaches embed traceable metadata directly during generation (<strong style="color:var(--cream);">Khan et al.</strong>), reducing disputes in co-created work (<strong style="color:var(--cream);">Lauk-Dubitskiy</strong>).</li>
-        <li>Scholars increasingly call for a codified "machine-assisted author" category (<strong style="color:var(--cream);">Oliveira</strong>) with contribution-based thresholds (<strong style="color:var(--cream);">Ramos-Zaga</strong>).</li>
-      </ul>
+<section class="slide" aria-label="Prototype">
+  <p class="eyebrow">Slide 6</p>
+  <h2>See the Prototype</h2>
+  <div class="content">
+    <ul class="brush">
+      <li>The provenance-tracking prototype described in this study is live.</li>
+      <li>It logs prompts, model versions, and generated outputs.</li>
+      <li>Explore it directly at the link below.</li>
+    </ul>
+    <div class="card" style="max-width:fit-content">
+      <strong style="display:block;margin-bottom:.5em">Live Prototype</strong>
+      <a href="https://manatune.onrender.com" target="_blank" rel="noopener noreferrer" style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(1.1rem,2.6vw,1.6rem);font-weight:700;color:var(--cream);text-decoration:none;border-bottom:2px solid var(--rust);padding-bottom:2px">manatune.onrender.com &#8599;</a>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- SLIDE 6: METHODOLOGY -->
-  <section class="slide" data-index="5" aria-label="Methodology">
-    <p class="eyebrow">Slide 6</p>
-    <h2>Methodology</h2>
-    <div class="content">
-      <div class="grid three">
-        <div class="card">
-          <strong style="color:var(--sunflower);">Design &amp; Sample</strong>
-          <p style="margin-top:0.5em;">Empirical, descriptive study; five-point Likert questionnaire; 210 participants via convenience sampling.</p>
-        </div>
-        <div class="card">
-          <strong style="color:var(--sunflower);">Analysis</strong>
-          <p style="margin-top:0.5em;">SPSS v21 — chi-square tests, one-way ANOVA, and Pearson correlation.</p>
-        </div>
-        <div class="card">
-          <strong style="color:var(--sunflower);">Variables</strong>
-          <p style="margin-top:0.5em;">Independent: age, gender, education, area, occupation. Dependent: awareness and support.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SLIDE 7: KEY FINDINGS -->
-  <section class="slide" data-index="6" aria-label="Key findings">
-    <p class="eyebrow">Slide 7</p>
-    <h2>Key Findings</h2>
-    <div class="content">
-      <div class="grid three">
-        <div class="card stat"><div class="num">71%</div><div class="label">of creative professionals endorse provenance tracking</div></div>
-        <div class="card stat"><div class="num">66%</div><div class="label">of urban residents support regulatory oversight</div></div>
-        <div class="card stat"><div class="num">12%</div><div class="label">expressed concern about data privacy</div></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SLIDE 8: HYPOTHESIS TESTING -->
-  <section class="slide" data-index="7" aria-label="Hypothesis testing results">
-    <p class="eyebrow">Slide 8</p>
-    <h2>Hypothesis Testing</h2>
-    <div class="content">
-      <ul class="brush">
-        <li>All 5 chi-square tests (age, gender, education, employment, area) returned p&nbsp;&gt;&nbsp;0.05.</li>
-        <li>All 3 ANOVA tests (age group, education, occupation) also returned p&nbsp;&gt;&nbsp;0.05.</li>
-        <li>No demographic variable showed a statistically significant association at the 5% level (n&nbsp;=&nbsp;210).</li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- SLIDE 9: DISCUSSION & LIMITATIONS -->
-  <section class="slide" data-index="8" aria-label="Discussion and limitations">
-    <p class="eyebrow">Slide 9</p>
-    <h2>Discussion &amp; Limitations</h2>
-    <div class="content">
-      <ul class="brush">
-        <li>Older, more educated, and urban respondents were consistently more sceptical of AI-tracking claims and current oversight.</li>
-        <li>Convenience sampling and self-reported measures may limit generalisability and introduce response bias.</li>
-        <li>A cross-sectional design means the findings can't establish causal change in attitudes over time.</li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- SLIDE 10: CONCLUSION -->
-  <section class="slide" data-index="9" aria-label="Conclusion and recommendations">
-    <p class="eyebrow">Slide 10</p>
-    <h2>Conclusion &amp; Recommendations</h2>
-    <div class="content">
-      <ul class="brush">
-        <li>Provenance tracking is feasible and welcomed by a majority of the creators surveyed.</li>
-        <li>Harmonise international standards and build lightweight, interoperable provenance modules into AI platforms.</li>
-        <li>Run co-design workshops with creators and fund open-source provenance infrastructure with ongoing monitoring.</li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- SLIDE 11: PROTOTYPE -->
-  <section class="slide" data-index="10" aria-label="Prototype">
-    <p class="eyebrow">Slide 11</p>
-    <h2>See the Prototype</h2>
-    <div class="content">
-      <ul class="brush">
-        <li>The provenance-tracking prototype described in this study is live.</li>
-        <li>It logs prompts, model versions, and generated outputs in real time.</li>
-        <li>Explore it directly at the link below.</li>
-      </ul>
-      <div class="card" style="max-width:fit-content;">
-        <strong style="color:var(--sunflower);display:block;margin-bottom:0.5em;">Live Prototype</strong>
-        <a href="https://manatune.onrender.com" target="_blank" rel="noopener noreferrer"
-           style="font-family:'Playfair Display',serif;font-size:clamp(1.1rem,2.6vw,1.6rem);font-weight:700;color:var(--cream);text-decoration:none;border-bottom:2px solid var(--rust);padding-bottom:2px;">
-          manatune.onrender.com &#8599;
-        </a>
-      </div>
-    </div>
-  </section>
+<section class="slide" aria-label="Way forward">
+  <p class="eyebrow">Slide 7</p>
+  <h2>The Way Forward</h2>
+  <div class="content">
+    <ul class="brush">
+      <li><strong style="color:var(--cream)">Standardise:</strong> interoperable provenance metadata across AI platforms.</li>
+      <li><strong style="color:var(--cream)">Protect creators:</strong> privacy by design, so creators control their own logs (GDPR, India's DPDP Act 2023).</li>
+      <li><strong style="color:var(--cream)">Avoid platform capture:</strong> fund open-source provenance infrastructure so evidence isn't owned by a few companies.</li>
+      <li><strong style="color:var(--cream)">Pair with law reform:</strong> clear thresholds for human contribution, backed by provenance evidence.</li>
+    </ul>
+  </div>
+</section>
 
 </main>
-
+<noscript><p style="position:fixed;bottom:0;left:0;right:0;padding:8px;background:#0a1530;text-align:center">JavaScript is needed to navigate slides. Use print view (Ctrl/Cmd+P) to see all of them.</p></noscript>
 <nav class="nav-bar" aria-label="Slide navigation">
   <button class="nav-btn" id="prevBtn" aria-label="Previous slide">&#8592; Prev</button>
-  <div class="dots" id="dots" role="tablist" aria-label="Go to slide"></div>
-  <span class="counter" id="counter">1 / 11</span>
+  <div class="dots" id="dots" role="group" aria-label="Go to slide"></div>
+  <span class="counter" id="counter" aria-live="polite" aria-atomic="true"></span>
   <button class="nav-btn" id="nextBtn" aria-label="Next slide">Next &#8594;</button>
 </nav>
-
 <script>
-(function(){
-  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
-  var total = slides.length;
-  var current = 0;
-
-  var prevBtn = document.getElementById('prevBtn');
-  var nextBtn = document.getElementById('nextBtn');
-  var counter = document.getElementById('counter');
-  var progressFill = document.getElementById('progressFill');
+(function () {
+  'use strict';
+  var slides = [].slice.call(document.querySelectorAll('.slide'));
+  var total = slides.length, cur = 0;
+  var prev = document.getElementById('prevBtn'), next = document.getElementById('nextBtn');
+  var counter = document.getElementById('counter'), fill = document.getElementById('progressFill');
   var dotsWrap = document.getElementById('dots');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  slides.forEach(function(_, i){
+  slides.forEach(function (s, i) {
+    s.setAttribute('role', 'group');
+    s.setAttribute('aria-roledescription', 'slide');
+    s.setAttribute('tabindex', '-1');
     var d = document.createElement('button');
-    d.className = 'dot' + (i === 0 ? ' active' : '');
-    d.setAttribute('aria-label', 'Slide ' + (i+1));
-    d.addEventListener('click', function(){ goTo(i); });
+    d.type = 'button'; d.className = 'dot';
+    d.setAttribute('aria-label', 'Slide ' + (i + 1));
+    d.addEventListener('click', function () { go(i, true); });
     dotsWrap.appendChild(d);
   });
-  var dots = Array.prototype.slice.call(dotsWrap.children);
+  var dots = [].slice.call(dotsWrap.children);
 
-  function render(){
-    slides.forEach(function(s, i){ s.classList.toggle('active', i === current); });
-    dots.forEach(function(d, i){ d.classList.toggle('active', i === current); });
-    counter.textContent = (current + 1) + ' / ' + total;
-    progressFill.style.width = ((current + 1) / total * 100) + '%';
-    prevBtn.disabled = current === 0;
-    nextBtn.disabled = current === total - 1;
+  function render() {
+    slides.forEach(function (s, i) {
+      var on = i === cur;
+      s.classList.toggle('active', on);
+      if (on) { s.removeAttribute('aria-hidden'); s.scrollTop = 0; } else { s.setAttribute('aria-hidden', 'true'); }
+    });
+    dots.forEach(function (d, i) {
+      d.classList.toggle('active', i === cur);
+      if (i === cur) d.setAttribute('aria-current', 'true'); else d.removeAttribute('aria-current');
+    });
+    counter.textContent = 'Slide ' + (cur + 1) + ' of ' + total;
+    fill.style.width = ((cur + 1) / total * 100) + '%';
+    prev.disabled = cur === 0; next.disabled = cur === total - 1;
+    var t = slides[cur].querySelector('h1,h2');
+    document.title = (t ? t.textContent + ' \u2013 ' : '') + 'Tracking Creation in the Age of AI';
   }
 
-  function goTo(i){
-    current = Math.max(0, Math.min(total - 1, i));
+  function go(i, moveFocus, fromHash) {
+    cur = Math.max(0, Math.min(total - 1, i));
     render();
+    if (!fromHash && history.replaceState) history.replaceState(null, '', '#' + (cur + 1));
+    if (moveFocus) { var h = slides[cur].querySelector('h1,h2') || slides[cur]; h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); }
   }
 
-  prevBtn.addEventListener('click', function(){ goTo(current - 1); });
-  nextBtn.addEventListener('click', function(){ goTo(current + 1); });
+  function fromHash() {
+    var n = parseInt(location.hash.replace('#', ''), 10);
+    return isNaN(n) ? 0 : n - 1;
+  }
 
-  document.addEventListener('keydown', function(e){
-    if (e.key === 'ArrowRight' || e.key === 'PageDown') { goTo(current + 1); }
-    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { goTo(current - 1); }
-    else if (e.key === 'Home') { goTo(0); }
-    else if (e.key === 'End') { goTo(total - 1); }
+  prev.addEventListener('click', function () { go(cur - 1, true); });
+  next.addEventListener('click', function () { go(cur + 1, true); });
+  window.addEventListener('hashchange', function () { go(fromHash(), false, true); });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.altKey || e.ctrlKey || e.metaKey) return;
+    var tag = e.target && e.target.tagName;
+    if ((e.key === ' ' || e.key === 'Enter') && (tag === 'BUTTON' || tag === 'A')) return;
+    switch (e.key) {
+      case 'ArrowRight': case 'PageDown': case ' ': e.preventDefault(); go(cur + 1, true); break;
+      case 'ArrowLeft': case 'PageUp': e.preventDefault(); go(cur - 1, true); break;
+      case 'Home': go(0, true); break;
+      case 'End': go(total - 1, true); break;
+    }
   });
 
-  // touch swipe
-  var touchStartX = null, touchStartY = null;
-  document.addEventListener('touchstart', function(e){
-    touchStartX = e.changedTouches[0].clientX;
-    touchStartY = e.changedTouches[0].clientY;
-  }, {passive:true});
-  document.addEventListener('touchend', function(e){
-    if (touchStartX === null) return;
-    var dx = e.changedTouches[0].clientX - touchStartX;
-    var dy = e.changedTouches[0].clientY - touchStartY;
-    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
-      if (dx < 0) goTo(current + 1); else goTo(current - 1);
-    }
-    touchStartX = null; touchStartY = null;
-  }, {passive:true});
+  var sx = null, sy = null;
+  document.addEventListener('touchstart', function (e) { sx = e.changedTouches[0].clientX; sy = e.changedTouches[0].clientY; }, { passive: true });
+  document.addEventListener('touchend', function (e) {
+    if (sx === null) return;
+    var dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) go(dx < 0 ? cur + 1 : cur - 1, false);
+    sx = sy = null;
+  }, { passive: true });
 
-  // scatter a few stars into the sky
   var sky = document.querySelector('.sky');
-  for (var i = 0; i < 40; i++){
-    var star = document.createElement('div');
-    star.className = 'star';
-    var size = Math.random() * 2.5 + 1;
-    star.style.width = size + 'px';
-    star.style.height = size + 'px';
-    star.style.top = (Math.random() * 100) + '%';
-    star.style.left = (Math.random() * 100) + '%';
-    star.style.animationDelay = (Math.random() * 4) + 's';
-    sky.appendChild(star);
+  var n = reduce ? 0 : (window.innerWidth < 700 ? 18 : 40);
+  for (var i = 0; i < n; i++) {
+    var s = document.createElement('div'), z = Math.random() * 2.5 + 1;
+    s.className = 'star';
+    s.style.cssText = 'width:' + z + 'px;height:' + z + 'px;top:' + Math.random() * 100 + '%;left:' + Math.random() * 100 + '%;animation-delay:' + Math.random() * 4 + 's';
+    sky.appendChild(s);
   }
 
+  cur = Math.max(0, Math.min(total - 1, fromHash()));
   render();
 })();
-</script>
 
+</script>
 </body>
 </html>
